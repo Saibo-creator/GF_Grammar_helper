@@ -3,7 +3,7 @@ concrete GenieMinimalBart of GenieMinimal = {
     Triplet , Subject , Object , Relation , Rel, Entity, Left, Right = Str;
   lin
     Repeat x y = x ++ y;
-    Empty = [];
+    Empty = "EOT"; --[];--
     Build_triplet x y z = x ++ y ++ z ;
     Build_relation x y z = x ++ y ++ z ;
     Build_subject x y z = x ++ y ++ z ;
