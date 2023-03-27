@@ -1,0 +1,19 @@
+abstract {abs_grammar_name} = {{
+  flags coding = utf8 ;
+  flags startcat = Triplet ;
+  cat
+    Triplet ; Subject ; Object ; Relation ; Rel ; Entity ; Left ; Right ; {entire_vocab_token_ids_starting_with_tok}
+  fun
+    Repeat:  Triplet -> Triplet -> Triplet ;
+    Empty: Triplet;
+    Build_triplet : Subject -> Relation -> Object -> Triplet ;
+    Build_relation: Left -> Rel -> Right -> Relation;
+    Build_subject: Left -> Entity -> Right -> Subject;
+    Build_object: Left -> Entity -> Right -> Object;
+    Left_bracket: Left;
+    Right_bracket: Right;
+    -- the following should be automatically generated --
+    {entities_tokenization_funcs}  -- line to replace, "Germany, France, UK, US" --
+    {relations_tokenization_funcs} -- line to replace, "Is, Has" --
+    {tokens_tokenization_funcs} -- line to replace, "tok1, tok2, tok3" --
+}}

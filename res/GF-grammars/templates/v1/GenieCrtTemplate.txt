@@ -1,0 +1,18 @@
+concrete {crt_grammar_name} of {abs_grammar_name} = {{
+  lincat
+    Triplet , Subject , Object , Relation , Rel, Entity, Left, Right, {entire_vocab_token_ids_starting_with_tok} = Str;
+  lin
+    Repeat x y = x ++ ";" ++ y;
+    Empty = "EOS";  --[];--
+    Build_triplet x y z = x ++ y ++ z ;
+    Build_relation x y z = x ++ y ++ z ;
+    Build_subject x y z = x ++ y ++ z ;
+    Build_object x y z = x ++ y ++ z ;
+
+    Left_bracket = "<" ;
+    Right_bracket = ">" ;
+    -- the following should be automatically generated --
+    {entities_decoding_lin}
+    {relations_decoding_lin}
+    {tokens_decoding_lin}
+}}
