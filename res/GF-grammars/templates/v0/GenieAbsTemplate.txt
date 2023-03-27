@@ -1,4 +1,4 @@
-abstract {abs_grammar_name} = {
+abstract {abs_grammar_name} = {{
   flags coding = utf8 ;
   flags startcat = Triplet ;
   cat
@@ -13,6 +13,6 @@ abstract {abs_grammar_name} = {
     Left_bracket: Left;
     Right_bracket: Right;
     -- the following should be automatically generated --
-    {entities}: Entity; -- line to replace, "Germany, France, UK, US" --
-    {relations}: Rel; -- line to replace, "Is, Has" --
-}
+    {entities_str}: Entity; -- line to replace, "Germany, France, UK, US" --
+    {relations_str}: Rel; -- line to replace, "Is, Has" --
+}}

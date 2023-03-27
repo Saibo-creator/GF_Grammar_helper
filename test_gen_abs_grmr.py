@@ -7,9 +7,9 @@
 # @Desc :
 import os
 
-from src.abs_grammar import GenieAbsGrammarBuilder
+from src.v1.abs_grammar import GenieAbsGrammarBuilder
 from src.config.config import ASSET_GF_DIR,RES_DIR
-from src.crt_grammar import GenieCrtGrammarBuilder
+from src.v1.crt_grammar import GenieCrtGrammarBuilder
 
 if __name__ == '__main__':
     abs_builder = GenieAbsGrammarBuilder()

@@ -1,4 +1,4 @@
-concrete Genie{tokenizer} of Genie = {
+concrete {crt_grammar_name} of {abs_grammar_name} = {{
   lincat
     Triplet , Subject , Object , Relation , Rel, Entity, Left, Right = Str;
   lin
@@ -12,6 +12,6 @@ concrete Genie{tokenizer} of Genie = {
     Left_bracket = "<" ;
     Right_bracket = ">" ;
     -- the following should be automatically generated --
-    {entity_lin} --Germany = "ger"++"many"; France = "fra"++"nce"; UK = "u"++"k"; US = "u"++"s"; line to replace--
-    {rel_lin} -- Is = "is"; Has = "has"; line to replace--
-}
+    {entity_lin_str} --Germany = "ger"++"many"; France = "fra"++"nce"; UK = "u"++"k"; US = "u"++"s"; line to replace--
+    {rel_lin_str} -- Is = "is"; Has = "has"; line to replace--
+}}

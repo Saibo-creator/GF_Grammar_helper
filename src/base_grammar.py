@@ -16,9 +16,10 @@ from src.utils import get_hashed_name
 
 class Grammar:
 
-    def __init__(self, grammar: str, name:str):
+    def __init__(self, grammar: str, name:str, meta: dict = None):
         self.grammar = grammar
         self.name = name
+        self.meta = meta
 
     def save(self, output_dir: str):
         output_path = os.path.join(output_dir, self.name + ".gf")
