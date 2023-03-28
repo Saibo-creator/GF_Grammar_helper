@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.gfo
+*.gf
+*.pgf
+asset/GF-grammars/gf/autogen
 .idea/
 # C extensions
 *.so

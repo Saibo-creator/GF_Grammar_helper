@@ -6,13 +6,18 @@
 # @AUTHOR : Saibo Geng
 # @Desc :
 import os
-from typing import List, Union
+import pdb
+from typing import List, Union, Dict
 from src.config.config import TEMPLATE_DIR
 
 from transformers import AutoTokenizer
+import line_profiler
 
 from src.base_grammar import Grammar, TemplateTokenGrammarBuilder
 from src.utils import get_hashed_name
+
+
+
 
 
 class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):
@@ -20,6 +25,7 @@ class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):
 
     def __init__(self):
         super().__init__()
+
 
     def build(self, abs_grammar_name: str, entities_or_path: Union[List[str], str],
               relations_or_path: Union[List[str], str], tokenizer_or_path) -> Grammar:
@@ -37,11 +43,11 @@ class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):
         grammar_meta = self.build_meta(entities=entities, relations=relations)
         return Grammar(formatted_grammar, name=abs_grammar_name, meta=grammar_meta)
 
-    def build_entities_ids(self, entities: List[str]) -> dict[str, str]:
-        return {f'Entity_{self.get_tokenization_func_name(entity)}': entity for entity in entities}
+    def build_entities_ids(self, entities: List[str]) -> Dict[str, str]:
+        return {self.get_tokenization_func_name(entity=entity): entity for entity in entities}
 
-    def build_relations_ids(self, relations: List[str]) -> dict[str, str]:
-        return {f'Rel_{self.get_tokenization_func_name(relation)}': relation for relation in relations}
+    def build_relations_ids(self, relations: List[str]) -> Dict[str, str]:
+        return {self.get_tokenization_func_name(rel=relation): relation for relation in relations}
 
     def build_meta(self, entities: List[str], relations: List[str]):
         entities_ids: dict[str, str] = self.build_entities_ids(entities=entities)
@@ -50,11 +56,11 @@ class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):
 
     def get_entities_str(self, entities: List[str]) -> str:
         entities_ids: dict[str, str] = self.build_entities_ids(entities=entities)
-        return ''.join([f'{entity_key},\n' for entity_key in entities_ids.keys()])
+        return ',\n'.join([f'{entity_key}' for entity_key in entities_ids.keys()])
 
     def get_relations_str(self, relations: List[str]) -> str:
         relations_ids: dict[str, str] = self.build_relations_ids(relations=relations)
-        return ''.join([f'{relation_key},\n' for relation_key in relations_ids.keys()])
+        return ',\n'.join([f'{relation_key}' for relation_key in relations_ids.keys()])
 
 #
 # def get_lin_for_items(trie_tokens: List[List[str]], save_path=None):

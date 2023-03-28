@@ -72,11 +72,6 @@ class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):
         token_cat: str = self.token_id2tok_cat(token_id)
         return f"{func_name} : {token_cat};"
 
-    def post_process_token_ids(self, token_ids: List[int], tokenizer):
-        "remove_bos=True, remove_eos=False"
-        if token_ids[0] == tokenizer.bos_token_id:
-            token_ids = token_ids[1:]
-        return token_ids
 
 
 def get_lin_for_items(trie_tokens: List[List[str]], save_path=None):

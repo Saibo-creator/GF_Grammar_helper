@@ -23,6 +23,9 @@ ASSET_DIR = os.path.join(ROOT_DIR, "asset")
 # Set the gf directory
 ASSET_GF_DIR = os.path.join(ASSET_DIR, "GF-grammars", "gf")
 
+#AUTO GENERATED
+AUTO_GEN_GF_DIR = os.path.join(ASSET_GF_DIR, "autogen")
+
 # Set the gf directory
 ASSET_PGF_DIR = os.path.join(ASSET_DIR, "GF-grammars", "pgf")
 
