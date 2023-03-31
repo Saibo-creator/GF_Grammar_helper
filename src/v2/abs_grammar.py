@@ -11,7 +11,6 @@ from typing import List, Union, Dict
 from src.config.config import TEMPLATE_DIR
 
 from transformers import AutoTokenizer
-import line_profiler
 
 from src.base_grammar import Grammar, TemplateTokenGrammarBuilder
 from src.utils import get_hashed_name
@@ -21,8 +20,8 @@ from src.utils import get_hashed_name
 
 
 class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "v0", "GenieAbsTemplate.txt")
-    grammar_prefix = ""
+    template = os.path.join(TEMPLATE_DIR, "v2", "GenieAbsTemplate.txt")
+    grammar_prefix = "FullyExpanded"
 
     def __init__(self):
         super().__init__()
@@ -35,11 +34,14 @@ class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):
                                                                               str) else entities_or_path
         relations: List[str] = self.read_jsonl(relations_or_path) if isinstance(relations_or_path,
                                                                                 str) else relations_or_path
-        abs_grammar_name = self.get_grammar_name(base_grammar_name=base_grammar_name)
+
+        abs_grammar_name = self.get_grammar_name(base_grammar_name)
+
         formatted_grammar: str = grammar.format(abs_grammar_name=abs_grammar_name,
                                                 entities_str=self.get_entities_str(entities=entities),
                                                 relations_str=self.get_relations_str(relations=relations))
         grammar_meta = self.build_meta(entities=entities, relations=relations)
+
         return Grammar(formatted_grammar, name=abs_grammar_name, meta=grammar_meta)
 
     def build_entities_ids(self, entities: List[str]) -> Dict[str, str]:

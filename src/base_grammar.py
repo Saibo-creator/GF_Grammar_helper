@@ -8,6 +8,7 @@
 import json
 import os
 import pdb
+import subprocess
 from abc import abstractmethod
 from typing import List, Union
 
@@ -24,7 +25,8 @@ class Grammar:
     def save(self, output_dir: str):
         os.makedirs(output_dir, exist_ok=True)
         "if path exists, ask user to overwrite or not."
-        self._save(output_dir=output_dir)
+        grammar_fpath = self._save(output_dir=output_dir)
+        return grammar_fpath
 
     def _save(self, output_dir: str):
         grammar_fpath = os.path.join(output_dir, self.name + ".gf")
@@ -36,6 +38,8 @@ class Grammar:
             with open(meta_fpath, "w") as file:
                 json.dump(self.meta, file)
 
+        return grammar_fpath
+
 
 
 class AbsCrtGrammarPair:
@@ -45,24 +49,43 @@ class AbsCrtGrammarPair:
         self.crt_grammar = crt_grammar
         self.name = self.abs_grammar.name
 
-    def save(self, output_dir: str):
+    def save(self, output_dir: str, compile: bool = False):
         dir = os.path.join(output_dir, self.name)
         os.makedirs(output_dir, exist_ok=True)
         if os.path.exists(dir):
             overwrite = input(f"Grammar {dir} already exists. Overwrite? (y/n)")
             if overwrite == "y":
-                self._save(dir)
+                self._save(dir, compile=compile)
             else:
                 print("Aborted.")
         else:
-            self._save(dir)
+            self._save(dir, compile=compile)
 
-    def _save(self, output_dir: str):
-        self.abs_grammar.save(output_dir)
-        self.crt_grammar.save(output_dir)
+    def _save(self, output_dir: str, compile: bool = False):
+        abs_grammar_fpath = self.abs_grammar.save(output_dir)
+        crt_grammar_fpath = self.crt_grammar.save(output_dir)
+        if compile:
+            self.compile_grammar(crt_grammar_fpath, output_dir)
+
+    @staticmethod
+    def compile_grammar(grammar_fpath: str, output_dir: str, verbose: bool = True):
+        """
+        Compile the grammar to .gfo file.
+        """
+        cmd = f"gf -make {grammar_fpath}"
+        if verbose:
+            print("Compiling grammar...")
+            print(cmd)
+        subprocess.run(cmd, shell=True, cwd=output_dir)
+
+
+
 
 
 class TemplateTokenGrammarBuilder:
+
+    # used to indent the grammar
+    INDENT = " "*4
 
     def __init__(self):
         pass
@@ -70,6 +93,26 @@ class TemplateTokenGrammarBuilder:
     @property
     @abstractmethod
     def template(self):
+        """
+        This enforce the subclass to define a template property.
+        we define an abstract base class Animal that has a name property defined as an abstract method using the @property and @abstractmethod decorators.
+        This means that any subclass of Animal must define a name property or method, or it will raise a TypeError when an instance is created.
+        """
+        pass
+
+    @property
+    @abstractmethod
+    def grammar_prefix(self):
+        """
+        This enforce the subclass to define a template property.
+        we define an abstract base class Animal that has a name property defined as an abstract method using the @property and @abstractmethod decorators.
+        This means that any subclass of Animal must define a name property or method, or it will raise a TypeError when an instance is created.
+        """
+        pass
+
+    @property
+    @abstractmethod
+    def grammar_suffix(self):
         """
         This enforce the subclass to define a template property.
         we define an abstract base class Animal that has a name property defined as an abstract method using the @property and @abstractmethod decorators.
@@ -117,4 +160,13 @@ class TemplateTokenGrammarBuilder:
         else:
             raise ValueError("Must specify either entity or relation or token_id")
 
+    def get_grammar_name(self, base_grammar_name: str, crt=False) -> str:
+        """
+        FullyExpanded + GenieWiki + Crt
+        example: FullyExpandedGenieWikiCrt
+        """
+        return f"{self.grammar_prefix}{base_grammar_name}" if not crt else f"{self.grammar_prefix}{base_grammar_name}Crt"
 
+    @staticmethod
+    def join_statements_multi_line(statements: List[str]) -> str:
+        return f"\n{TemplateTokenGrammarBuilder.INDENT}".join(statements)

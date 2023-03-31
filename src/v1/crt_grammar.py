@@ -19,23 +19,25 @@ from src.base_grammar import Grammar, TemplateTokenGrammarBuilder
 
 class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder):
     template = os.path.join(TEMPLATE_DIR, "v1", "GenieCrtTemplate.txt")
+    grammar_prefix = ""
 
     def __init__(self):
         super().__init__()
 
-    def build(self, abs_grammar_name: str, entities_or_path: Union[List[str],str], relations_or_path: Union[List[str],str], tokenizer_or_path, crt_grammar_name=None) -> Grammar:
+    def build(self, base_grammar_name: str, entities_or_path: Union[List[str], str], relations_or_path: Union[List[str], str], tokenizer_or_path, crt_grammar_name=None) -> Grammar:
         grammar: str = self.read_template()
+        abs_grammar_name = self.get_grammar_name(base_grammar_name=base_grammar_name)
         if crt_grammar_name is None:
-            crt_grammar_name = f"{abs_grammar_name}Crt"
+            crt_grammar_name = self.get_grammar_name(base_grammar_name=base_grammar_name, crt=True)
         tokenizer = AutoTokenizer.from_pretrained(tokenizer_or_path) if isinstance(tokenizer_or_path, str) else tokenizer_or_path
         entities = self.read_jsonl(entities_or_path) if isinstance(entities_or_path, str) else entities_or_path
         relations = self.read_jsonl(relations_or_path) if isinstance(relations_or_path, str) else relations_or_path
-        formatted_grammar: str = grammar.format( abs_grammar_name=abs_grammar_name, crt_grammar_name=crt_grammar_name,
-            entire_vocab_token_ids_starting_with_tok=self.get_argument_entire_vocab_token_ids_starting_with_tok(
+        formatted_grammar: str = grammar.format(abs_grammar_name=abs_grammar_name, crt_grammar_name=crt_grammar_name,
+                                                entire_vocab_token_ids_starting_with_tok=self.get_argument_entire_vocab_token_ids_starting_with_tok(
                 tokenizer),
-            entities_decoding_lin=self.batch_get_decoding_lin(tokenizer, entities=entities),
-            relations_decoding_lin=self.batch_get_decoding_lin(tokenizer, relations=relations),
-            tokens_decoding_lin=self.batch_get_decoding_lin(tokenizer, token_ids=tokenizer.vocab.values()))
+                                                entities_decoding_lin=self.batch_get_decoding_lin(tokenizer, entities=entities),
+                                                relations_decoding_lin=self.batch_get_decoding_lin(tokenizer, relations=relations),
+                                                tokens_decoding_lin=self.batch_get_decoding_lin(tokenizer, token_ids=tokenizer.vocab.values()))
         return Grammar(formatted_grammar, name=crt_grammar_name)
 
     def get_argument_entire_vocab_token_ids_starting_with_tok(self, tokenizer):
@@ -45,13 +47,15 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder):
     def batch_get_decoding_lin(self, tokenizer, entities: List[str] = None, relations: List[str] = None,
                                     token_ids: List[int] = None):
         if entities:
-            return "".join([self.get_entity_or_rel_decoding_lin(entity=entity, tokenizer=tokenizer) for entity in entities])
+            statements = [self.get_entity_or_rel_decoding_lin(entity=entity, tokenizer=tokenizer) for entity in entities]
         elif relations:
-            return "".join([self.get_entity_or_rel_decoding_lin(rel=rel, tokenizer=tokenizer) for rel in relations])
+            statements = [self.get_entity_or_rel_decoding_lin(rel=rel, tokenizer=tokenizer) for rel in relations]
         elif token_ids:
-            return "".join([self.get_token_decoding_lin(tok_id,tokenizer) for tok_id in token_ids])
+            statements = [self.get_token_decoding_lin(tok_id, tokenizer) for tok_id in token_ids]
         else:
             raise ValueError("No input provided!")
+
+        return self.join_statements_multi_line(statements)
 
     def get_entity_or_rel_decoding_lin(self, entity: str=None, rel:str=None, tokenizer=None) -> str:
         "Germany g e r m a n y = g ++ e ++ r ++ m ++ a ++ n ++ y;"

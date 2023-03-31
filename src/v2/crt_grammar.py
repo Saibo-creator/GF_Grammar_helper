@@ -18,8 +18,13 @@ from src.base_grammar import Grammar, TemplateTokenGrammarBuilder
 
 
 class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "v0", "GenieCrtTemplate.txt")
-    grammar_prefix = ""
+    template = os.path.join(TEMPLATE_DIR, "v2", "GenieCrtTemplate.txt")
+    grammar_prefix = "FullyExpanded"
+
+    Subject_marker = "[s]"
+    Relation_marker = "[r]"
+    Object_marker = "[o]"
+    Triplet_ending_marker = "[e]"
 
     def __init__(self):
         super().__init__()
@@ -36,6 +41,10 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder):
         relations = self.read_jsonl(relations_or_path) if isinstance(relations_or_path, str) else relations_or_path
 
         formatted_grammar: str = grammar.format(abs_grammar_name=abs_grammar_name, crt_grammar_name=crt_grammar_name,
+                                                Subject_marker_tokens = self.get_marker_tokens(self.Subject_marker, tokenizer, literal=literal),
+                                                Relation_marker_tokens = self.get_marker_tokens(self.Relation_marker, tokenizer, literal=literal),
+                                                Object_marker_tokens = self.get_marker_tokens(self.Object_marker, tokenizer, literal=literal),
+                                                Triplet_ending_marker_tokens = self.get_marker_tokens(self.Triplet_ending_marker, tokenizer, literal=literal),
                                                 entity_lin_str=self.batch_get_decoding_lin(tokenizer, entities=entities, literal=literal),
                                                 rel_lin_str=self.batch_get_decoding_lin(tokenizer, relations=relations, literal=literal))
         return Grammar(formatted_grammar, name=crt_grammar_name)
@@ -66,4 +75,13 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder):
         # token_cats: List[str] = [self.token_id2tok_cat(tok_id) for tok_id in token_ids] # tok_0, tok_1, ...
         tokens_concat = " ++ ".join(token_id_in_quotes)
         return f"{func_name}  = {tokens_concat};"
+
+    def get_marker_tokens(self, marker:str, tokenizer, literal=False):
+        # chunk = "[s]"
+        token_ids: List[int] = tokenizer.encode(marker)
+        processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(token_ids, literal=literal, tokenizer=tokenizer)
+        token_id_in_quotes: List[str] = [f'"{token_id}"' for token_id in processed_token_ids]
+        # token_cats: List[str] = [self.token_id2tok_cat(tok_id) for tok_id in token_ids] # tok_0, tok_1, ...
+        tokens_concat = " ++ ".join(token_id_in_quotes)
+        return tokens_concat
 

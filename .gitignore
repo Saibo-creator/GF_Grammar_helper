@@ -10,6 +10,8 @@ asset/GF-grammars/gf/autogen
 # C extensions
 *.so
 
+res/genie-data
+
 # Distribution / packaging
 .Python
 build/
