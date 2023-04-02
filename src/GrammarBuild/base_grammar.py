@@ -13,6 +13,7 @@ from abc import abstractmethod
 from typing import List, Union
 
 from src.utils import get_hashed_name
+from src.config.config import ASSET_PGF_DIR
 
 
 class Grammar:
@@ -65,19 +66,25 @@ class AbsCrtGrammarPair:
         abs_grammar_fpath = self.abs_grammar.save(output_dir)
         crt_grammar_fpath = self.crt_grammar.save(output_dir)
         if compile:
-            self.compile_grammar(crt_grammar_fpath, output_dir)
+            pgf_fpath = self.compile_grammar(crt_grammar_fpath, output_dir)
+            target_pgf_dir = ASSET_PGF_DIR
+            mv_cmd = f"mv {pgf_fpath} {target_pgf_dir}"
+            subprocess.run(mv_cmd, shell=True)
+
 
     @staticmethod
-    def compile_grammar(grammar_fpath: str, output_dir: str, verbose: bool = True):
+    def compile_grammar(crt_grammar_fpath: str, output_dir: str, verbose: bool = True):
         """
         Compile the grammar to .gfo file.
         """
-        cmd = f"gf -make {grammar_fpath}"
+        cmd = f"gf -make {crt_grammar_fpath}"
         if verbose:
             print("Compiling grammar...")
             print(cmd)
         subprocess.run(cmd, shell=True, cwd=output_dir)
+        pgf_fpath = crt_grammar_fpath.replace(".gf", ".pgf").replace("Crt", "")
 
+        return pgf_fpath
 
 
 
@@ -142,10 +149,12 @@ class TemplateTokenGrammarBuilder:
         "Tok_0, Tok_1, ..."
         return f"Tok_{token_id}"
 
-    def post_process_token_ids(self, token_ids: List[int], tokenizer, literal: bool = False) -> List[Union[int,str]]:
+    def post_process_token_ids(self, token_ids: List[int], tokenizer, literal: bool = False, rm_bos=True, rm_eos=False) -> List[Union[int,str]]:
         "remove_bos=True, remove_eos=False"
-        if token_ids[0] == tokenizer.bos_token_id:
+        if token_ids[0] == tokenizer.bos_token_id and rm_bos:
             token_ids = token_ids[1:]
+        if token_ids[-1] == tokenizer.eos_token_id and rm_eos:
+            token_ids = token_ids[:-1]
         if literal:
             token_ids = [tokenizer.decode(token_id) for token_id in token_ids]
         return token_ids

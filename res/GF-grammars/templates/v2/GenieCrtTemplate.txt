@@ -1,19 +1,22 @@
 concrete {crt_grammar_name} of {abs_grammar_name} = {{
   -- [s] John [r] lives in [o] New York [e] [s] John [r] likes [o] pizza [e] [s] Mary [r] lives in [o] London [e] --
   lincat
-    Triplet , Subject , Relation , Object , Triplet_ending_marker , Subject_marker , Relation_marker , Object_marker , Rel , Entity = Str;
+    Text , BOT , EOT , Triplet , Subject , Relation , Object , Triplet_ending_marker , Subject_marker , Relation_marker , Object_marker , Rel , Entity = Str;
   lin
+    Start x y z = x ++ y ++ z;
     Repeat x y = x ++ y;
-    Empty = "EOS";  --[];--
+    Empty = {eos_token};  --[];--
     Build_triplet x y z w = x ++ y ++ z ++ w ;
     Build_relation x y = x ++ y ;
     Build_subject x y = x ++ y ;
     Build_object x y = x ++ y ;
 
-    Build_subject_marker = {Subject_marker_tokens}; -- [s] --
-    Build_relation_marker = {Relation_marker_tokens}; -- [r] --
-    Build_object_marker = {Object_marker_tokens}; -- [o] --
-    Build_triplet_ending_marker = {Triplet_ending_marker_tokens}; -- [e] --
+    Materialise_BOT = {bos_token};
+    Materialise_EOT = {eos_token};
+    Materialise_subject_marker = {Subject_marker_tokens}; -- [s] --
+    Materialise_relation_marker = {Relation_marker_tokens}; -- [r] --
+    Materialise_object_marker = {Object_marker_tokens}; -- [o] --
+    Materialise_triplet_ending_marker = {Triplet_ending_marker_tokens}; -- [e] --
 
     -- the following should be automatically generated --
     {entity_lin_str} --Germany = "ger"++"many"; France = "fra"++"nce"; UK = "u"++"k"; US = "u"++"s"; line to replace--

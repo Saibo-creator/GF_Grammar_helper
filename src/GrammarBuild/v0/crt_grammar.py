@@ -5,16 +5,13 @@
 # @Project: GFLM
 # @AUTHOR : Saibo Geng
 # @Desc :
-import hashlib
 import os
-import pdb
-import re
 from typing import List, Union
 from src.config.config import TEMPLATE_DIR
 
 from transformers import AutoTokenizer
 
-from src.base_grammar import Grammar, TemplateTokenGrammarBuilder
+from src.GrammarBuild.base_grammar import Grammar, TemplateTokenGrammarBuilder
 
 
 class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder):

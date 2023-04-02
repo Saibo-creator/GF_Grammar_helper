@@ -6,10 +6,9 @@
 # @AUTHOR : Saibo Geng
 # @Desc :
 import os
-import pdb
 
-from src.config.config import AUTO_GEN_GF_DIR,RES_DIR
-from src.base_grammar import AbsCrtGrammarPair
+from src import AUTO_GEN_GF_DIR,RES_DIR
+from src.GrammarBuild.base_grammar import AbsCrtGrammarPair
 
 
 if __name__ == '__main__':

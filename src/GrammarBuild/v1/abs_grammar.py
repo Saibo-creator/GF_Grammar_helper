@@ -11,8 +11,7 @@ from src.config.config import TEMPLATE_DIR
 
 from transformers import AutoTokenizer
 
-from src.base_grammar import Grammar, TemplateTokenGrammarBuilder
-from src.utils import get_hashed_name
+from src.GrammarBuild.base_grammar import Grammar, TemplateTokenGrammarBuilder
 
 
 class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):

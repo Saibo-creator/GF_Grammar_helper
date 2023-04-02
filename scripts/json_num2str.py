@@ -8,7 +8,7 @@
 import os
 import sys
 
-from src.utils import entity_num2str
+from src import entity_num2str
 
 sys.path.append("..")
 

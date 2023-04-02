@@ -5,16 +5,14 @@
 # @Project: GFLM
 # @AUTHOR : Saibo Geng
 # @Desc :
-import hashlib
 import os
 import pdb
-import re
 from typing import List, Union
 from src.config.config import TEMPLATE_DIR
 
 from transformers import AutoTokenizer
 
-from src.base_grammar import Grammar, TemplateTokenGrammarBuilder
+from src.GrammarBuild.base_grammar import Grammar, TemplateTokenGrammarBuilder
 
 
 class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder):
@@ -25,6 +23,8 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder):
     Relation_marker = "[r]"
     Object_marker = "[o]"
     Triplet_ending_marker = "[e]"
+
+    Default_BOS_marker = "0"
 
     def __init__(self):
         super().__init__()
@@ -39,27 +39,28 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder):
                                                                                    str) else tokenizer_or_path
         entities = self.read_jsonl(entities_or_path) if isinstance(entities_or_path, str) else entities_or_path
         relations = self.read_jsonl(relations_or_path) if isinstance(relations_or_path, str) else relations_or_path
-
         formatted_grammar: str = grammar.format(abs_grammar_name=abs_grammar_name, crt_grammar_name=crt_grammar_name,
-                                                Subject_marker_tokens = self.get_marker_tokens(self.Subject_marker, tokenizer, literal=literal),
-                                                Relation_marker_tokens = self.get_marker_tokens(self.Relation_marker, tokenizer, literal=literal),
-                                                Object_marker_tokens = self.get_marker_tokens(self.Object_marker, tokenizer, literal=literal),
-                                                Triplet_ending_marker_tokens = self.get_marker_tokens(self.Triplet_ending_marker, tokenizer, literal=literal),
-                                                entity_lin_str=self.batch_get_decoding_lin(tokenizer, entities=entities, literal=literal),
-                                                rel_lin_str=self.batch_get_decoding_lin(tokenizer, relations=relations, literal=literal))
+                                                bos_token=self.get_marker_tokens(tokenizer.bos_token, tokenizer, literal, rm_eos=True,rm_bos=False),
+                                                eos_token=self.get_marker_tokens(tokenizer.eos_token, tokenizer, literal, rm_eos=True),
+                                                Subject_marker_tokens = self.get_marker_tokens(self.Subject_marker, tokenizer, literal=literal, rm_eos=True),
+                                                Relation_marker_tokens = self.get_marker_tokens(self.Relation_marker, tokenizer, literal=literal, rm_eos=True),
+                                                Object_marker_tokens = self.get_marker_tokens(self.Object_marker, tokenizer, literal=literal, rm_eos=True),
+                                                Triplet_ending_marker_tokens = self.get_marker_tokens(self.Triplet_ending_marker, tokenizer, literal=literal, rm_eos=True),
+                                                entity_lin_str=self.batch_get_decoding_lin(tokenizer, entities=entities, literal=literal,rm_eos=True, rm_bos=True),
+                                                rel_lin_str=self.batch_get_decoding_lin(tokenizer, relations=relations, literal=literal,rm_eos=True, rm_bos=True))
         return Grammar(formatted_grammar, name=crt_grammar_name)
 
 
-    def batch_get_decoding_lin(self, tokenizer, entities: List[str] = None, relations: List[str] = None,literal=False) -> str:
+    def batch_get_decoding_lin(self, tokenizer, entities: List[str] = None, relations: List[str] = None,literal=False, rm_bos=True, rm_eos=False) -> str:
         if entities:
-            statements = [self.get_entity_or_rel_decoding_lin(entity=entity, tokenizer=tokenizer, literal=literal) for entity in entities]
+            statements = [self.get_entity_or_rel_decoding_lin(entity=entity, tokenizer=tokenizer, literal=literal, rm_bos=rm_bos, rm_eos=rm_eos) for entity in entities]
         elif relations:
-            statements = [self.get_entity_or_rel_decoding_lin(rel=rel, tokenizer=tokenizer, literal=literal) for rel in relations]
+            statements = [self.get_entity_or_rel_decoding_lin(rel=rel, tokenizer=tokenizer, literal=literal, rm_bos=rm_bos, rm_eos=rm_eos) for rel in relations]
         else:
             raise ValueError("No input provided!")
         return self.join_statements_multi_line(statements)
 
-    def get_entity_or_rel_decoding_lin(self, entity: str = None, rel: str = None, tokenizer=None, literal=False) -> str:
+    def get_entity_or_rel_decoding_lin(self, entity: str = None, rel: str = None, tokenizer=None, literal=False, rm_bos=True, rm_eos=False) -> str:
         """Germany = "ger"++"many"; France = "fra"++"nce"; UK = "u"++"k"; US = "u"++"s";"""
         if entity:
             func_name: str = self.get_tokenization_func_name(entity=entity)
@@ -70,18 +71,25 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder):
             raise ValueError("No input provided!")
         assert tokenizer is not None, "tokenizer is None! This is not allowed!"
         token_ids: List[int] = tokenizer.encode(entity)
-        processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(token_ids, tokenizer, literal=literal)
+        processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(token_ids, tokenizer, literal=literal, rm_bos=rm_bos, rm_eos=rm_eos)
         token_id_in_quotes: List[str] = [f'"{token_id}"' for token_id in processed_token_ids]
         # token_cats: List[str] = [self.token_id2tok_cat(tok_id) for tok_id in token_ids] # tok_0, tok_1, ...
         tokens_concat = " ++ ".join(token_id_in_quotes)
         return f"{func_name}  = {tokens_concat};"
 
-    def get_marker_tokens(self, marker:str, tokenizer, literal=False):
+    def get_marker_tokens(self, marker:str, tokenizer, literal=False, rm_bos=True, rm_eos=False):
         # chunk = "[s]"
+        assert marker is not None, "marker is None! This is not allowed!"
         token_ids: List[int] = tokenizer.encode(marker)
-        processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(token_ids, literal=literal, tokenizer=tokenizer)
+        processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(token_ids, literal=literal, tokenizer=tokenizer, rm_bos=rm_bos, rm_eos=rm_eos)
         token_id_in_quotes: List[str] = [f'"{token_id}"' for token_id in processed_token_ids]
         # token_cats: List[str] = [self.token_id2tok_cat(tok_id) for tok_id in token_ids] # tok_0, tok_1, ...
         tokens_concat = " ++ ".join(token_id_in_quotes)
         return tokens_concat
+
+    # def get_bos_token(self, tokenizer, literal=False):
+    #     return tokenizer.bos_token if literal else str(tokenizer.bos_token_id)
+    #
+    # def get_eos_token(self, tokenizer, literal=False):
+    #     return tokenizer.eos_token if literal else str(tokenizer.eos_token_id)
 

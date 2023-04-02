@@ -1,5 +1,4 @@
 import json
-import pdb
 import shlex
 import subprocess
 from typing import List, Union
@@ -44,11 +43,11 @@ class ServerPgf(Pgf):
         self.url = ServerPgf.DOMAIN + ":" + str(self.port) + f"/{pgf}"
 
     def complete(self, input: Union[str, List[int]]) -> List[str]:
-        pdb.set_trace()
         processed_input: str = self.process_input(input)
         params = {"command": "complete", 'input': processed_input}
 
         # Send an HTTP GET request with values
+        # pdb.set_trace()
         response = requests.get(self.url, params=params)
 
         parsed_response = json.loads(response.text)
@@ -65,10 +64,10 @@ class ServerPgf(Pgf):
         return allowed_tokens
 
     def process_input(self, input: Union[str, List[int]]) -> str:
+        if type(input) == list:
+            input = " ".join([str(x) for x in input])
         if input == "":
             return input
-        elif type(input) == list:
-            return " ".join([str(x) for x in input])
         else:
            return input if input[-1] == " " else input + " "
 
