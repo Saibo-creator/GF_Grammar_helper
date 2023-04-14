@@ -18,20 +18,20 @@ if __name__ == '__main__':
 
     pgf = ServerPgf(pgf='FullyExpandedGenieWiki.pgf', port=41296, root_dir=pgf_dir)
 
-    X = 10
-    Y = 24
-    times = np.zeros((X, Y))
-    for i in range(X):
+    num_repeat = 4
+    max_seq_len = 156
+    times = np.zeros((num_repeat, max_seq_len))
+    for i in range(max_seq_len):
         prefix = ""
-        for j in range(Y):
+        for j in range(num_repeat):
+            start_time = time.time()
             completions = pgf.complete(prefix)
             # randomly choose one completion
             if len(completions) > 0:
                 idx = np.random.randint(0, len(completions))
-                start_time = time.time()
                 next_token_id = completions[idx]
                 end_time = time.time()
-                times[i][j] = end_time - start_time
+                times[i][j] = round(end_time - start_time,4)
                 prefix += " " + next_token_id
                 print(prefix)
 
