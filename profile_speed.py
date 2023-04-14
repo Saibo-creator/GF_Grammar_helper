@@ -18,11 +18,12 @@ if __name__ == '__main__':
 
     pgf = ServerPgf(pgf='FullyExpandedGenieWiki.pgf', port=41296, root_dir=pgf_dir)
 
-    Max = 1000
-    prefix = ""
-    times = np.zeros((12, 128))
-    for i in range(12):
-        for j in range(128):
+    X = 10
+    Y = 24
+    times = np.zeros((X, Y))
+    for i in range(X):
+        prefix = ""
+        for j in range(Y):
             completions = pgf.complete(prefix)
             # randomly choose one completion
             if len(completions) > 0:
