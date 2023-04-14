@@ -15,15 +15,16 @@ from src.config.config import ASSET_PGF_DIR
 
 if __name__ == '__main__':
     pgf_dir = ASSET_PGF_DIR
+    pgf_name = 'FullyExpandedGenieWiki'
+    pgf_fname = pgf_name + ".pgf"
+    pgf = ServerPgf(pgf=pgf_fname, port=41296, root_dir=pgf_dir)
 
-    pgf = ServerPgf(pgf='FullyExpandedGenieWiki.pgf', port=41296, root_dir=pgf_dir)
-
-    num_repeat = 4
-    max_seq_len = 156
+    num_repeat = 6
+    max_seq_len = 1024
     times = np.zeros((num_repeat, max_seq_len))
-    for i in range(max_seq_len):
+    for i in range(num_repeat):
         prefix = ""
-        for j in range(num_repeat):
+        for j in range(max_seq_len):
             start_time = time.time()
             completions = pgf.complete(prefix)
             # randomly choose one completion
@@ -36,7 +37,7 @@ if __name__ == '__main__':
                 print(prefix)
 
     # save the time as csv
-    np.savetxt("time.csv", times, delimiter=",")
+    np.savetxt(f"{pgf_name}_time.csv", times, delimiter=",")
 
 
     print(pgf.complete(''))
