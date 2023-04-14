@@ -44,6 +44,7 @@ def measure_speed(pgf_name='FullyExpandedGenieWiki', port=41296, pgf_dir=ASSET_P
     if not os.path.exists(BENCHMARK_DIR):
         os.mkdir(benchmark_session_dir)
     csv_fpath = os.path.join(benchmark_session_dir, f"time.csv")
+    os.makedirs(os.path.dirname(csv_fpath), exist_ok=True)
     np.savetxt(csv_fpath, times_matrix, delimiter=",")
 
     return csv_fpath
