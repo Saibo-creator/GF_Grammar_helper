@@ -7,7 +7,7 @@
 # @Desc :
 import os
 
-from src import AUTO_GEN_GF_DIR,RES_DIR
+from src.config.config import AUTO_GEN_GF_DIR,RES_DIR
 from src.GrammarBuild.base_grammar import AbsCrtGrammarPair
 
 
@@ -27,9 +27,9 @@ if __name__ == '__main__':
     mode = args.mode
 
     #dynamic import based on version
-    GenieAbsGrammarBuilder = __import__(f"src.v{version}.abs_grammar",
+    GenieAbsGrammarBuilder = __import__(f"src.GrammarBuild.v{version}.abs_grammar",
                                         fromlist=["GenieAbsGrammarBuilder"]).GenieAbsGrammarBuilder
-    GenieCrtGrammarBuilder = __import__(f"src.v{version}.crt_grammar",
+    GenieCrtGrammarBuilder = __import__(f"src.GrammarBuild.v{version}.crt_grammar",
                                         fromlist=["GenieCrtGrammarBuilder"]).GenieCrtGrammarBuilder
 
     abs_builder = GenieAbsGrammarBuilder()

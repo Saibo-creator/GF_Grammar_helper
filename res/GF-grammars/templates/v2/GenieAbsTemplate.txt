@@ -3,12 +3,13 @@ abstract {abs_grammar_name} = {{
   flags startcat = Text ;
   -- [s] John [r] lives in [o] New York [e] [s] John [r] likes [o] pizza [e] [s] Mary [r] lives in [o] London [e] --
   cat
-    Text ; BOT ; EOT ; Triplet ; Subject ; Relation; Object ; Triplet_ending_marker; Subject_marker ; Relation_marker; Object_marker ; Rel ; Entity ;
+    Text ; BOT ; EOT ; Triplet ; Triplets ; Subject ; Relation; Object ; Triplet_ending_marker; Subject_marker ; Relation_marker; Object_marker ; Rel ; Entity ;
   fun
-    Start: BOT -> Triplet -> EOT -> Text ;
-    Repeat:  Triplet -> Triplet -> Triplet ;
+    Start: BOT -> Triplets -> EOT -> Text ;
+    Repeat:  Triplet -> Triplets -> Triplets ;
     Empty: Triplet;
     Build_triplet : Subject -> Relation -> Object -> Triplet_ending_marker -> Triplet ;
+    Build_triplets : Subject -> Relation -> Object -> Triplet_ending_marker -> Triplets ;
     Build_subject: Subject_marker -> Entity -> Subject;
     Build_relation: Relation_marker -> Rel -> Relation;
     Build_object: Object_marker -> Entity -> Object;
