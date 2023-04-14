@@ -2,10 +2,11 @@ abstract FoodRepeat = {
   flags coding = utf8 ;
   flags startcat = Comment ;
   cat
-    Comment ; Item ; Kind ; Quality ;
+    Comment ; Sentence; Item ; Kind ; Quality ;
   fun
-    Repeat : Comment -> Comment -> Comment ;
-    Pred : Item -> Quality -> Comment ;
+    Repeat : Sentence -> Comment -> Comment ;
+    Pred : Item -> Quality -> Sentence ;
+    Predd : Item -> Quality -> Comment ;
     This, That : Kind -> Item ;
     Mod : Quality -> Kind -> Kind ;
     Wine, Cheese, Fish : Kind ;

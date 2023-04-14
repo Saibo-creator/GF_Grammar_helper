@@ -5,10 +5,12 @@ __pycache__/
 *.gfo
 *.gf
 *.pgf
-asset/GF-grammars/gf/autogen
+output/grammars/autogen
 .idea/
 # C extensions
 *.so
+
+res/genie-data
 
 # Distribution / packaging
 .Python

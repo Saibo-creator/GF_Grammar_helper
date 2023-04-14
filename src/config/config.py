@@ -16,6 +16,7 @@ ROOT_DIR = os.path.dirname(os.path.dirname(SCRIPT_DIR))
 
 # Set the resource directory
 RES_DIR = os.path.join(ROOT_DIR, "res")
+OUTPUT_DIR = os.path.join(ROOT_DIR, "output")
 
 # Set the asset directory
 ASSET_DIR = os.path.join(ROOT_DIR, "asset")
@@ -24,7 +25,10 @@ ASSET_DIR = os.path.join(ROOT_DIR, "asset")
 ASSET_GF_DIR = os.path.join(ASSET_DIR, "GF-grammars", "gf")
 
 #AUTO GENERATED
-AUTO_GEN_GF_DIR = os.path.join(ASSET_GF_DIR, "autogen")
+AUTO_GEN_GF_DIR = os.path.join(ASSET_GF_DIR, "grammars", "autogen")
+
+# Benchmarks
+BENCHMARK_DIR = os.path.join(OUTPUT_DIR, "benchmarks")
 
 # Set the gf directory
 ASSET_PGF_DIR = os.path.join(ASSET_DIR, "GF-grammars", "pgf")

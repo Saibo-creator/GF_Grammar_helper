@@ -12,8 +12,8 @@ concrete GenieRepeatBart of GenieRepeat = {
     Left_bracket = "<" ;
     Right_bracket = ">" ;
     -- the following should be automatically generated --
-    Germany = "ger"++"many";
-    France = "fra"++"nce";
+    Germany = "germ"++"any";
+    France = "fran"++"ce";
     UK = "u"++"k";
     US = "u"++"s";
     Is = "is";

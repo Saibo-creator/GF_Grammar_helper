@@ -1,9 +1,10 @@
 concrete FoodRepeatEng of FoodRepeat = {
   lincat
-    Comment, Item, Kind, Quality = Str ;
+    Comment, Sentence, Item, Kind, Quality = Str ;
   lin
     Repeat x y = x ++ ";" ++ y ;
     Pred x y = x ++ "is" ++ y ;
+    Predd x y = x ++ "is" ++ y ;
     This kind = "this" ++ kind ;
     That kind = "that" ++ kind ;
     Mod quality kind = quality ++ kind ;
