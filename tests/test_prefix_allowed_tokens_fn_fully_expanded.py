@@ -5,7 +5,7 @@ from tqdm import tqdm
 
 from transformers import AutoTokenizer
 from src.constrained_generation.pgf import ServerPgf
-from src.config.config import ASSET_PGF_DIR
+from src.config.config import PGF_ASSET_DIR
 
 
 class TestPrefixAllowedTokenFn(unittest.TestCase):
@@ -13,7 +13,7 @@ class TestPrefixAllowedTokenFn(unittest.TestCase):
         tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-base")
         self.tokenizer = tokenizer
 
-        self.pgf = ServerPgf(pgf='FullyExpandedGenieT5Test.pgf', port=41296, root_dir=ASSET_PGF_DIR)
+        self.pgf = ServerPgf(pgf='FullyExpandedGenieT5Test.pgf', port=41296, root_dir=PGF_ASSET_DIR)
 
 
 

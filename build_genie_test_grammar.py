@@ -9,7 +9,7 @@ import os
 
 from transformers import AutoTokenizer
 
-from src.config.config import AUTO_GEN_GF_DIR
+from src.config.config import GF_AUTO_GEN_GF_DIR
 from src.GrammarBuild.base_grammar import AbsCrtGrammarPair
 from src.GrammarBuild.v2.abs_grammar import GenieAbsGrammarBuilder
 from src.GrammarBuild.v2.crt_grammar import GenieCrtGrammarBuilder
@@ -24,7 +24,7 @@ if __name__ == '__main__':
     # tokenizer = "martinjosifoski/genie-rw"
     # tokenizer =
 
-    output_dir = os.path.join(AUTO_GEN_GF_DIR, f"v2")
+    output_dir = os.path.join(GF_AUTO_GEN_GF_DIR, f"v2")
     grammar_name = "GenieT5Test"
 
     ENTITIES = [" AlAq", " byAq", " AlA", " Al by"]
