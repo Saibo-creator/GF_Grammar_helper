@@ -17,7 +17,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", type=str, default="wiki-ner", help="dataset name", choices=["wiki-ner", "rebel"])
     parser.add_argument("--grammar-name", type=str, default=None, help="name of the grammar")
-    parser.add_argument("--grammar-version", type=int, default=2, help="version of the grammar")
+    # parser.add_argument("--grammar-version", type=int, default=2, help="version of the grammar")
     parser.add_argument("--compile", action="store_true", help="whether to compile the grammar")
     parser.add_argument("--debug", action="store_true", help="whether to use debug mode, which will generate a small grammar from list of entities and relations")
     parser.add_argument("--literal", action="store_true", help="whether to use literal grammar")

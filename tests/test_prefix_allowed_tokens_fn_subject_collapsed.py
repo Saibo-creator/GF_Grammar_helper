@@ -13,7 +13,7 @@ class TestPrefixAllowedTokenFn(unittest.TestCase):
         tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-base")
         self.tokenizer = tokenizer
 
-        self.pgf = ServerPgf(pgf='FullyExpandedGenieT5Test.pgf', port=41296, root_dir=PGF_ASSET_DIR)
+        self.pgf = ServerPgf(pgf='SubjectCollapsedGenieT5Test.pgf', port=41296, root_dir=PGF_ASSET_DIR)
 
 
 
@@ -59,35 +59,35 @@ class TestPrefixAllowedTokenFn(unittest.TestCase):
         self.expected_output = [
             # sorted([1, self._get_id("[s]", 0)]),  # End the extraction or start a new triplet
             [0],
-            [1] + self._get_token_id("["),  # s 10975, or end the extraction with [1]
+            sorted([1] + self._get_token_id("[")),  # s 10975, or end the extraction with [1]
             self._get_token_id("s"),  # 29
             self._get_token_id("]"),  # 338
-            self._get_token_id(" by") + self._get_token_id(" Al"),
-            self._get_token_id(" by") + [self._get_id("hasA", 1)],
+            sorted(self._get_token_id(" by") + self._get_token_id(" Al")),
+            sorted(self._get_token_id(" by") + [self._get_id("hasA", 1)]),
             sorted(self._get_token_id("q") + self._get_token_id("[")),  # 0,1343
             self._get_token_id("["),  # 0
             self._get_token_id("r"),  # 10975
             self._get_token_id("]"),  # 338
-            self._get_token_id(" is") + self._get_token_id(" date"),
+            sorted(self._get_token_id(" is") + self._get_token_id(" date")),
             sorted(self._get_token_id("death") + self._get_token_id(" birth") + self._get_token_id("[")),  # 0, 744, 3113
             self._get_token_id("["),  # 0
             self._get_token_id("o"),  # 10975
             self._get_token_id("]"),  # 139
-            self._get_token_id(" by") + self._get_token_id(" Al"),
-            self._get_token_id(" by") + [self._get_id("hasA", 1)],
+            sorted(self._get_token_id(" by") + self._get_token_id(" Al")),
+            sorted(self._get_token_id(" by") + [self._get_id("hasA", 1)]),
             sorted(self._get_token_id("q") + self._get_token_id("[")),  # 1343,0
             self._get_token_id("["),  # 0
-            self._get_token_id("e"),  # 10975
+            sorted(self._get_token_id("r") + self._get_token_id("e")),  # 10975
             self._get_token_id("]"),  # 242
             sorted([1, self._get_id("[s]", 0)]),  # 0,1  End the extraction or start a new triplet
             self._get_token_id("s"),  # 10975
             self._get_token_id("]"),  # 29
-            self._get_token_id(" by") + self._get_token_id(" Al"),
-            self._get_token_id(" by") + [self._get_id("hasA", 1)],
+            sorted(self._get_token_id(" by") + self._get_token_id(" Al")),
+            sorted(self._get_token_id(" by") + [self._get_id("hasA", 1)]),
             self._get_token_id("["),  # 0
             self._get_token_id("r"),  # 10975
             self._get_token_id("]"),  # 338
-            self._get_token_id(" is") + self._get_token_id(" date")
+            sorted(self._get_token_id(" is") + self._get_token_id(" date"))
         ]
 
     def _get_id(self, string, idx):
@@ -114,16 +114,13 @@ class TestPrefixAllowedTokenFn(unittest.TestCase):
                 # pdb.set_trace()
                 expected_output = self.expected_output[i]
 
-                # self.prefix_allowed_tokens_fn = self.constrained_generation_module.get_prefix_allowed_tokens_fn()
                 allowed_tokens = sorted(self.pgf.prefix_allowed_tokens(sent))
-                # allowed_tokens = sorted(self.prefix_allowed_tokens_fn(0, sent))
-                # pdb.set_trace()
-                # self.assertNotEqual(len(allowed_tokens), 0) TODO: Fix this
+                self.assertNotEqual(len(allowed_tokens), 0)
 
-                # for t1, t2 in zip(allowed_tokens, expected_output):
-                #     # self.assertEqual(t1, t2) TODO: Fix this
-                #     print(f"expected: {t2}, actual: {t1}, prefix={sent}")
-                #     pdb.set_trace()
+                for t1, t2 in zip(allowed_tokens, expected_output):
+                    self.assertEqual(t1, t2)
+                    # print(f"expected: {t2}, actual: {t1}, prefix={sent}")
+                    # pdb.set_trace()
                 #
                 # self.assertEqual(allowed_tokens, expected_output)
                 print(f"Test {i} passed:\n"

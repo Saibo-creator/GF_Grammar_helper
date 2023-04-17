@@ -13,8 +13,6 @@ from src.GrammarBuild.base_grammar import Grammar, TemplateTokenGrammarBuilder
 
 
 class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "v2", "GenieAbsTemplate.txt")
-    grammar_prefix = "FullyExpanded"
 
     def __init__(self):
         super().__init__()
@@ -57,3 +55,31 @@ class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):
         relations_id_map: Dict[str, str] = self.build_relations_ids(relations=relations)
         relations_ids = [relation_key if i == len(relations_id_map)-1 else relation_key+"," for i, relation_key in enumerate(relations_id_map.keys()) ]
         return self.join_statements_multi_line(statements=relations_ids)
+
+
+class GenieFullyExpandedAbsGrammarBuilder(GenieAbsGrammarBuilder):
+    template = os.path.join(TEMPLATE_DIR, "v2", "GenieFullyExpandedAbsTemplate.txt")
+    grammar_prefix = "FullyExpanded"
+    grammar_suffix = ""
+
+    def __init__(self):
+        super().__init__()
+
+
+class GenieFullyExpandedEtAbsGrammarBuilder(GenieAbsGrammarBuilder):
+    template = os.path.join(TEMPLATE_DIR, "v2", "GenieFullyExpandedAbsTemplate.txt")
+    grammar_prefix = "FullyExpandedEt"
+    grammar_suffix = ""
+
+    def __init__(self):
+        super().__init__()
+
+
+class GenieSubjectCollapsedAbsGrammarBuilder(GenieAbsGrammarBuilder):
+    template = os.path.join(TEMPLATE_DIR, "v2", "GenieSubjectCollapsedAbsTemplate.txt")
+    grammar_prefix = "SubjectCollapsed"
+    grammar_suffix = ""
+
+    def __init__(self):
+        super().__init__()
+

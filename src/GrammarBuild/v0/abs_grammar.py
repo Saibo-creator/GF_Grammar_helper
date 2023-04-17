@@ -13,7 +13,7 @@ from src.GrammarBuild.base_grammar import Grammar, TemplateTokenGrammarBuilder
 
 
 class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "v0", "GenieAbsTemplate.txt")
+    template = os.path.join(TEMPLATE_DIR, "v0", "GenieFullyExpandedAbsTemplate.txt")
     grammar_prefix = ""
 
     def __init__(self):

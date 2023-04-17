@@ -7,6 +7,7 @@
 # @Desc :
 import os
 import pdb
+from abc import ABC, abstractmethod
 from typing import List, Union
 from src.config.config import TEMPLATE_DIR
 
@@ -15,16 +16,9 @@ from transformers import AutoTokenizer
 from src.GrammarBuild.base_grammar import Grammar, TemplateTokenGrammarBuilder
 
 
-class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "v2", "GenieCrtTemplate.txt")
-    grammar_prefix = "FullyExpanded"
+class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
 
-    Subject_marker = "[s]"
-    Relation_marker = "[r]"
-    Object_marker = "[o]"
-    Triplet_ending_marker = "[e]"
 
-    Default_BOS_marker = "0"
 
     def __init__(self):
         super().__init__()
@@ -40,8 +34,8 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder):
         entities = self.read_jsonl(entities_or_path) if isinstance(entities_or_path, str) else entities_or_path
         relations = self.read_jsonl(relations_or_path) if isinstance(relations_or_path, str) else relations_or_path
         formatted_grammar: str = grammar.format(abs_grammar_name=abs_grammar_name, crt_grammar_name=crt_grammar_name,
-                                                bos_token=self.get_marker_tokens(tokenizer.bos_token, tokenizer, literal, rm_eos=True,rm_bos=False),
-                                                eos_token=self.get_marker_tokens(tokenizer.eos_token, tokenizer, literal, rm_eos=True),
+                                                bog_tokens=self.get_marker_tokens(tokenizer.bos_token, tokenizer, literal, rm_eos=True,rm_bos=False),
+                                                eog_tokens=self.get_marker_tokens(tokenizer.eos_token, tokenizer, literal, rm_eos=True),
                                                 Subject_marker_tokens = self.get_marker_tokens(self.Subject_marker, tokenizer, literal=literal, rm_eos=True),
                                                 Relation_marker_tokens = self.get_marker_tokens(self.Relation_marker, tokenizer, literal=literal, rm_eos=True),
                                                 Object_marker_tokens = self.get_marker_tokens(self.Object_marker, tokenizer, literal=literal, rm_eos=True),
@@ -87,9 +81,85 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder):
         tokens_concat = " ++ ".join(token_id_in_quotes)
         return tokens_concat
 
-    # def get_bos_token(self, tokenizer, literal=False):
-    #     return tokenizer.bos_token if literal else str(tokenizer.bos_token_id)
-    #
-    # def get_eos_token(self, tokenizer, literal=False):
-    #     return tokenizer.eos_token if literal else str(tokenizer.eos_token_id)
+    @property
+    @abstractmethod
+    def Subject_marker(self):
+        """
+        This enforce the subclass to define a template property.
+        we define an abstract base class Animal that has a name property defined as an abstract method using the @property and @abstractmethod decorators.
+        This means that any subclass of Animal must define a name property or method, or it will raise a TypeError when an instance is created.
+        """
+        pass
 
+    @property
+    @abstractmethod
+    def Relation_marker(self):
+        """
+        This enforce the subclass to define a template property.
+        we define an abstract base class Animal that has a name property defined as an abstract method using the @property and @abstractmethod decorators.
+        This means that any subclass of Animal must define a name property or method, or it will raise a TypeError when an instance is created.
+        """
+        pass
+
+    @property
+    @abstractmethod
+    def Object_marker(self):
+        """
+        This enforce the subclass to define a template property.
+        we define an abstract base class Animal that has a name property defined as an abstract method using the @property and @abstractmethod decorators.
+        This means that any subclass of Animal must define a name property or method, or it will raise a TypeError when an instance is created.
+        """
+        pass
+
+    @property
+    @abstractmethod
+    def Triplet_ending_marker(self):
+        """
+        This enforce the subclass to define a template property.
+        we define an abstract base class Animal that has a name property defined as an abstract method using the @property and @abstractmethod decorators.
+        This means that any subclass of Animal must define a name property or method, or it will raise a TypeError when an instance is created.
+        """
+        pass
+
+
+class GenieFullyExpandedCrtGrammarBuilder(GenieCrtGrammarBuilder):
+
+    template = os.path.join(TEMPLATE_DIR, "v2", "GenieFullyExpandedCrtTemplate.txt")
+    grammar_prefix = "FullyExpanded"
+    grammar_suffix = ""
+
+    Subject_marker = "[s]"
+    Relation_marker = "[r]"
+    Object_marker = "[o]"
+    Triplet_ending_marker = "[e]"
+
+    Default_BOS_marker = "0"
+
+
+class GenieFullyExpandedEtCrtGrammarBuilder(GenieCrtGrammarBuilder):
+
+    template = os.path.join(TEMPLATE_DIR, "v2", "GenieFullyExpandedCrtTemplate.txt")
+    grammar_prefix = "FullyExpandedEt"
+    grammar_suffix = ""
+
+    Subject_marker = "[s]"
+    Relation_marker = "[r]"
+    Object_marker = "[o]"
+    Triplet_ending_marker = "[et]"
+
+    Default_BOS_marker = "0"
+
+
+
+class GenieSubjectCollapsedCrtGrammarBuilder(GenieCrtGrammarBuilder):
+
+    template = os.path.join(TEMPLATE_DIR, "v2", "GenieSubjectCollapsedCrtTemplate.txt")
+    grammar_prefix = "SubjectCollapsed"
+    grammar_suffix = ""
+
+    Subject_marker = "[s]"
+    Relation_marker = "[r]"
+    Object_marker = "[o]"
+    Triplet_ending_marker = "[e]"
+
+    Default_BOS_marker = "0"

@@ -15,7 +15,7 @@ from src.GrammarBuild.base_grammar import Grammar, TemplateTokenGrammarBuilder
 
 
 class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "v0", "GenieCrtTemplate.txt")
+    template = os.path.join(TEMPLATE_DIR, "v0", "GenieFullyExpandedCrtTemplate.txt")
     grammar_prefix = ""
 
     def __init__(self):
