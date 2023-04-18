@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Filename : base_grammar.py
 # @Date : 2023-03-25-15-16
-# @Project: GFLM
+# @Project: GF-Grammar-Factory
 # @AUTHOR : Saibo Geng
 # @Desc :
 import json

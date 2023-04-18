@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Filename : abs_grammar.py
 # @Date : 2023-03-24-15-22
-# @Project: GFLM
+# @Project: GF-Grammar-Factory
 # @AUTHOR : Saibo Geng
 # @Desc :
 import os

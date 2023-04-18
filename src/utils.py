@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Filename : utils
 # @Date : 2023-03-24-15-24
-# @Project: GFLM
+# @Project: GF-Grammar-Factory
 # @AUTHOR : Saibo Geng
 # @Desc :
 import hashlib

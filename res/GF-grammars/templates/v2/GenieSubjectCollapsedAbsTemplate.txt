@@ -7,7 +7,8 @@ abstract {abs_grammar_name} = {{
   fun
     Start: BOG -> Triplets -> EOG -> Text ;
     Repeat:  Triplet -> Triplets -> Triplets ;
-    Empty: Triplet;
+    Empty_triplet: Triplet;
+    Empty_triplets: Triplets;
     Build_triplet : Subject -> Doublets -> Triplet_ending_marker -> Triplet ;
     Build_triplets : Subject -> Doublets -> Triplet_ending_marker -> Triplets ;
     Repeat_Doublet : Doublet -> Doublets -> Doublets ;

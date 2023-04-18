@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Filename : config.py
 # @Date : 2023-03-25-14-44
-# @Project: GFLM
+# @Project: GF-Grammar-Factory
 # @AUTHOR : Saibo Geng
 # @Desc :
 

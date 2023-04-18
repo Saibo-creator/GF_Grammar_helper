@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Filename : visualization.py
 # @Date : 2023-04-14-10-39
-# @Project: GFLM
+# @Project: GF-Grammar-Factory
 # @AUTHOR : Saibo Geng
 # @Desc :
 

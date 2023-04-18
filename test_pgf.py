@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Filename : test_pgf.py
 # @Date : 2023-03-29-12-28
-# @Project: GFLM
+# @Project: GF-Grammar-Factory
 # @AUTHOR : Saibo Geng
 # @Desc :
 

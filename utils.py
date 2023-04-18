@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Filename : utils.py
 # @Date : 2023-03-19-15-38
-# @Project: GFLM
+# @Project: GF-Grammar-Factory
 # @AUTHOR : Saibo Geng
 # @Desc :
 

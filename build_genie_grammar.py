@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Filename : test_gen_abs_grmr
 # @Date : 2023-03-25-13-28
-# @Project: GFLM
+# @Project: GF-Grammar-Factory
 # @AUTHOR : Saibo Geng
 # @Desc :
 import os

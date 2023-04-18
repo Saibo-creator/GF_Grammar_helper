@@ -5,7 +5,8 @@ concrete {crt_grammar_name} of {abs_grammar_name} = {{
   lin
     Start x y z = x ++ y ++ z;
     Repeat x y = x ++ y;
-    Empty = {eog_tokens};  --[];--
+    Empty_triplet = [];
+    Empty_triplets = [];
     Build_triplet x y z = x ++ y ++ z ;
     Build_triplets x y z = x ++ y ++ z ;
     Repeat_Doublet x y = x ++ y;
