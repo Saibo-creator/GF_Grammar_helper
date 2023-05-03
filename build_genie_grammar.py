@@ -16,8 +16,10 @@ if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", type=str, default="wiki-ner", help="dataset name", choices=["wiki-ner", "rebel", "rebel-medium"])
+    parser.add_argument("--format", type=str, default="FullyExpanded", choices=["FullyExpanded", "FullyExpandedEt",
+                            "SubjectCollapsed"])
     parser.add_argument("--grammar-name", type=str, default=None, help="name of the grammar")
-    # parser.add_argument("--grammar-version", type=int, default=2, help="version of the grammar")
+    parser.add_argument("--grammar-version", type=int, default=2, help="version of the grammar")
     parser.add_argument("--compile", action="store_true", help="whether to compile the grammar")
     parser.add_argument("--debug", action="store_true", help="whether to use debug mode, which will generate a small grammar from list of entities and relations")
     parser.add_argument("--literal", action="store_true", help="whether to use literal grammar")
@@ -40,11 +42,18 @@ if __name__ == '__main__':
     else:
         grammar_name = args.grammar_name
 
-    #dynamic import based on version
-    GenieAbsGrammarBuilder = __import__(f"src.GrammarBuild.v{version}.abs_grammar",
-                                        fromlist=["GenieAbsGrammarBuilder"]).GenieAbsGrammarBuilder
-    GenieCrtGrammarBuilder = __import__(f"src.GrammarBuild.v{version}.crt_grammar",
-                                        fromlist=["GenieCrtGrammarBuilder"]).GenieCrtGrammarBuilder
+    # #dynamic import based on version
+    # GenieAbsGrammarBuilder = __import__(f"src.GrammarBuild.v{version}.abs_grammar",
+    #                                     fromlist=["GenieAbsGrammarBuilder"]).GenieAbsGrammarBuilder
+    # GenieCrtGrammarBuilder = __import__(f"src.GrammarBuild.v{version}.crt_grammar",
+    #                                     fromlist=["GenieCrtGrammarBuilder"]).GenieCrtGrammarBuilder
+
+    #dynamic import based on format
+    GenieAbsGrammarBuilderModule = __import__(f"src.GrammarBuild.v2", fromlist=[f"Genie{args.format}AbsGrammarBuilder"])
+    GenieCrtGrammarBuilderModule = __import__(f"src.GrammarBuild.v2", fromlist=[f"Genie{args.format}CrtGrammarBuilder"])
+
+    GenieAbsGrammarBuilder = getattr(GenieAbsGrammarBuilderModule, f"Genie{args.format}AbsGrammarBuilder")
+    GenieCrtGrammarBuilder = getattr(GenieCrtGrammarBuilderModule, f"Genie{args.format}CrtGrammarBuilder")
 
     abs_builder = GenieAbsGrammarBuilder()
     crt_builder = GenieCrtGrammarBuilder()
