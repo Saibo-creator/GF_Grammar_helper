@@ -138,6 +138,12 @@ class TemplateTokenGrammarBuilder:
                 entities.append(json_obj)
         return entities
 
+    def dump_jsonl(self, entities: List[dict], entities_path: str):
+        with open(entities_path, "w") as file:
+            for entity in entities:
+                json.dumps(entity, file)
+                file.write("\n")
+
     def build(self, **kwargs) -> Grammar:
         raise NotImplementedError
 

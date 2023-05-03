@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset", type=str, default="wiki-ner", help="dataset name", choices=["wiki-ner", "rebel"])
+    parser.add_argument("--dataset", type=str, default="wiki-ner", help="dataset name", choices=["wiki-ner", "rebel", "rebel-medium"])
     parser.add_argument("--grammar-name", type=str, default=None, help="name of the grammar")
     # parser.add_argument("--grammar-version", type=int, default=2, help="version of the grammar")
     parser.add_argument("--compile", action="store_true", help="whether to compile the grammar")
@@ -27,7 +27,14 @@ if __name__ == '__main__':
     version=args.grammar_version
 
     if args.grammar_name is None:
-        grammar_name = "GenieWiki" if args.dataset == "wiki-ner" else "GenieRebel"
+        if args.dataset == "wiki-ner":
+            grammar_name = "GenieWiki"
+        elif args.dataset == "rebel":
+            grammar_name = "GenieRebel"
+        elif args.dataset == "rebel-medium":
+            grammar_name = "GenieRebelMedium"
+        else:
+            raise NotImplementedError(f"dataset {args.dataset} not implemented")
         if args.debug:
             grammar_name = "debug"
     else:
