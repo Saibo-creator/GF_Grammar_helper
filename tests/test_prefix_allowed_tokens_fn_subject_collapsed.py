@@ -4,7 +4,7 @@ import unittest
 from tqdm import tqdm
 
 from transformers import AutoTokenizer
-from src.constrained_generation.pgf import ServerPgf
+from src.constrained_generation.pgf import HttpPgf
 from src.config.config import PGF_ASSET_DIR
 
 
@@ -13,7 +13,7 @@ class TestPrefixAllowedTokenFn(unittest.TestCase):
         tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-base")
         self.tokenizer = tokenizer
 
-        self.pgf = ServerPgf(pgf='SubjectCollapsedGenieT5Test.pgf', port=41296, root_dir=PGF_ASSET_DIR)
+        self.pgf = HttpPgf(pgf='SubjectCollapsedGenieT5Test.pgf', port=41296, root_dir=PGF_ASSET_DIR)
 
 
 
@@ -114,7 +114,7 @@ class TestPrefixAllowedTokenFn(unittest.TestCase):
                 # pdb.set_trace()
                 expected_output = self.expected_output[i]
 
-                allowed_tokens = sorted(self.pgf.prefix_allowed_tokens(sent))
+                allowed_tokens = sorted(self.pgf.get_prefix_allowed_tokens(sent))
                 self.assertNotEqual(len(allowed_tokens), 0)
 
                 for t1, t2 in zip(allowed_tokens, expected_output):

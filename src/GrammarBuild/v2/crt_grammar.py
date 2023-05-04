@@ -51,7 +51,7 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
         elif relations:
             statements = [self.get_entity_or_rel_decoding_lin(rel=rel, tokenizer=tokenizer, literal=literal, rm_bos=rm_bos, rm_eos=rm_eos) for rel in relations]
         else:
-            raise ValueError("No input provided!")
+            raise ValueError("No input_ids provided!")
         return self.join_statements_multi_line(statements)
 
     def get_entity_or_rel_decoding_lin(self, entity: str = None, rel: str = None, tokenizer=None, literal=False, rm_bos=True, rm_eos=False) -> str:
@@ -62,7 +62,7 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
             func_name: str = self.get_tokenization_func_name(rel=rel)
             entity = rel
         else:
-            raise ValueError("No input provided!")
+            raise ValueError("No input_ids provided!")
         assert tokenizer is not None, "tokenizer is None! This is not allowed!"
         token_ids: List[int] = tokenizer.encode(entity)
         processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(token_ids, tokenizer, literal=literal, rm_bos=rm_bos, rm_eos=rm_eos)

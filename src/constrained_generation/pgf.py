@@ -1,8 +1,8 @@
 import json
 import shlex
+import socket
 import subprocess
 from typing import List, Union
-from src.utils import is_port_available
 
 import requests
 
@@ -16,20 +16,20 @@ class Pgf:
         raise NotImplementedError
 
 
-class ServerPgf(Pgf):
+class HttpPgf(Pgf):
     DOMAIN: str = "http://localhost"
 
     def __init__(self,  root_dir: str = ".", pgf: str = "test.pgf", port: int = 41296):
         super().__init__(pgf)
-        self.url = ServerPgf.DOMAIN + ":" + str(port) + f"/{pgf}"
+        self.set_grammar(pgf)
 
         # Find a free port
         while not is_port_available(port):
             port += 1
         self.port = port
-        self.launch_server(root_dir=root_dir, verbose=True)
+        self._launch_server(root_dir=root_dir, verbose=True)
 
-    def launch_server(self, root_dir: str, verbose: bool = True):
+    def _launch_server(self, root_dir: str, verbose: bool = True):
         cmd = f"gf --document-root={root_dir} --server={self.port}"
         if verbose:
             print("Launching server with command: " + cmd)
@@ -40,11 +40,11 @@ class ServerPgf(Pgf):
 
     def set_grammar(self, pgf: str):
         self.pgf = pgf
-        self.url = ServerPgf.DOMAIN + ":" + str(self.port) + f"/{pgf}"
+        self.url = HttpPgf.DOMAIN + ":" + str(self.port) + f"/{pgf}"
 
     def complete(self, input: Union[str, List[int]]) -> List[str]:
-        processed_input: str = self.process_input(input)
-        params = {"command": "complete", 'input': processed_input}
+        processed_input: str = self._preprocess_input_ids(input)
+        params = {"command": "complete", 'input_ids': processed_input}
 
         # Send an HTTP GET request with values
         # pdb.set_trace()
@@ -58,12 +58,12 @@ class ServerPgf(Pgf):
 
         return completions
 
-    def prefix_allowed_tokens(self, input: str) -> List[int]:
-        completions:List[str] = self.complete(input)
+    def get_prefix_allowed_tokens(self, input_ids: str) -> List[int]:
+        completions:List[str] = self.complete(input_ids)
         allowed_tokens = [int(x) for x in completions]
         return allowed_tokens
 
-    def process_input(self, input: Union[str, List[int]]) -> str:
+    def _preprocess_input_ids(self, input: Union[str, List[int]]) -> str:
         if type(input) == list:
             input = " ".join([str(x) for x in input])
         if input == "":
@@ -71,3 +71,11 @@ class ServerPgf(Pgf):
         else:
            return input if input[-1] == " " else input + " "
 
+
+def is_port_available(port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        try:
+            s.bind(('localhost', port))
+            return True
+        except OSError:
+            return False

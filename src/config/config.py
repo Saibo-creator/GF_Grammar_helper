@@ -45,7 +45,7 @@ TRAINING_DATA_PATH ={
         "entity": os.path.join(RES_DIR, "genie-data", "jsonl", "large", "rebel_entity_trie_original_strings.jsonl"),
         "relation": os.path.join(RES_DIR, "genie-data", "jsonl", "large", "rebel_relation_trie_original_strings.jsonl"),
     },
-    "medium": {
+    "rebel-medium": {
         "entity": os.path.join(RES_DIR, "genie-data", "jsonl", "medium", "llama_constrained_rebel_entity_names.jsonl"),
         "relation": os.path.join(RES_DIR, "genie-data", "jsonl", "medium", "llama_constrained_rebel_relation_names.jsonl"),
     }
