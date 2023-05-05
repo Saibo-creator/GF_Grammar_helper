@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Filename : time_complexity.py
 # @Date : 2023-04-14-11-27
-# @Project: GFLM
+# @Project: GF-Grammar-Factory
 # @AUTHOR : Saibo Geng
 # @Desc :
 
@@ -13,14 +13,14 @@ import time
 import numpy as np
 from tqdm import tqdm
 
-from src.constrained_generation.pgf import ServerPgf
-from src.config.config import ASSET_PGF_DIR, BENCHMARK_DIR
+from src.constrained_generation.pgf import HttpPgf
+from src.config.config import PGF_ASSET_DIR, BENCHMARK_DIR
 from src.benchmark.visualization import plot_time_complexity
 
 
-def measure_speed(pgf_name='FullyExpandedGenieWiki', port=41296, pgf_dir=ASSET_PGF_DIR, num_repeat=6, max_seq_len=1024):
+def measure_speed(pgf_name='FullyExpandedGenieWiki', port=41296, pgf_dir=PGF_ASSET_DIR, num_repeat=6, max_seq_len=1024):
     pgf_fname = pgf_name + ".pgf"
-    pgf = ServerPgf(pgf=pgf_fname, port=port, root_dir=pgf_dir)
+    pgf = HttpPgf(pgf=pgf_fname, port=port, root_dir=pgf_dir)
 
     times_matrix = np.zeros((num_repeat, max_seq_len))
     for i in tqdm(range(num_repeat), desc="Repeat"):
@@ -44,6 +44,7 @@ def measure_speed(pgf_name='FullyExpandedGenieWiki', port=41296, pgf_dir=ASSET_P
     if not os.path.exists(BENCHMARK_DIR):
         os.mkdir(benchmark_session_dir)
     csv_fpath = os.path.join(benchmark_session_dir, f"time.csv")
+    os.makedirs(os.path.dirname(csv_fpath), exist_ok=True)
     np.savetxt(csv_fpath, times_matrix, delimiter=",")
 
     return csv_fpath
@@ -53,7 +54,7 @@ if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--pgf', type=str, default='FullyExpandedGenieWiki')
     arg_parser.add_argument('--port', type=int, default=41296)
-    arg_parser.add_argument('--pgf_dir', type=str, default=ASSET_PGF_DIR)
+    arg_parser.add_argument('--pgf_dir', type=str, default=PGF_ASSET_DIR)
     arg_parser.add_argument('--num_repeat', type=int, default=6)
     arg_parser.add_argument('--max_seq_len', type=int, default=1024)
     args = arg_parser.parse_args()

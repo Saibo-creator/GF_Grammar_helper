@@ -2,14 +2,13 @@
 # -*- coding: utf-8 -*-
 # @Filename : utils
 # @Date : 2023-03-24-15-24
-# @Project: GFLM
+# @Project: GF-Grammar-Factory
 # @AUTHOR : Saibo Geng
 # @Desc :
 import hashlib
 import json
 import os
 import re
-import socket
 
 import transformers
 
@@ -75,10 +74,3 @@ def generate_id(string):
     return hash_string[:12]
 
 
-def is_port_available(port):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        try:
-            s.bind(('localhost', port))
-            return True
-        except OSError:
-            return False

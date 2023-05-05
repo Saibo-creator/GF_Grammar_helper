@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Filename : abs_grammar.py
 # @Date : 2023-03-24-15-22
-# @Project: GFLM
+# @Project: GF-Grammar-Factory
 # @AUTHOR : Saibo Geng
 # @Desc :
 import os
@@ -15,7 +15,7 @@ from src.GrammarBuild.base_grammar import Grammar, TemplateTokenGrammarBuilder
 
 
 class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "v1", "GenieAbsTemplate.txt")
+    template = os.path.join(TEMPLATE_DIR, "v1", "GenieFullyExpandedAbsTemplate.txt")
     grammar_prefix = ""
 
     def __init__(self):

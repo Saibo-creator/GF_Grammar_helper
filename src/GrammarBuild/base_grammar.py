@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Filename : base_grammar.py
 # @Date : 2023-03-25-15-16
-# @Project: GFLM
+# @Project: GF-Grammar-Factory
 # @AUTHOR : Saibo Geng
 # @Desc :
 import json
@@ -13,7 +13,7 @@ from abc import abstractmethod
 from typing import List, Union
 
 from src.utils import get_hashed_name
-from src.config.config import ASSET_PGF_DIR
+from src.config.config import PGF_ASSET_DIR
 
 
 class Grammar:
@@ -67,9 +67,6 @@ class AbsCrtGrammarPair:
         crt_grammar_fpath = self.crt_grammar.save(output_dir)
         if compile:
             pgf_fpath = self.compile_grammar(crt_grammar_fpath, output_dir)
-            target_pgf_dir = ASSET_PGF_DIR
-            mv_cmd = f"mv {pgf_fpath} {target_pgf_dir}"
-            subprocess.run(mv_cmd, shell=True)
 
 
     @staticmethod
@@ -140,6 +137,12 @@ class TemplateTokenGrammarBuilder:
                 json_obj = json.loads(line)
                 entities.append(json_obj)
         return entities
+
+    def dump_jsonl(self, entities: List[dict], entities_path: str):
+        with open(entities_path, "w") as file:
+            for entity in entities:
+                json.dumps(entity, file)
+                file.write("\n")
 
     def build(self, **kwargs) -> Grammar:
         raise NotImplementedError

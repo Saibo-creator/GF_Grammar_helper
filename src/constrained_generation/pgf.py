@@ -1,8 +1,9 @@
 import json
+import os
 import shlex
+import socket
 import subprocess
 from typing import List, Union
-from src.utils import is_port_available
 
 import requests
 
@@ -16,21 +17,22 @@ class Pgf:
         raise NotImplementedError
 
 
-class ServerPgf(Pgf):
+class HttpPgf(Pgf):
     DOMAIN: str = "http://localhost"
 
     def __init__(self,  root_dir: str = ".", pgf: str = "test.pgf", port: int = 41296):
         super().__init__(pgf)
-        self.url = ServerPgf.DOMAIN + ":" + str(port) + f"/{pgf}"
 
         # Find a free port
+        self.pgf_dir = root_dir
         while not is_port_available(port):
             port += 1
         self.port = port
-        self.launch_server(root_dir=root_dir, verbose=True)
+        self._launch_server(verbose=True)
+        self.set_grammar(pgf)
 
-    def launch_server(self, root_dir: str, verbose: bool = True):
-        cmd = f"gf --document-root={root_dir} --server={self.port}"
+    def _launch_server(self, verbose: bool = True):
+        cmd = f"gf --document-root={self.pgf_dir} --server={self.port}"
         if verbose:
             print("Launching server with command: " + cmd)
         # Start the subprocess and detach it from the parent process
@@ -39,16 +41,24 @@ class ServerPgf(Pgf):
         subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, close_fds=True)
 
     def set_grammar(self, pgf: str):
+        # check if the grammar is available
+        if not self._is_grammar_available(pgf):
+            raise Exception(f"Error: the grammar {pgf} is not available in {self.pgf_dir}")
+
         self.pgf = pgf
-        self.url = ServerPgf.DOMAIN + ":" + str(self.port) + f"/{pgf}"
+        self.url = HttpPgf.DOMAIN + ":" + str(self.port) + f"/{pgf}"
 
     def complete(self, input: Union[str, List[int]]) -> List[str]:
-        processed_input: str = self.process_input(input)
-        params = {"command": "complete", 'input': processed_input}
+        processed_input: str = self._preprocess_input_ids(input)
+        params = {"command": "complete", 'input_ids': processed_input}
 
         # Send an HTTP GET request with values
         # pdb.set_trace()
         response = requests.get(self.url, params=params)
+
+        # Parse the response, handle errors
+        if response.status_code != 200:
+            raise Exception("Error: the server returned status code " + str(response.status_code))
 
         parsed_response = json.loads(response.text)
 
@@ -58,12 +68,12 @@ class ServerPgf(Pgf):
 
         return completions
 
-    def prefix_allowed_tokens(self, input: str) -> List[int]:
-        completions:List[str] = self.complete(input)
+    def get_prefix_allowed_tokens(self, input_ids: str) -> List[int]:
+        completions:List[str] = self.complete(input_ids)
         allowed_tokens = [int(x) for x in completions]
         return allowed_tokens
 
-    def process_input(self, input: Union[str, List[int]]) -> str:
+    def _preprocess_input_ids(self, input: Union[str, List[int]]) -> str:
         if type(input) == list:
             input = " ".join([str(x) for x in input])
         if input == "":
@@ -71,3 +81,16 @@ class ServerPgf(Pgf):
         else:
            return input if input[-1] == " " else input + " "
 
+    def _is_grammar_available(self, pgf):
+        path = os.path.join(self.pgf_dir, pgf)
+        return os.path.exists(path)
+
+
+
+def is_port_available(port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        try:
+            s.bind(('localhost', port))
+            return True
+        except OSError:
+            return False

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Filename : entity_num2str.py
 # @Date : 2023-03-24-15-21
-# @Project: GFLM
+# @Project: GF-Grammar-Factory
 # @AUTHOR : Saibo Geng
 # @Desc :
 import os

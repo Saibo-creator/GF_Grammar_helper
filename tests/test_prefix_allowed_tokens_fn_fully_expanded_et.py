@@ -13,7 +13,7 @@ class TestPrefixAllowedTokenFn(unittest.TestCase):
         tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-base")
         self.tokenizer = tokenizer
 
-        self.pgf = HttpPgf(pgf='FullyExpandedGenieT5Test.pgf', port=41296, root_dir=PGF_ASSET_DIR)
+        self.pgf = HttpPgf(pgf='FullyExpandedEtGenieT5Test.pgf', port=41296, root_dir=PGF_ASSET_DIR)
 
 
 
@@ -45,16 +45,18 @@ class TestPrefixAllowedTokenFn(unittest.TestCase):
             [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [")[:-1],
             # Mid of end of triplet tag
             [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [e")[:-1],
+            # Mid of end of triplet tag
+            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [et")[:-1],
             # End of triplet tag
-            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [e]")[:-1],
-            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [e] [")[:-1],
-            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [e] [s")[:-1],
-            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [e] [s]")[:-1],
-            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [e] [s] Al")[:-1],
-            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [e] [s] AlAq")[:-1],
-            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [e] [s] AlAq [")[:-1],
-            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [e] [s] AlAq [r")[:-1],
-            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [e] [s] AlAq [r]")[:-1],
+            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [et]")[:-1],
+            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [et] [")[:-1],
+            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [et] [s")[:-1],
+            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [et] [s]")[:-1],
+            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [et] [s] Al")[:-1],
+            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [et] [s] AlAq")[:-1],
+            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [et] [s] AlAq [")[:-1],
+            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [et] [s] AlAq [r")[:-1],
+            [0]+tokenizer.encode(" [s] AlAq [r] date of birth [o] AlAq [et] [s] AlAq [r]")[:-1],
         ]
         self.expected_output = [
             # sorted([1, self._get_id("[s]", 0)]),  # End the extraction or start a new triplet
@@ -78,6 +80,7 @@ class TestPrefixAllowedTokenFn(unittest.TestCase):
             sorted(self._get_token_id("q") + self._get_token_id("[")),  # 1343,0
             self._get_token_id("["),  # 0
             self._get_token_id("e"),  # 10975
+            self._get_token_id("t"),
             self._get_token_id("]"),  # 242
             sorted([1, self._get_id("[s]", 0)]),  # 0,1  End the extraction or start a new triplet
             self._get_token_id("s"),  # 10975
