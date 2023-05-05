@@ -1,4 +1,5 @@
 import json
+import os
 import shlex
 import socket
 import subprocess
@@ -21,16 +22,17 @@ class HttpPgf(Pgf):
 
     def __init__(self,  root_dir: str = ".", pgf: str = "test.pgf", port: int = 41296):
         super().__init__(pgf)
-        self.set_grammar(pgf)
 
         # Find a free port
+        self.pgf_dir = root_dir
         while not is_port_available(port):
             port += 1
         self.port = port
-        self._launch_server(root_dir=root_dir, verbose=True)
+        self._launch_server(verbose=True)
+        self.set_grammar(pgf)
 
-    def _launch_server(self, root_dir: str, verbose: bool = True):
-        cmd = f"gf --document-root={root_dir} --server={self.port}"
+    def _launch_server(self, verbose: bool = True):
+        cmd = f"gf --document-root={self.pgf_dir} --server={self.port}"
         if verbose:
             print("Launching server with command: " + cmd)
         # Start the subprocess and detach it from the parent process
@@ -39,6 +41,10 @@ class HttpPgf(Pgf):
         subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, close_fds=True)
 
     def set_grammar(self, pgf: str):
+        # check if the grammar is available
+        if not self._is_grammar_available(pgf):
+            raise Exception(f"Error: the grammar {pgf} is not available in {self.pgf_dir}")
+
         self.pgf = pgf
         self.url = HttpPgf.DOMAIN + ":" + str(self.port) + f"/{pgf}"
 
@@ -49,6 +55,10 @@ class HttpPgf(Pgf):
         # Send an HTTP GET request with values
         # pdb.set_trace()
         response = requests.get(self.url, params=params)
+
+        # Parse the response, handle errors
+        if response.status_code != 200:
+            raise Exception("Error: the server returned status code " + str(response.status_code))
 
         parsed_response = json.loads(response.text)
 
@@ -70,6 +80,11 @@ class HttpPgf(Pgf):
             return input
         else:
            return input if input[-1] == " " else input + " "
+
+    def _is_grammar_available(self, pgf):
+        path = os.path.join(self.pgf_dir, pgf)
+        return os.path.exists(path)
+
 
 
 def is_port_available(port):
