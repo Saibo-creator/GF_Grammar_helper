@@ -177,7 +177,7 @@ class TemplateTokenGrammarBuilder:
         FullyExpanded + GenieWiki + Crt
         example: FullyExpandedGenieWikiCrt
         """
-        return f"{self.grammar_prefix}{base_grammar_name}" if not crt else f"{self.grammar_prefix}{base_grammar_name}Crt"
+        return f"{self.grammar_prefix}{base_grammar_name}_Abs" if not crt else f"{self.grammar_prefix}{base_grammar_name}_Crt"
 
     @staticmethod
     def join_statements_multi_line(statements: List[str]) -> str:
