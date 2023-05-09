@@ -37,7 +37,7 @@ TEMPLATE_DIR = os.path.join(RES_DIR, "GF-grammars", "templates")
 
 # entity file paths
 TRAINING_DATA_PATH ={
-    "wiki-ner": {
+    "wiki_ner": {
         "entity":os.path.join(RES_DIR, "genie-data", "jsonl", "small", "wiki_ner_entity_trie_original_strings.jsonl"),
         "relation":os.path.join(RES_DIR, "genie-data", "jsonl", "small", "wiki_ner_relation_trie_original_strings.jsonl"),
     },
@@ -45,7 +45,7 @@ TRAINING_DATA_PATH ={
         "entity": os.path.join(RES_DIR, "genie-data", "jsonl", "large", "rebel_entity_trie_original_strings.jsonl"),
         "relation": os.path.join(RES_DIR, "genie-data", "jsonl", "large", "rebel_relation_trie_original_strings.jsonl"),
     },
-    "rebel-medium": {
+    "rebel_medium": {
         "entity": os.path.join(RES_DIR, "genie-data", "jsonl", "medium", "llama_constrained_rebel_entity_names.jsonl"),
         "relation": os.path.join(RES_DIR, "genie-data", "jsonl", "medium", "llama_constrained_rebel_relation_names.jsonl"),
     }

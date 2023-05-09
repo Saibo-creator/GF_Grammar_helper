@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--constrained-world", type=str, default="wiki-ner", help="constrained_world name", choices=["wiki-ner", "rebel", "rebel-medium"])
+    parser.add_argument("--constrained-world", type=str, default="wiki_ner", help="constrained_world name", choices=["wiki_ner", "rebel", "rebel_medium"])
     parser.add_argument("--linearization-class-id", type=str, default="fully_expanded", choices=["fully_expanded", "subject_collapsed"])
     parser.add_argument("--tokenizer-path", type=str, default="/dlabdata1/llama_hf/7B", help="martinjosifoski/genie-rw, /dlabdata1/llama_hf/7B, t5-small")
     parser.add_argument("--grammar-name", type=str, default="auto", help="name of the grammar") # genie_llama_fully_expanded
@@ -36,12 +36,12 @@ if __name__ == '__main__':
 
         grammar_name += f"_{args.linearization_class_id}"
 
-        if args.constrained_world == "wiki-ner":
-            grammar_name += "_wiki-ner"
+        if args.constrained_world == "wiki_ner":
+            grammar_name += "_wiki_ner"
         elif args.constrained_world == "rebel":
             grammar_name += "_rebel"
-        elif args.constrained_world == "rebel-medium":
-            grammar_name += "_rebel-medium"
+        elif args.constrained_world == "rebel_medium":
+            grammar_name += "_rebel_medium"
         else:
             raise NotImplementedError(f"constrained_world {args.constrained_world} not implemented")
         if args.debug:
