@@ -32,7 +32,7 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
         abs_grammar_name = self.get_grammar_name(base_grammar_name=base_grammar_name)
         if crt_grammar_name is None:
             crt_grammar_name = self.get_grammar_name(base_grammar_name=base_grammar_name, crt=True)
-        tokenizer = AutoTokenizer.from_pretrained(tokenizer_or_path) if isinstance(tokenizer_or_path,
+        tokenizer = AutoTokenizer.from_pretrained(tokenizer_or_path, use_fast=False) if isinstance(tokenizer_or_path,
                                                                                    str) else tokenizer_or_path
         entities = self.read_jsonl(entities_or_path) if isinstance(entities_or_path, str) else entities_or_path
         relations = self.read_jsonl(relations_or_path) if isinstance(relations_or_path, str) else relations_or_path
