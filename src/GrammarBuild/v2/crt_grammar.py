@@ -128,7 +128,7 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
 class GenieFullyExpandedCrtGrammarBuilder(GenieCrtGrammarBuilder):
 
     template = os.path.join(TEMPLATE_DIR, "v2", "GenieFullyExpandedCrtTemplate.txt")
-    grammar_prefix = "FullyExpanded"
+    grammar_prefix = "" # "FullyExpanded"
     grammar_suffix = ""
 
     Subject_marker = "[s]"
@@ -142,7 +142,7 @@ class GenieFullyExpandedCrtGrammarBuilder(GenieCrtGrammarBuilder):
 class GenieSubjectCollapsedCrtGrammarBuilder(GenieCrtGrammarBuilder):
 
     template = os.path.join(TEMPLATE_DIR, "v2", "GenieSubjectCollapsedCrtTemplate.txt")
-    grammar_prefix = "SubjectCollapsed"
+    grammar_prefix = "" # "SubjectCollapsed"
     grammar_suffix = ""
 
     Subject_marker = "[s]"
