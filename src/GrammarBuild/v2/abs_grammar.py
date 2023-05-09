@@ -66,15 +66,6 @@ class GenieFullyExpandedAbsGrammarBuilder(GenieAbsGrammarBuilder):
         super().__init__()
 
 
-class GenieFullyExpandedEtAbsGrammarBuilder(GenieAbsGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "v2", "GenieFullyExpandedAbsTemplate.txt")
-    grammar_prefix = "FullyExpandedEt"
-    grammar_suffix = ""
-
-    def __init__(self):
-        super().__init__()
-
-
 class GenieSubjectCollapsedAbsGrammarBuilder(GenieAbsGrammarBuilder):
     template = os.path.join(TEMPLATE_DIR, "v2", "GenieSubjectCollapsedAbsTemplate.txt")
     grammar_prefix = "SubjectCollapsed"

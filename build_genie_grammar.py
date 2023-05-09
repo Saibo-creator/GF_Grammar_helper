@@ -15,61 +15,73 @@ if __name__ == '__main__':
 
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset", type=str, default="wiki-ner", help="dataset name", choices=["wiki-ner", "rebel", "rebel-medium"])
-    parser.add_argument("--format", type=str, default="FullyExpanded", choices=["FullyExpanded", "FullyExpandedEt",
-                            "SubjectCollapsed"])
-    parser.add_argument("--grammar-name", type=str, default=None, help="name of the grammar")
-    parser.add_argument("--grammar-version", type=int, default=2, help="version of the grammar")
+    parser.add_argument("--constrained-world", type=str, default="wiki-ner", help="constrained_world name", choices=["wiki-ner", "rebel", "rebel-medium"])
+    parser.add_argument("--linearization-class-id", type=str, default="fully_expanded", choices=["fully_expanded", "subject_collapsed"])
+    parser.add_argument("--tokenizer-path", type=str, default="/dlabdata1/llama_hf/7B", help="martinjosifoski/genie-rw, /dlabdata1/llama_hf/7B, t5-small")
+    parser.add_argument("--grammar-name", type=str, default="auto", help="name of the grammar") # genie_llama_fully_expanded
     parser.add_argument("--compile", action="store_true", help="whether to compile the grammar")
     parser.add_argument("--debug", action="store_true", help="whether to use debug mode, which will generate a small grammar from list of entities and relations")
     parser.add_argument("--literal", action="store_true", help="whether to use literal grammar")
     args = parser.parse_args()
 
 
-    version=args.grammar_version
-
-    if args.grammar_name is None:
-        if args.dataset == "wiki-ner":
-            grammar_name = "GenieWiki"
-        elif args.dataset == "rebel":
-            grammar_name = "GenieRebel"
-        elif args.dataset == "rebel-medium":
-            grammar_name = "GenieRebelMedium"
+    if args.grammar_name == "auto":
+        grammar_name="genie"
+        if "llama" in args.tokenizer_path:
+            grammar_name += "_llama"
+        elif "t5" in args.tokenizer_path:
+            grammar_name += "_t5"
         else:
-            raise NotImplementedError(f"dataset {args.dataset} not implemented")
+            raise NotImplementedError(f"tokenizer_path {args.tokenizer_path} not implemented")
+
+        grammar_name += f"_{args.linearization_class_id}"
+
+        if args.constrained_world == "wiki-ner":
+            grammar_name += "_wiki-ner"
+        elif args.constrained_world == "rebel":
+            grammar_name += "_rebel"
+        elif args.constrained_world == "rebel-medium":
+            grammar_name += "_rebel-medium"
+        else:
+            raise NotImplementedError(f"constrained_world {args.constrained_world} not implemented")
         if args.debug:
             grammar_name = "debug"
     else:
         grammar_name = args.grammar_name
 
-    # #dynamic import based on version
-    # GenieAbsGrammarBuilder = __import__(f"src.GrammarBuild.v{version}.abs_grammar",
-    #                                     fromlist=["GenieAbsGrammarBuilder"]).GenieAbsGrammarBuilder
-    # GenieCrtGrammarBuilder = __import__(f"src.GrammarBuild.v{version}.crt_grammar",
-    #                                     fromlist=["GenieCrtGrammarBuilder"]).GenieCrtGrammarBuilder
+    if args.linearization_class_id == "fully_expanded":
+        submodule_name = "FullyExpanded"
+    elif args.linearization_class_id == "subject_collapsed":
+        submodule_name = "SubjectCollapsed"
+    else:
+        raise NotImplementedError(f"linearization_class_id {args.linearization_class_id} not implemented")
 
-    #dynamic import based on format
-    GenieAbsGrammarBuilderModule = __import__(f"src.GrammarBuild.v2", fromlist=[f"Genie{args.format}AbsGrammarBuilder"])
-    GenieCrtGrammarBuilderModule = __import__(f"src.GrammarBuild.v2", fromlist=[f"Genie{args.format}CrtGrammarBuilder"])
+    #dynamic import based on linearization_class_id
+    GenieAbsGrammarBuilderModule = __import__(f"src.GrammarBuild.v2", fromlist=[f"Genie{submodule_name}AbsGrammarBuilder"])
+    GenieCrtGrammarBuilderModule = __import__(f"src.GrammarBuild.v2", fromlist=[f"Genie{submodule_name}CrtGrammarBuilder"])
 
-    GenieAbsGrammarBuilder = getattr(GenieAbsGrammarBuilderModule, f"Genie{args.format}AbsGrammarBuilder")
-    GenieCrtGrammarBuilder = getattr(GenieCrtGrammarBuilderModule, f"Genie{args.format}CrtGrammarBuilder")
+    GenieAbsGrammarBuilder = getattr(GenieAbsGrammarBuilderModule, f"Genie{submodule_name}AbsGrammarBuilder")
+    GenieCrtGrammarBuilder = getattr(GenieCrtGrammarBuilderModule, f"Genie{submodule_name}CrtGrammarBuilder")
 
     abs_builder = GenieAbsGrammarBuilder()
     crt_builder = GenieCrtGrammarBuilder()
 
-    output_dir = os.path.join(GF_AUTO_GEN_GF_DIR, f"v{version}")
+    output_dir = os.path.join(GF_AUTO_GEN_GF_DIR, f"v2")
 
     if args.debug:
-        abs_grammar = abs_builder.build(base_grammar_name=grammar_name, entities_or_path=["entity1", "entity2"], relations_or_path=["relation1", "relation2"], tokenizer_or_path="martinjosifoski/genie-rw")
-        crt_grammar = crt_builder.build(base_grammar_name=grammar_name, entities_or_path=["entity1", "entity2"], relations_or_path =["relation1", "relation2"], tokenizer_or_path="martinjosifoski/genie-rw")
+        abs_grammar = abs_builder.build(base_grammar_name=grammar_name, entities_or_path=["entity1", "entity2"], relations_or_path=["relation1", "relation2"], tokenizer_or_path=args.tokenizer_path)
+        crt_grammar = crt_builder.build(base_grammar_name=grammar_name, entities_or_path=["entity1", "entity2"], relations_or_path =["relation1", "relation2"], tokenizer_or_path=args.tokenizer_path)
 
     else:
 
-        entities_path = TRAINING_DATA_PATH[args.dataset]["entity"]
-        relations_path = TRAINING_DATA_PATH[args.dataset]["relation"]
-        abs_grammar = abs_builder.build(base_grammar_name=grammar_name, entities_or_path=entities_path, relations_or_path=relations_path, tokenizer_or_path="martinjosifoski/genie-rw")
-        crt_grammar = crt_builder.build(base_grammar_name=grammar_name, entities_or_path=entities_path, relations_or_path=relations_path, tokenizer_or_path="martinjosifoski/genie-rw", literal=args.literal)
+        entities_path = TRAINING_DATA_PATH[args.constrained_world]["entity"]
+        relations_path = TRAINING_DATA_PATH[args.constrained_world]["relation"]
+        print("start building abstract grammar...")
+        abs_grammar = abs_builder.build(base_grammar_name=grammar_name, entities_or_path=entities_path, relations_or_path=relations_path, tokenizer_or_path=args.tokenizer_path)
+        print("finished building abstract grammar...")
+        print("start building concrete grammar...")
+        crt_grammar = crt_builder.build(base_grammar_name=grammar_name, entities_or_path=entities_path, relations_or_path=relations_path, tokenizer_or_path=args.tokenizer_path, literal=args.literal)
+        print("finished building concrete grammar...")
 
 
     grammar_pair = AbsCrtGrammarPair(abs_grammar=abs_grammar, crt_grammar=crt_grammar)

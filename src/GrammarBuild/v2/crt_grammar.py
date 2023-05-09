@@ -9,6 +9,9 @@ import os
 import pdb
 from abc import ABC, abstractmethod
 from typing import List, Union
+
+from tqdm import tqdm
+
 from src.config.config import TEMPLATE_DIR
 
 from transformers import AutoTokenizer
@@ -34,7 +37,7 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
         entities = self.read_jsonl(entities_or_path) if isinstance(entities_or_path, str) else entities_or_path
         relations = self.read_jsonl(relations_or_path) if isinstance(relations_or_path, str) else relations_or_path
         formatted_grammar: str = grammar.format(abs_grammar_name=abs_grammar_name, crt_grammar_name=crt_grammar_name,
-                                                bog_tokens=self.get_marker_tokens(tokenizer.bos_token, tokenizer, literal, rm_eos=True,rm_bos=False),
+                                                bog_tokens="[]",#self.get_marker_tokens(tokenizer.bos_token, tokenizer, literal, rm_eos=True,rm_bos=False)
                                                 eog_tokens=self.get_marker_tokens(tokenizer.eos_token, tokenizer, literal, rm_eos=True),
                                                 Subject_marker_tokens = self.get_marker_tokens(self.Subject_marker, tokenizer, literal=literal, rm_eos=True),
                                                 Relation_marker_tokens = self.get_marker_tokens(self.Relation_marker, tokenizer, literal=literal, rm_eos=True),
@@ -47,9 +50,9 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
 
     def batch_get_decoding_lin(self, tokenizer, entities: List[str] = None, relations: List[str] = None,literal=False, rm_bos=True, rm_eos=False) -> str:
         if entities:
-            statements = [self.get_entity_or_rel_decoding_lin(entity=entity, tokenizer=tokenizer, literal=literal, rm_bos=rm_bos, rm_eos=rm_eos) for entity in entities]
+            statements = [self.get_entity_or_rel_decoding_lin(entity=entity, tokenizer=tokenizer, literal=literal, rm_bos=rm_bos, rm_eos=rm_eos) for entity in tqdm(entities, desc="get linearization for entities")]
         elif relations:
-            statements = [self.get_entity_or_rel_decoding_lin(rel=rel, tokenizer=tokenizer, literal=literal, rm_bos=rm_bos, rm_eos=rm_eos) for rel in relations]
+            statements = [self.get_entity_or_rel_decoding_lin(rel=rel, tokenizer=tokenizer, literal=literal, rm_bos=rm_bos, rm_eos=rm_eos) for rel in tqdm(relations, desc="get linearization for relations")]
         else:
             raise ValueError("No input_ids provided!")
         return self.join_statements_multi_line(statements)
@@ -134,21 +137,6 @@ class GenieFullyExpandedCrtGrammarBuilder(GenieCrtGrammarBuilder):
     Triplet_ending_marker = "[e]"
 
     Default_BOS_marker = "0"
-
-
-class GenieFullyExpandedEtCrtGrammarBuilder(GenieCrtGrammarBuilder):
-
-    template = os.path.join(TEMPLATE_DIR, "v2", "GenieFullyExpandedCrtTemplate.txt")
-    grammar_prefix = "FullyExpandedEt"
-    grammar_suffix = ""
-
-    Subject_marker = "[s]"
-    Relation_marker = "[r]"
-    Object_marker = "[o]"
-    Triplet_ending_marker = "[et]"
-
-    Default_BOS_marker = "0"
-
 
 
 class GenieSubjectCollapsedCrtGrammarBuilder(GenieCrtGrammarBuilder):

@@ -3,9 +3,12 @@ import os
 import shlex
 import socket
 import subprocess
+import sys
 from typing import List, Union
 
 import requests
+
+DEFAULT_PGF_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "pgf")
 
 
 class Pgf:
@@ -20,33 +23,39 @@ class Pgf:
 class HttpPgf(Pgf):
     DOMAIN: str = "http://localhost"
 
-    def __init__(self,  root_dir: str = ".", pgf: str = "test.pgf", port: int = 41296):
+    def __init__(self,  root_dir=None, pgf: str = "test.pgf", port: int = 41296):
         super().__init__(pgf)
-
-        # Find a free port
+        if root_dir is None:
+            root_dir = DEFAULT_PGF_DIR
         self.pgf_dir = root_dir
+        self.set_grammar(pgf)
+
+        self.prepare_launch(port=port)
+        self._launch_server(root_dir=root_dir, verbose=True)
+
+    def prepare_launch(self, port: int = 41296):
+        # Find a free port
         while not is_port_available(port):
             port += 1
         self.port = port
-        self._launch_server(verbose=True)
-        self.set_grammar(pgf)
+        self.url = HttpPgf.DOMAIN + ":" + str(self.port) + f"/{self.pgf}"
 
-    def _launch_server(self, verbose: bool = True):
-        cmd = f"gf --document-root={self.pgf_dir} --server={self.port}"
+    def _launch_server(self, root_dir: str, verbose: bool = True):
+        cmd = f"gf --document-root={root_dir} --server={self.port}"
         if verbose:
             print("Launching server with command: " + cmd)
         # Start the subprocess and detach it from the parent process
         # Split the command string into a list of arguments
         args = shlex.split(cmd)
-        subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, close_fds=True)
+        process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, close_fds=True)
+
+        # Wait for the server to be ready
+        print(f"visit {self.url} to check if the server is ready")
 
     def set_grammar(self, pgf: str):
         # check if the grammar is available
         if not self._is_grammar_available(pgf):
             raise Exception(f"Error: the grammar {pgf} is not available in {self.pgf_dir}")
-
-        self.pgf = pgf
-        self.url = HttpPgf.DOMAIN + ":" + str(self.port) + f"/{pgf}"
 
     def complete(self, input: Union[str, List[int]]) -> List[str]:
         processed_input: str = self._preprocess_input_ids(input)
@@ -84,7 +93,6 @@ class HttpPgf(Pgf):
     def _is_grammar_available(self, pgf):
         path = os.path.join(self.pgf_dir, pgf)
         return os.path.exists(path)
-
 
 
 def is_port_available(port):
