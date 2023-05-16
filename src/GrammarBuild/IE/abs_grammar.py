@@ -58,7 +58,7 @@ class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):
 
 
 class GenieFullyExpandedAbsGrammarBuilder(GenieAbsGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "v2", "GenieFullyExpandedAbsTemplate.txt")
+    template = os.path.join(TEMPLATE_DIR, "IE", "GenieFullyExpandedAbsTemplate.txt")
     grammar_prefix = "" # "FullyExpanded"
     grammar_suffix = ""
 
@@ -67,7 +67,7 @@ class GenieFullyExpandedAbsGrammarBuilder(GenieAbsGrammarBuilder):
 
 
 class GenieSubjectCollapsedAbsGrammarBuilder(GenieAbsGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "v2", "GenieSubjectCollapsedAbsTemplate.txt")
+    template = os.path.join(TEMPLATE_DIR, "IE", "GenieSubjectCollapsedAbsTemplate.txt")
     grammar_prefix = "" # "SubjectCollapsed"
     grammar_suffix = ""
 

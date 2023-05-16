@@ -7,17 +7,19 @@
 # @Desc :
 import os
 
-from src.config.config import GF_AUTO_GEN_GF_DIR,RES_DIR,TRAINING_DATA_PATH
+from src.config.config import GF_AUTO_GEN_GF_DIR,DATA_DIR,IE_TRAINING_DATA_PATH
 from src.GrammarBuild.base_grammar import AbsCrtGrammarPair
 
 
 if __name__ == '__main__':
+    # get env variable LLAMA_DIR
+    LLAMA_DIR = os.environ.get("LLAMA_DIR")
 
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--constrained-world", type=str, default="wiki_ner", help="constrained_world name", choices=["wiki_ner", "rebel", "rebel_medium"])
     parser.add_argument("--linearization-class-id", type=str, default="fully_expanded", choices=["fully_expanded", "subject_collapsed"])
-    parser.add_argument("--tokenizer-path", type=str, default="/dlabdata1/llama_hf/7B", help="martinjosifoski/genie-rw, /dlabdata1/llama_hf/7B, t5-small")
+    parser.add_argument("--tokenizer-path", type=str, default=f"{LLAMA_DIR}/7B", help="martinjosifoski/genie-rw, /dlabdata1/llama_hf/7B, t5-small")
     parser.add_argument("--grammar-name", type=str, default="auto", help="name of the grammar") # genie_llama_fully_expanded
     parser.add_argument("--compile", action="store_true", help="whether to compile the grammar")
     parser.add_argument("--debug", action="store_true", help="whether to use debug mode, which will generate a small grammar from list of entities and relations")
@@ -57,8 +59,8 @@ if __name__ == '__main__':
         raise NotImplementedError(f"linearization_class_id {args.linearization_class_id} not implemented")
 
     #dynamic import based on linearization_class_id
-    GenieAbsGrammarBuilderModule = __import__(f"src.GrammarBuild.v2", fromlist=[f"Genie{submodule_name}AbsGrammarBuilder"])
-    GenieCrtGrammarBuilderModule = __import__(f"src.GrammarBuild.v2", fromlist=[f"Genie{submodule_name}CrtGrammarBuilder"])
+    GenieAbsGrammarBuilderModule = __import__(f"src.GrammarBuild.IE", fromlist=[f"Genie{submodule_name}AbsGrammarBuilder"])
+    GenieCrtGrammarBuilderModule = __import__(f"src.GrammarBuild.IE", fromlist=[f"Genie{submodule_name}CrtGrammarBuilder"])
 
     GenieAbsGrammarBuilder = getattr(GenieAbsGrammarBuilderModule, f"Genie{submodule_name}AbsGrammarBuilder")
     GenieCrtGrammarBuilder = getattr(GenieCrtGrammarBuilderModule, f"Genie{submodule_name}CrtGrammarBuilder")
@@ -66,7 +68,7 @@ if __name__ == '__main__':
     abs_builder = GenieAbsGrammarBuilder()
     crt_builder = GenieCrtGrammarBuilder()
 
-    output_dir = os.path.join(GF_AUTO_GEN_GF_DIR, f"v2")
+    output_dir = os.path.join(GF_AUTO_GEN_GF_DIR, f"IE")
 
     if args.debug:
         abs_grammar = abs_builder.build(base_grammar_name=grammar_name, entities_or_path=["entity1", "entity2"], relations_or_path=["relation1", "relation2"], tokenizer_or_path=args.tokenizer_path)
@@ -74,8 +76,8 @@ if __name__ == '__main__':
 
     else:
 
-        entities_path = TRAINING_DATA_PATH[args.constrained_world]["entity"]
-        relations_path = TRAINING_DATA_PATH[args.constrained_world]["relation"]
+        entities_path = IE_TRAINING_DATA_PATH[args.constrained_world]["entity"]
+        relations_path = IE_TRAINING_DATA_PATH[args.constrained_world]["relation"]
         print("start building abstract grammar...")
         abs_grammar = abs_builder.build(base_grammar_name=grammar_name, entities_or_path=entities_path, relations_or_path=relations_path, tokenizer_or_path=args.tokenizer_path)
         print("finished building abstract grammar...")

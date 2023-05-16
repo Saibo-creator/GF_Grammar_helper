@@ -10,7 +10,7 @@ output/grammars/autogen
 # C extensions
 *.so
 
-res/genie-data
+data/genie-data
 
 # Distribution / packaging
 .Python

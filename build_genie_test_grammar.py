@@ -21,8 +21,8 @@ if __name__ == '__main__':
     args = arg_parser.parse_args()
 
     #dynamic import based on format
-    GenieAbsGrammarBuilderModule = __import__(f"src.GrammarBuild.v2", fromlist=[f"Genie{args.format}AbsGrammarBuilder"])
-    GenieCrtGrammarBuilderModule = __import__(f"src.GrammarBuild.v2", fromlist=[f"Genie{args.format}CrtGrammarBuilder"])
+    GenieAbsGrammarBuilderModule = __import__(f"src.GrammarBuild.IE", fromlist=[f"Genie{args.format}AbsGrammarBuilder"])
+    GenieCrtGrammarBuilderModule = __import__(f"src.GrammarBuild.IE", fromlist=[f"Genie{args.format}CrtGrammarBuilder"])
 
     GenieAbsGrammarBuilder = getattr(GenieAbsGrammarBuilderModule, f"Genie{args.format}AbsGrammarBuilder")
     GenieCrtGrammarBuilder = getattr(GenieCrtGrammarBuilderModule, f"Genie{args.format}CrtGrammarBuilder")
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     abs_builder = GenieAbsGrammarBuilder()
     crt_builder = GenieCrtGrammarBuilder()
 
-    output_dir = os.path.join(GF_AUTO_GEN_GF_DIR, f"v2")
+    output_dir = os.path.join(GF_AUTO_GEN_GF_DIR, f"IE")
     grammar_name = "GenieT5Test"
 
     ENTITIES = [" AlAq", " byAq", " AlA", " Al by"]

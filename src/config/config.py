@@ -31,23 +31,39 @@ BENCHMARK_DIR = os.path.join(OUTPUT_DIR, "benchmarks")
 
 
 # Set the resource directory
-RES_DIR = os.path.join(ROOT_DIR, "res")
+DATA_DIR = os.path.join(ROOT_DIR, "data")
 # Set the templates directory
-TEMPLATE_DIR = os.path.join(RES_DIR, "GF-grammars", "templates")
+TEMPLATE_DIR = os.path.join(ASSET_DIR, "templates")
 
 # entity file paths
-TRAINING_DATA_PATH ={
+IE_TRAINING_DATA_PATH ={
     "wiki_ner": {
-        "entity":os.path.join(RES_DIR, "genie-data", "jsonl", "small", "wiki_ner_entity_trie_original_strings.jsonl"),
-        "relation":os.path.join(RES_DIR, "genie-data", "jsonl", "small", "wiki_ner_relation_trie_original_strings.jsonl"),
+        "entity":os.path.join(DATA_DIR, "IE", "jsonl", "small", "wiki_ner_entity_trie_original_strings.jsonl"),
+        "relation":os.path.join(DATA_DIR, "IE", "jsonl", "small", "wiki_ner_relation_trie_original_strings.jsonl"),
     },
     "rebel": {
-        "entity": os.path.join(RES_DIR, "genie-data", "jsonl", "large", "rebel_entity_trie_original_strings.jsonl"),
-        "relation": os.path.join(RES_DIR, "genie-data", "jsonl", "large", "rebel_relation_trie_original_strings.jsonl"),
+        "entity": os.path.join(DATA_DIR, "IE", "jsonl", "large", "rebel_entity_trie_original_strings.jsonl"),
+        "relation": os.path.join(DATA_DIR, "IE", "jsonl", "large", "rebel_relation_trie_original_strings.jsonl"),
     },
     "rebel_medium": {
-        "entity": os.path.join(RES_DIR, "genie-data", "jsonl", "medium", "llama_constrained_rebel_entity_names.jsonl"),
-        "relation": os.path.join(RES_DIR, "genie-data", "jsonl", "medium", "llama_constrained_rebel_relation_names.jsonl"),
+        "entity": os.path.join(DATA_DIR, "IE", "jsonl", "medium", "llama_constrained_rebel_entity_names.jsonl"),
+        "relation": os.path.join(DATA_DIR, "IE", "jsonl", "medium", "llama_constrained_rebel_relation_names.jsonl"),
     }
+}
+
+EL_TRAINING_DATA_PATH ={
+    "aida-train": {
+        "entity":os.path.join(DATA_DIR, "EL", "aida-train-kilt-entities.jsonl")},
+    "aida-test": {
+        "entity":os.path.join(DATA_DIR, "EL", "aida-test-kilt-entities.jsonl")},
+    "aida-dev": {
+        "entity":os.path.join(DATA_DIR, "EL", "aida-dev-kilt-entities.jsonl")},
+    "aida-all": {
+        "entity":os.path.join(DATA_DIR, "EL", "aida-all-kilt-entities.jsonl")},
+}
+
+DATA_PATHS = {
+    "IE": IE_TRAINING_DATA_PATH,
+    "EL": EL_TRAINING_DATA_PATH,
 }
 

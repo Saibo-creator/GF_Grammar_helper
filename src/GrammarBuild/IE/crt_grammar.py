@@ -38,7 +38,7 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
         relations = self.read_jsonl(relations_or_path) if isinstance(relations_or_path, str) else relations_or_path
         formatted_grammar: str = grammar.format(abs_grammar_name=abs_grammar_name, crt_grammar_name=crt_grammar_name,
                                                 bog_tokens="[]",#self.get_marker_tokens(tokenizer.bos_token, tokenizer, literal, rm_eos=True,rm_bos=False)
-                                                eog_tokens=self.get_marker_tokens(tokenizer.eos_token, tokenizer, literal, rm_eos=True),
+                                                eog_tokens= f'"{tokenizer.encode(tokenizer.eos_token, add_special_tokens=False)[0]}"', # "2" for llama and "1" for T5
                                                 Subject_marker_tokens = self.get_marker_tokens(self.Subject_marker, tokenizer, literal=literal, rm_eos=True),
                                                 Relation_marker_tokens = self.get_marker_tokens(self.Relation_marker, tokenizer, literal=literal, rm_eos=True),
                                                 Object_marker_tokens = self.get_marker_tokens(self.Object_marker, tokenizer, literal=literal, rm_eos=True),
@@ -127,7 +127,7 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
 
 class GenieFullyExpandedCrtGrammarBuilder(GenieCrtGrammarBuilder):
 
-    template = os.path.join(TEMPLATE_DIR, "v2", "GenieFullyExpandedCrtTemplate.txt")
+    template = os.path.join(TEMPLATE_DIR, "IE", "GenieFullyExpandedCrtTemplate.txt")
     grammar_prefix = "" # "FullyExpanded"
     grammar_suffix = ""
 
@@ -141,7 +141,7 @@ class GenieFullyExpandedCrtGrammarBuilder(GenieCrtGrammarBuilder):
 
 class GenieSubjectCollapsedCrtGrammarBuilder(GenieCrtGrammarBuilder):
 
-    template = os.path.join(TEMPLATE_DIR, "v2", "GenieSubjectCollapsedCrtTemplate.txt")
+    template = os.path.join(TEMPLATE_DIR, "IE", "GenieSubjectCollapsedCrtTemplate.txt")
     grammar_prefix = "" # "SubjectCollapsed"
     grammar_suffix = ""
 
