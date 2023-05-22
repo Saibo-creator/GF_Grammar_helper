@@ -8,3 +8,5 @@
 
 from .abs_grammar import ELAbsGrammarBuilder
 from .crt_grammar import ELCrtGrammarBuilder
+from .abs_otf_grammar import ELotfAbsGrammarBuilder
+from .crt_otf_grammar import ELotfCrtGrammarBuilder

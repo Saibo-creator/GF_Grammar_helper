@@ -50,10 +50,15 @@ class AbsCrtGrammarPair:
         self.crt_grammar = crt_grammar
         self.name = self.abs_grammar.name
 
-    def save(self, output_dir: str, compile: bool = False):
-        dir = os.path.join(output_dir, self.name)
+    def save(self, output_dir: str, compile: bool = False, only_keep_pgf: bool = False, individual_dir: bool = True):
+        # if not individual_dir, then save to output_dir, this will make all grammars in one dir(including intermediate grammars)
+        if individual_dir:
+            dir = os.path.join(output_dir, self.name)
+        else:
+            dir = output_dir
         os.makedirs(output_dir, exist_ok=True)
-        if os.path.exists(dir):
+        if os.path.exists(dir) and individual_dir:
+            # if the goal is to save all grammars in one dir, then we don't need to ask user to overwrite
             overwrite = input(f"Grammar {dir} already exists. Overwrite? (y/n)")
             if overwrite == "y":
                 self._save(dir, compile=compile)
@@ -61,12 +66,21 @@ class AbsCrtGrammarPair:
                 print("Aborted.")
         else:
             self._save(dir, compile=compile)
+        if only_keep_pgf:
+            self._remove_gf_file(dir)
 
     def _save(self, output_dir: str, compile: bool = False):
         abs_grammar_fpath = self.abs_grammar.save(output_dir)
         crt_grammar_fpath = self.crt_grammar.save(output_dir)
         if compile:
             pgf_fpath = self.compile_grammar(crt_grammar_fpath, output_dir)
+
+    def _remove_gf_file(self, dir: str):
+        files = os.listdir(dir)
+        for file in files:
+            if not file.endswith(".pgf"):
+                os.remove(os.path.join(dir, file))
+
 
 
     @staticmethod
@@ -182,3 +196,14 @@ class TemplateTokenGrammarBuilder:
     @staticmethod
     def join_statements_multi_line(statements: List[str]) -> str:
         return f"\n{TemplateTokenGrammarBuilder.INDENT}".join(statements)
+
+
+    def get_marker_tokens(self, marker:str, tokenizer, literal=False, rm_bos=True, rm_eos=False):
+        # chunk = "[s]"
+        assert marker is not None, "marker is None! This is not allowed!"
+        token_ids: List[int] = tokenizer.encode(marker)
+        processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(token_ids, literal=literal, tokenizer=tokenizer, rm_bos=rm_bos, rm_eos=rm_eos)
+        token_id_in_quotes: List[str] = [f'"{token_id}"' for token_id in processed_token_ids]
+        # token_cats: List[str] = [self.token_id2tok_cat(tok_id) for tok_id in token_ids] # tok_0, tok_1, ...
+        tokens_concat = " ++ ".join(token_id_in_quotes)
+        return tokens_concat

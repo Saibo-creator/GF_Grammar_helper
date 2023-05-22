@@ -74,15 +74,7 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
         tokens_concat = " ++ ".join(token_id_in_quotes)
         return f"{func_name}  = {tokens_concat};"
 
-    def get_marker_tokens(self, marker:str, tokenizer, literal=False, rm_bos=True, rm_eos=False):
-        # chunk = "[s]"
-        assert marker is not None, "marker is None! This is not allowed!"
-        token_ids: List[int] = tokenizer.encode(marker)
-        processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(token_ids, literal=literal, tokenizer=tokenizer, rm_bos=rm_bos, rm_eos=rm_eos)
-        token_id_in_quotes: List[str] = [f'"{token_id}"' for token_id in processed_token_ids]
-        # token_cats: List[str] = [self.token_id2tok_cat(tok_id) for tok_id in token_ids] # tok_0, tok_1, ...
-        tokens_concat = " ++ ".join(token_id_in_quotes)
-        return tokens_concat
+
 
     @property
     @abstractmethod

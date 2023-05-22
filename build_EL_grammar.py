@@ -42,6 +42,10 @@ if __name__ == '__main__':
             grammar_name += "_aida"
         else:
             raise NotImplementedError(f"constrained_world {args.constrained_world} not implemented")
+
+        # split
+        grammar_name += f"_{args.split}"
+
         if args.debug:
             grammar_name = "debug"
     else:
