@@ -32,24 +32,12 @@ concrete {crt_grammar_name} of {abs_grammar_name} = {{
     --Empty_HyphenFunctionTags: HyphenFunctionTags;--
     Empty_HyphenFunctionTags = ""; -- --
 
-    --Derive_HyphenNumTag: Hyphen -> Num -> HyphenNumTag;--
-    Derive_HyphenNumTag a b = a ++ b; -- -3 --
-
     --Empty_HyphenNumTag: HyphenNumTag;--
     Empty_HyphenNumTag = ""; -- --
 
 
-    --Derive_HyphenFunctionTag: Hyphen -> FunctionTag -> HyphenFunctionTag;--
-    Degenerate_HyphenFunctionTag a b = a ++ b; -- -SBJ --
-
-    --Degenerate_HyphenFunctionTags: Hyphen -> FunctionTag -> HyphenFunctionTags;--
-    Degenerate_HyphenFunctionTags a b = a ++ b; -- -SBJ --
-
     --Empty_HyphenFunctionTag: HyphenFunctionTag;--
     Empty_HyphenFunctionTag = ""; -- --
-
-    --Materialize_Hyphen: Hyphen;--
-    Materialize_Hyphen = {Hyphen}; --"-"; --
 
     --Materialize_SentenceTag: SentenceTag;--
     Materialize_SentenceTag = {S}; --"S"; --

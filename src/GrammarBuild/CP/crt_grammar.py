@@ -57,11 +57,11 @@ class CPCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
         for tag in PHRASE_LEVEL_TAGS:
             rules.append(self.get_PhraseLevelTag_LinearizationRule(tag=tag))
         for tag in FUNCTIONAL_TAGS:
-            rules.append(self.get_FunctionTag_LinearizationRule(tag=tag))
+            rules.append(self.get_HyphenFunctionTag_LinearizationRule(tag=tag))
         for tag in WORD_LEVEL_TAGS:
             rules.append(self.get_WordLevelTag_LinearizationRule(tag=tag))
         for tag in NUM_TAGS:
-            rules.append(self.get_NumTag_LinearizationRule(tag=tag))
+            rules.append(self.get_HyphenNumTag_LinearizationRule(tag=tag))
         return self.join_statements_multi_line(statements=rules)
 
     def get_PhraseLevelTag_LinearizationRule(self, tag: str) -> str:
@@ -70,10 +70,11 @@ class CPCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
         materialization_rule: str = self.get_materialization_rule(rule_name=rule_name, entity=tag)
         return materialization_rule
 
-    def get_FunctionTag_LinearizationRule(self, tag: str) -> str:
+    def get_HyphenFunctionTag_LinearizationRule(self, tag: str) -> str:
         tag_var_name = self.normalize_tag(tag=tag)
-        rule_name = f"Derive_FunctionTag_{tag_var_name}"
-        materialization_rule: str = self.get_materialization_rule(rule_name=rule_name, entity=tag)
+        rule_name = f"Derive_HyphenFunctionTag_{tag_var_name}"
+        hyphen_tag = f"{self.Hyphen}{tag}"
+        materialization_rule: str = self.get_materialization_rule(rule_name=rule_name, entity=hyphen_tag, pseudo_prefix=True)
         return materialization_rule
 
     def get_WordLevelTag_LinearizationRule(self, tag: str) -> str:
@@ -82,9 +83,10 @@ class CPCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
         materialization_rule: str = self.get_materialization_rule(rule_name=rule_name, entity=tag)
         return materialization_rule
 
-    def get_NumTag_LinearizationRule(self, tag: str) -> str:
-        rule_name = f"Derive_NumTag_{tag}"
-        materialization_rule: str = self.get_materialization_rule(rule_name=rule_name, entity=tag)
+    def get_HyphenNumTag_LinearizationRule(self, tag: str) -> str:
+        rule_name = f"Derive_HyphenNumTag_{tag}"
+        hyphen_tag = f"{self.Hyphen}{tag}"
+        materialization_rule: str = self.get_materialization_rule(rule_name=rule_name, entity=hyphen_tag, pseudo_prefix=True)
         return materialization_rule
 
     @staticmethod

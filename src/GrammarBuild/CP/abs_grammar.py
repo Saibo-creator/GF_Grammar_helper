@@ -38,27 +38,27 @@ class CPAbsGrammarBuilder(TemplateTokenGrammarBuilder):
         for tag in PHRASE_LEVEL_TAGS:
             rules.append(self.get_PhraseLevelTag_BuildRule(tag=tag))
         for tag in FUNCTIONAL_TAGS:
-            rules.append(self.get_FunctionTag_BuildRule(tag=tag))
+            rules.append(self.get_HyphenFunctionTag_BuildRule(tag=tag))
         for tag in WORD_LEVEL_TAGS:
             rules.append(self.get_WordLevelTag_BuildRule(tag=tag))
         for tag in NUM_TAGS:
-            rules.append(self.get_NumTag_BuildRule(tag=tag))
+            rules.append(self.get_HyphenNumTag_BuildRule(tag=tag))
         return self.join_statements_multi_line(statements=rules)
 
     def get_PhraseLevelTag_BuildRule(self, tag: str) -> str:
         tag_var_name = CPAbsGrammarBuilder.normalize_tag(tag=tag)
         return f"Derive_PhraseLevelTag_{tag_var_name}: PhraseLevelTag;"
 
-    def get_FunctionTag_BuildRule(self, tag: str) -> str:
+    def get_HyphenFunctionTag_BuildRule(self, tag: str) -> str:
         tag_var_name = CPAbsGrammarBuilder.normalize_tag(tag=tag)
-        return f"Derive_FunctionTag_{tag_var_name}: FunctionTag;"
+        return f"Derive_HyphenFunctionTag_{tag_var_name}: HyphenFunctionTag;"
 
     def get_WordLevelTag_BuildRule(self, tag: str) -> str:
         tag_var_name = CPAbsGrammarBuilder.normalize_tag(tag=tag)
         return f"Derive_WordLevelTag_{tag_var_name}: WordTag;"
 
-    def get_NumTag_BuildRule(self, tag: str) -> str:
-        return f"Derive_NumTag_{tag}: Num;"
+    def get_HyphenNumTag_BuildRule(self, tag: str) -> str:
+        return f"Derive_HyphenNumTag_{tag}: HyphenNumTag;"
 
     @staticmethod
     def normalize_tag(tag: str) -> str:

@@ -17,20 +17,9 @@ abstract {abs_grammar_name} = {{
     Derive_HyphenFunctionTags: HyphenFunctionTag -> HyphenFunctionTags -> HyphenFunctionTags;
     Empty_HyphenFunctionTags: HyphenFunctionTags;
     Empty_HyphenFunctionTag: HyphenFunctionTag;
-
-    Degenerate_HyphenFunctionTag: Hyphen -> FunctionTag -> HyphenFunctionTag;
-    Degenerate_HyphenFunctionTags: Hyphen -> FunctionTag -> HyphenFunctionTags;
-
-
-
-
-    Derive_HyphenNumTag: Hyphen -> Num -> HyphenNumTag;
     Empty_HyphenNumTag: HyphenNumTag;
 
 
-
-
-    Materialize_Hyphen: Hyphen;
     Materialize_SentenceTag: SentenceTag;
     Materialize_Left: Left;
     Materialize_Right: Right;

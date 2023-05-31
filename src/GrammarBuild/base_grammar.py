@@ -107,6 +107,8 @@ class TemplateTokenGrammarBuilder:
     # used to indent the grammar
     INDENT = " "*4
 
+    PSEUDO_PREFIX = "Ж" # using character so that tokenizer independent
+
     def __init__(self, tokenizer_or_path: str, literal=False):
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_or_path, use_fast=False) if isinstance(tokenizer_or_path,
                                                                                                    str) else tokenizer_or_path
@@ -156,7 +158,7 @@ class TemplateTokenGrammarBuilder:
         "Tok_0, Tok_1, ..."
         return f"Tok_{token_id}"
 
-    def post_process_token_ids(self, token_ids: List[int], rm_bos=True, rm_eos=False, pseudo_prefix=None) -> List[Union[int,str]]:
+    def post_process_token_ids(self, token_ids: List[int], rm_bos=True, rm_eos=False, pseudo_prefix=False) -> List[Union[int,str]]:
         "remove_bos=True, remove_eos=False"
         if token_ids[0] == self.tokenizer.bos_token_id and rm_bos:
             token_ids = token_ids[1:]
@@ -164,7 +166,7 @@ class TemplateTokenGrammarBuilder:
         if token_ids[-1] == self.tokenizer.eos_token_id and rm_eos:
             token_ids = token_ids[:-1]
 
-        pseudo_prefix_token_id = self.tokenizer.encode(pseudo_prefix,add_special_tokens=False)[0] if pseudo_prefix is not None else None
+        pseudo_prefix_token_id = self.tokenizer.encode(self.PSEUDO_PREFIX,add_special_tokens=False)[0] if pseudo_prefix else None
 
         if pseudo_prefix_token_id is not None and token_ids[0] == pseudo_prefix_token_id:
             token_ids = token_ids[1:]
@@ -195,12 +197,12 @@ class TemplateTokenGrammarBuilder:
         return f"\n{TemplateTokenGrammarBuilder.INDENT}".join(statements)
 
 
-    def get_entity_tokens(self, entity:str, rm_bos=True, rm_eos=False, pseudo_prefix=None) -> str:
+    def get_entity_tokens(self, entity:str, rm_bos=True, rm_eos=False, pseudo_prefix=False) -> str:
         # chunk = "[s]"
         # pseudo_prefix = "(" for example
         assert entity is not None, "entity is None! This is not allowed!"
         if pseudo_prefix:
-            entity = pseudo_prefix+entity
+            entity = self.PSEUDO_PREFIX+entity
         token_ids: List[int] = self.tokenizer.encode(entity)
         processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(token_ids, rm_bos=rm_bos, rm_eos=rm_eos, pseudo_prefix=pseudo_prefix)
         token_id_in_quotes: List[str] = [f'"{token_id}"' for token_id in processed_token_ids]
@@ -208,12 +210,12 @@ class TemplateTokenGrammarBuilder:
         tokens_concat = " ++ ".join(token_id_in_quotes)
         return tokens_concat
 
-    def get_materialization_rule(self, rule_name:str, entity:str) -> str:
+    def get_materialization_rule(self, rule_name:str, entity:str, pseudo_prefix=False) -> str:
         "beta"
         if type(entity) != str:
             print(f"entity {entity} is not a string! It is {type(entity)}. Converting to string...")
             entity = str(entity)
 
-        tokens_concat = self.get_entity_tokens(entity, rm_bos=True, rm_eos=True)
+        tokens_concat = self.get_entity_tokens(entity, rm_bos=True, rm_eos=True, pseudo_prefix=pseudo_prefix)
         rule = f"{rule_name} = {tokens_concat};"
         return rule
