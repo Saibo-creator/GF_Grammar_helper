@@ -9,15 +9,15 @@ abstract {abs_grammar_name} = {{
     Repeat:  Triplet -> Triplets -> Triplets ;
     Empty_triplet: Triplet;
     Empty_triplets: Triplets;
-    Build_triplet : Subject -> Doublets -> Triplet_ending_marker -> Triplet ;
-    Build_triplets : Subject -> Doublets -> Triplet_ending_marker -> Triplets ;
+    Derive_triplet : Subject -> Doublets -> Triplet_ending_marker -> Triplet ;
+    Derive_triplets : Subject -> Doublets -> Triplet_ending_marker -> Triplets ;
     Repeat_Doublet : Doublet -> Doublets -> Doublets ;
-    Build_doublet : Relation -> Object -> Doublet ;
-    Build_doublets : Relation -> Object -> Doublets ;
+    Derive_doublet : Relation -> Object -> Doublet ;
+    Derive_doublets : Relation -> Object -> Doublets ;
 
-    Build_subject: Subject_marker -> Entity -> Subject;
-    Build_relation: Relation_marker -> Rel -> Relation;
-    Build_object: Object_marker -> Entity -> Object;
+    Derive_subject: Subject_marker -> Entity -> Subject;
+    Derive_relation: Relation_marker -> Rel -> Relation;
+    Derive_object: Object_marker -> Entity -> Object;
 
     Materialise_BOG: BOG;
     Materialise_EOG: EOG;

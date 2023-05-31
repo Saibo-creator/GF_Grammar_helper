@@ -62,8 +62,14 @@ EL_TRAINING_DATA_PATH ={
         "entity":os.path.join(DATA_DIR, "EL", "aida-all-kilt-entities.jsonl")},
 }
 
+AB_TRAINING_DATA_PATH ={
+    "trial": {
+        "entity":os.path.join(DATA_DIR, "AB", "trial_entities.jsonl")},
+}
+
 DATA_PATHS = {
     "IE": IE_TRAINING_DATA_PATH,
     "EL": EL_TRAINING_DATA_PATH,
+    "AB": AB_TRAINING_DATA_PATH,
 }
 

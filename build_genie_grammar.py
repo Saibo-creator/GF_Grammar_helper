@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--constrained-world", type=str, default="wiki_ner", help="constrained_world name", choices=["wiki_ner", "rebel", "rebel_medium"])
+    parser.add_argument("--dataset", type=str, default="wiki_ner", help="dataset name", choices=["wiki_ner", "rebel", "rebel_medium"])
     parser.add_argument("--linearization-class-id", type=str, default="fully_expanded", choices=["fully_expanded", "subject_collapsed"])
     parser.add_argument("--tokenizer-path", type=str, default=f"{LLAMA_DIR}/7B", help="martinjosifoski/genie-rw, /dlabdata1/llama_hf/7B, t5-small")
     parser.add_argument("--grammar-name", type=str, default="auto", help="name of the grammar") # genie_llama_fully_expanded
@@ -38,14 +38,14 @@ if __name__ == '__main__':
 
         grammar_name += f"_{args.linearization_class_id}"
 
-        if args.constrained_world == "wiki_ner":
+        if args.dataset == "wiki_ner":
             grammar_name += "_wiki_ner"
-        elif args.constrained_world == "rebel":
+        elif args.dataset == "rebel":
             grammar_name += "_rebel"
-        elif args.constrained_world == "rebel_medium":
+        elif args.dataset == "rebel_medium":
             grammar_name += "_rebel_medium"
         else:
-            raise NotImplementedError(f"constrained_world {args.constrained_world} not implemented")
+            raise NotImplementedError(f"dataset {args.dataset} not implemented")
         if args.debug:
             grammar_name = "debug"
     else:
@@ -76,8 +76,8 @@ if __name__ == '__main__':
 
     else:
 
-        entities_path = IE_TRAINING_DATA_PATH[args.constrained_world]["entity"]
-        relations_path = IE_TRAINING_DATA_PATH[args.constrained_world]["relation"]
+        entities_path = IE_TRAINING_DATA_PATH[args.dataset]["entity"]
+        relations_path = IE_TRAINING_DATA_PATH[args.dataset]["relation"]
         print("start building abstract grammar...")
         abs_grammar = abs_builder.build(base_grammar_name=grammar_name, entities_or_path=entities_path, relations_or_path=relations_path, tokenizer_or_path=args.tokenizer_path)
         print("finished building abstract grammar...")

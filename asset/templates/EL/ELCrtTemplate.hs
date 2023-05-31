@@ -8,5 +8,5 @@ concrete {crt_grammar_name} of {abs_grammar_name} = {{
     Materialise_EOG = {eog_tokens};
 
     -- the following should be automatically generated --
-    {entity_lin_str} --Germany = "ger"++"many"; France = "fra"++"nce"; UK = "u"++"k"; US = "u"++"s"; line to replace--
+    {entity_lin_str}
 }}

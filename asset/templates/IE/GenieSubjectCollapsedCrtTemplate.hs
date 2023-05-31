@@ -1,17 +1,21 @@
 concrete {crt_grammar_name} of {abs_grammar_name} = {{
   -- [s] John [r] lives in [o] New York [e] [s] John [r] likes [o] pizza [e] [s] Mary [r] lives in [o] London [e] --
   lincat
-    Text , BOG , EOG , Triplet , Triplets , Subject , Relation , Object , Triplet_ending_marker , Subject_marker , Relation_marker , Object_marker , Rel , Entity = Str;
+    Text , BOG , EOG , Triplet , Triplets , Doublet, Doublets, Subject , Relation , Object , Triplet_ending_marker , Subject_marker , Relation_marker , Object_marker , Rel , Entity = Str;
   lin
     Start x y z = x ++ y ++ z;
     Repeat x y = x ++ y;
     Empty_triplet = [];
     Empty_triplets = [];
-    Build_triplet x y z w = x ++ y ++ z ++ w ;
-    Build_triplets x y z w = x ++ y ++ z ++ w ;
-    Build_relation x y = x ++ y ;
-    Build_subject x y = x ++ y ;
-    Build_object x y = x ++ y ;
+    Derive_triplet x y z = x ++ y ++ z ;
+    Derive_triplets x y z = x ++ y ++ z ;
+    Repeat_Doublet x y = x ++ y;
+    Derive_doublet x y = x ++ y ;
+    Derive_doublets x y = x ++ y ;
+
+    Derive_subject x y = x ++ y ;
+    Derive_relation x y = x ++ y ;
+    Derive_object x y = x ++ y ;
 
     Materialise_BOG = {bog_tokens};
     Materialise_EOG = {eog_tokens};

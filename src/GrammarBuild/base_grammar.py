@@ -12,6 +12,8 @@ import subprocess
 from abc import abstractmethod
 from typing import List, Union
 
+from transformers import AutoTokenizer
+
 from src.utils import get_hashed_name
 from src.config.config import PGF_ASSET_DIR
 
@@ -105,8 +107,15 @@ class TemplateTokenGrammarBuilder:
     # used to indent the grammar
     INDENT = " "*4
 
-    def __init__(self):
-        pass
+    def __init__(self, tokenizer_or_path: str, literal=False):
+        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_or_path, use_fast=False) if isinstance(tokenizer_or_path,
+                                                                                                   str) else tokenizer_or_path
+        self.literal = literal
+        if self.literal:
+            self.grammar_suffix = "_literal"
+        else:
+            self.grammar_suffix = ""
+
 
     @property
     @abstractmethod
@@ -118,25 +127,6 @@ class TemplateTokenGrammarBuilder:
         """
         pass
 
-    @property
-    @abstractmethod
-    def grammar_prefix(self):
-        """
-        This enforce the subclass to define a template property.
-        we define an abstract base class Animal that has a name property defined as an abstract method using the @property and @abstractmethod decorators.
-        This means that any subclass of Animal must define a name property or method, or it will raise a TypeError when an instance is created.
-        """
-        pass
-
-    @property
-    @abstractmethod
-    def grammar_suffix(self):
-        """
-        This enforce the subclass to define a template property.
-        we define an abstract base class Animal that has a name property defined as an abstract method using the @property and @abstractmethod decorators.
-        This means that any subclass of Animal must define a name property or method, or it will raise a TypeError when an instance is created.
-        """
-        pass
 
     def read_template(self) -> str:
         with open(self.template, "r") as file:
@@ -166,14 +156,21 @@ class TemplateTokenGrammarBuilder:
         "Tok_0, Tok_1, ..."
         return f"Tok_{token_id}"
 
-    def post_process_token_ids(self, token_ids: List[int], tokenizer, literal: bool = False, rm_bos=True, rm_eos=False) -> List[Union[int,str]]:
+    def post_process_token_ids(self, token_ids: List[int], rm_bos=True, rm_eos=False, pseudo_prefix=None) -> List[Union[int,str]]:
         "remove_bos=True, remove_eos=False"
-        if token_ids[0] == tokenizer.bos_token_id and rm_bos:
+        if token_ids[0] == self.tokenizer.bos_token_id and rm_bos:
             token_ids = token_ids[1:]
-        if token_ids[-1] == tokenizer.eos_token_id and rm_eos:
+
+        if token_ids[-1] == self.tokenizer.eos_token_id and rm_eos:
             token_ids = token_ids[:-1]
-        if literal:
-            token_ids = [tokenizer.decode(token_id) for token_id in token_ids]
+
+        pseudo_prefix_token_id = self.tokenizer.encode(pseudo_prefix,add_special_tokens=False)[0] if pseudo_prefix is not None else None
+
+        if pseudo_prefix_token_id is not None and token_ids[0] == pseudo_prefix_token_id:
+            token_ids = token_ids[1:]
+
+        if self.literal:
+            token_ids = [self.tokenizer.decode(token_id) for token_id in token_ids]
         return token_ids
 
     def get_tokenization_func_name(self, entity: str = None, rel: str = None, token_id: int = None) -> str:
@@ -191,19 +188,32 @@ class TemplateTokenGrammarBuilder:
         FullyExpanded + GenieWiki + Crt
         example: FullyExpandedGenieWikiCrt
         """
-        return f"{self.grammar_prefix}{base_grammar_name}" if not crt else f"{self.grammar_prefix}{base_grammar_name}_Crt"
+        return f"{self.grammar_prefix}{base_grammar_name}{self.grammar_suffix}" if not crt else f"{self.grammar_prefix}{base_grammar_name}{self.grammar_suffix}_Crt"
 
     @staticmethod
     def join_statements_multi_line(statements: List[str]) -> str:
         return f"\n{TemplateTokenGrammarBuilder.INDENT}".join(statements)
 
 
-    def get_marker_tokens(self, marker:str, tokenizer, literal=False, rm_bos=True, rm_eos=False):
+    def get_entity_tokens(self, entity:str, rm_bos=True, rm_eos=False, pseudo_prefix=None) -> str:
         # chunk = "[s]"
-        assert marker is not None, "marker is None! This is not allowed!"
-        token_ids: List[int] = tokenizer.encode(marker)
-        processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(token_ids, literal=literal, tokenizer=tokenizer, rm_bos=rm_bos, rm_eos=rm_eos)
+        # pseudo_prefix = "(" for example
+        assert entity is not None, "entity is None! This is not allowed!"
+        if pseudo_prefix:
+            entity = pseudo_prefix+entity
+        token_ids: List[int] = self.tokenizer.encode(entity)
+        processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(token_ids, rm_bos=rm_bos, rm_eos=rm_eos, pseudo_prefix=pseudo_prefix)
         token_id_in_quotes: List[str] = [f'"{token_id}"' for token_id in processed_token_ids]
         # token_cats: List[str] = [self.token_id2tok_cat(tok_id) for tok_id in token_ids] # tok_0, tok_1, ...
         tokens_concat = " ++ ".join(token_id_in_quotes)
         return tokens_concat
+
+    def get_materialization_rule(self, rule_name:str, entity:str) -> str:
+        "beta"
+        if type(entity) != str:
+            print(f"entity {entity} is not a string! It is {type(entity)}. Converting to string...")
+            entity = str(entity)
+
+        tokens_concat = self.get_entity_tokens(entity, rm_bos=True, rm_eos=True)
+        rule = f"{rule_name} = {tokens_concat};"
+        return rule

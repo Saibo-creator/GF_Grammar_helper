@@ -14,12 +14,12 @@ from src.GrammarBuild.base_grammar import Grammar, TemplateTokenGrammarBuilder
 
 class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, tokenizer_or_path:str, literal=False):
+        super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
 
 
     def build(self, base_grammar_name: str, entities_or_path: Union[List[str], str],
-              relations_or_path: Union[List[str], str], tokenizer_or_path) -> Grammar:
+              relations_or_path: Union[List[str], str]) -> Grammar:
         grammar: str = self.read_template()
         entities: List[str] = self.read_jsonl(entities_or_path) if isinstance(entities_or_path,
                                                                               str) else entities_or_path
@@ -28,49 +28,49 @@ class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):
 
         abs_grammar_name = self.get_grammar_name(base_grammar_name)
 
-        formatted_grammar: str = grammar.format(abs_grammar_name=abs_grammar_name,
-                                                entities_str=self.get_entities_str(entities=entities),
-                                                relations_str=self.get_relations_str(relations=relations))
+        formatted_grammar_plain_text: str = grammar.format(abs_grammar_name=abs_grammar_name,
+                                                entities_str=self.add_entities_derivative_rules(entities=entities),
+                                                relations_str=self.add_relations_derivative_rules(relations=relations))
         grammar_meta = self.build_meta(entities=entities, relations=relations)
 
-        return Grammar(formatted_grammar, name=abs_grammar_name, meta=grammar_meta)
+        return Grammar(formatted_grammar_plain_text, name=abs_grammar_name, meta=grammar_meta)
 
-    def build_entities_ids(self, entities: List[str]) -> Dict[str, str]:
+    def assign_entities_ids(self, entities: List[str]) -> Dict[str, str]:
         return {self.get_tokenization_func_name(entity=entity): entity for entity in entities}
 
-    def build_relations_ids(self, relations: List[str]) -> Dict[str, str]:
+    def assign_relations_ids(self, relations: List[str]) -> Dict[str, str]:
         return {self.get_tokenization_func_name(rel=relation): relation for relation in relations}
 
     def build_meta(self, entities: List[str], relations: List[str]):
-        entities_ids: Dict[str, str] = self.build_entities_ids(entities=entities)
-        relations_ids: Dict[str, str] = self.build_relations_ids(relations=relations)
+        entities_ids: Dict[str, str] = self.assign_entities_ids(entities=entities)
+        relations_ids: Dict[str, str] = self.assign_relations_ids(relations=relations)
         return {"entities": entities_ids, "relations": relations_ids}
 
-    def get_entities_str(self, entities: List[str]) -> str:
-        entities_id_map: Dict[str, str] = self.build_entities_ids(entities=entities)
+    def add_entities_derivative_rules(self, entities: List[str]) -> str:
+        entities_id_map: Dict[str, str] = self.assign_entities_ids(entities=entities)
         entities_ids = [entity_key if i == len(entities_id_map)-1 else entity_key+"," for i, entity_key in enumerate(entities_id_map.keys()) ]
         return self.join_statements_multi_line(statements=entities_ids)
 
-    def get_relations_str(self, relations: List[str]) -> str:
-        relations_id_map: Dict[str, str] = self.build_relations_ids(relations=relations)
+    def add_relations_derivative_rules(self, relations: List[str]) -> str:
+        relations_id_map: Dict[str, str] = self.assign_relations_ids(relations=relations)
         relations_ids = [relation_key if i == len(relations_id_map)-1 else relation_key+"," for i, relation_key in enumerate(relations_id_map.keys()) ]
         return self.join_statements_multi_line(statements=relations_ids)
 
 
 class GenieFullyExpandedAbsGrammarBuilder(GenieAbsGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "IE", "GenieFullyExpandedAbsTemplate.txt")
+    template = os.path.join(TEMPLATE_DIR, "IE", "GenieFullyExpandedAbsTemplate.hs")
     grammar_prefix = "" # "FullyExpanded"
-    grammar_suffix = ""
 
-    def __init__(self):
-        super().__init__()
+
+    def __init__(self, tokenizer_or_path:str, literal=False):
+        super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
 
 
 class GenieSubjectCollapsedAbsGrammarBuilder(GenieAbsGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "IE", "GenieSubjectCollapsedAbsTemplate.txt")
+    template = os.path.join(TEMPLATE_DIR, "IE", "GenieSubjectCollapsedAbsTemplate.hs")
     grammar_prefix = "" # "SubjectCollapsed"
-    grammar_suffix = ""
 
-    def __init__(self):
-        super().__init__()
+
+    def __init__(self, tokenizer_or_path:str, literal=False):
+        super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
 

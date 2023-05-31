@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset", type=str, default="aida", help="constrained_world name", choices=["aida", "ace2004", "aquaint", "clueweb", "msnbc", "wiki"])
+    parser.add_argument("--dataset", type=str, default="aida", help="dataset name", choices=["aida", "ace2004", "aquaint", "clueweb", "msnbc", "wiki"])
     parser.add_argument("--split", type=str, default="dev", choices=["all", "train", "dev", "test"])
     parser.add_argument("--tokenizer-path", type=str, default=f"{LLAMA_DIR}/7B", help="martinjosifoski/genie-rw, /dlabdata1/llama_hf/7B, t5-small")
     parser.add_argument("--grammar-name", type=str, default="auto", help="name of the grammar") # genie_llama_fully_expanded
@@ -51,8 +51,8 @@ if __name__ == '__main__':
     else:
         grammar_name = args.grammar_name
 
-    abs_builder = ELotfAbsGrammarBuilder()
-    crt_builder = ELotfCrtGrammarBuilder()
+    abs_builder = ELotfAbsGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)
+    crt_builder = ELotfCrtGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)
 
     output_dir = os.path.join(GF_AUTO_GEN_GF_DIR, f"EL", grammar_name)
 
@@ -66,8 +66,8 @@ if __name__ == '__main__':
         entities = entry["candidates"]
         entry_id = entry["id"]
         grammar_entry_name = grammar_name + f"_{entry_id}"
-        abs_grammar = abs_builder.build(base_grammar_name=grammar_entry_name, entities_or_path=entities,  tokenizer_or_path=args.tokenizer_path)
-        crt_grammar = crt_builder.build(base_grammar_name=grammar_entry_name, mention=mention, entities_or_path=entities, tokenizer_or_path=args.tokenizer_path, literal=args.literal)
+        abs_grammar = abs_builder.build(base_grammar_name=grammar_entry_name, entities_or_path=entities)
+        crt_grammar = crt_builder.build(base_grammar_name=grammar_entry_name, mention=mention, entities_or_path=entities)
 
         grammar_pair = AbsCrtGrammarPair(abs_grammar=abs_grammar, crt_grammar=crt_grammar)
         grammar_pair.save(output_dir=output_dir, compile=args.compile, only_keep_pgf=True, individual_dir=False)
