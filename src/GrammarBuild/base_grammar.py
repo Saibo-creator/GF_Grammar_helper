@@ -172,7 +172,8 @@ class TemplateTokenGrammarBuilder:
             token_ids = token_ids[1:]
 
         if self.literal:
-            token_ids = [self.tokenizer.decode(token_id) for token_id in token_ids]
+            # token_ids = [self.tokenizer.decode(token_id) for token_id in token_ids]
+            token_ids = self.tokenizer.convert_ids_to_tokens(token_ids)
         return token_ids
 
     def get_tokenization_func_name(self, entity: str = None, rel: str = None, token_id: int = None) -> str:

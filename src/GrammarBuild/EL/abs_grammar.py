@@ -27,7 +27,7 @@ class ELAbsGrammarBuilder(TemplateTokenGrammarBuilder):
         abs_grammar_name = self.get_grammar_name(base_grammar_name)
 
         formatted_grammar_plain_text: str = grammar.format(abs_grammar_name=abs_grammar_name,
-                                                entities_str=self.add_entities_derivative_rules(entities=entities))
+                                                Materialize_Entities=self.add_entities_derivative_rules(entities=entities))
         grammar_meta = self.build_meta(entities=entities)
 
         return Grammar(formatted_grammar_plain_text, name=abs_grammar_name, meta=grammar_meta)

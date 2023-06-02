@@ -8,5 +8,5 @@ concrete {crt_grammar_name} of {abs_grammar_name} = {{
     Materialise_EOG = {eog_tokens};
 
     -- the following should be automatically generated --
-    {entity_lin_str}
+    {Materialize_Entities}
 }}

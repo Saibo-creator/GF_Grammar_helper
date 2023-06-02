@@ -22,7 +22,7 @@ from .crt_grammar import ELCrtGrammarBuilder
 
 class ELotfCrtGrammarBuilder(ELCrtGrammarBuilder, ABC):
 
-    template = os.path.join(TEMPLATE_DIR, "EL", "EL-OTF-CrtTemplate-w-mention.txt")
+    template = os.path.join(TEMPLATE_DIR, "EL", "EL-OTF-CrtTemplate.hs")
     grammar_prefix = ""
 
 
@@ -47,7 +47,7 @@ class ELotfCrtGrammarBuilder(ELCrtGrammarBuilder, ABC):
                                                            mention_tokens= self.get_entity_tokens(entity=mention,  rm_eos=True),
                                                            open_bracket_tokens = self.get_entity_tokens(self.Open_bracket_marker,  rm_eos=True),
                                                            close_bracket_tokens = self.get_entity_tokens(self.Close_bracket_marker,  rm_eos=True),
-                                                           entity_lin_str=self.batch_get_decoding_linearization_rules(entities=entities,  rm_eos=True, rm_bos=True))
+                                                           Materialize_Entities=self.batch_get_decoding_linearization_rules(entities=entities,  rm_eos=True, rm_bos=True))
         return Grammar(formatted_grammar_plain_text, name=crt_grammar_name)
 
 
@@ -77,7 +77,7 @@ class ELotfCrtGrammarBuilder(ELCrtGrammarBuilder, ABC):
 #         formatted_grammar: str = grammar.format(abs_grammar_name=abs_grammar_name, crt_grammar_name=crt_grammar_name,
 #                                                 bog_tokens="[]",#self.get_entity_tokens(tokenizer.bos_token, tokenizer, literal, rm_eos=True,rm_bos=False)
 #                                                 eog_tokens= f'"{tokenizer.encode(tokenizer.eos_token, add_special_tokens=False)[0]}"', # "2" for llama and "1" for T5
-#                                                 entity_lin_str=self.batch_get_decoding_linearization_rules(tokenizer, entities=entities, rm_eos=True, rm_bos=True))
+#                                                 Materialize_Entities=self.batch_get_decoding_linearization_rules(tokenizer, entities=entities, rm_eos=True, rm_bos=True))
 #         return Grammar(formatted_grammar, name=crt_grammar_name)
 #
 #

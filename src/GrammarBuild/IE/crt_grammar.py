@@ -37,11 +37,11 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
         formatted_grammar_plain_text: str = grammar.format(abs_grammar_name=abs_grammar_name, crt_grammar_name=crt_grammar_name,
                                                            bog_tokens="[]",  #self.get_entity_tokens(tokenizer.bos_token, tokenizer, literal, rm_eos=True,rm_bos=False)
                                                            eog_tokens= f'"{self.tokenizer.encode(self.tokenizer.eos_token, add_special_tokens=False)[0]}"',  # "2" for llama and "1" for T5
-                                                           Subject_marker_tokens = self.get_entity_tokens(self.Subject_marker, rm_eos=True),
-                                                           Relation_marker_tokens = self.get_entity_tokens(self.Relation_marker, rm_eos=True),
-                                                           Object_marker_tokens = self.get_entity_tokens(self.Object_marker, rm_eos=True),
-                                                           Triplet_ending_marker_tokens = self.get_entity_tokens(self.Triplet_ending_marker, rm_eos=True),
-                                                           entity_lin_str=self.batch_get_decoding_linearization_rules( entities=entities, rm_eos=True, rm_bos=True),
+                                                           SubjectMarker_tokens = self.get_entity_tokens(self.SubjectMarker, rm_eos=True),
+                                                           RelationMarker_tokens = self.get_entity_tokens(self.RelationMarker, rm_eos=True),
+                                                           objectMarker_tokens = self.get_entity_tokens(self.objectMarker, rm_eos=True),
+                                                           TripletEndingMarker_tokens = self.get_entity_tokens(self.TripletEndingMarker, rm_eos=True),
+                                                           Materialize_Entities=self.batch_get_decoding_linearization_rules( entities=entities, rm_eos=True, rm_bos=True),
                                                            rel_lin_str=self.batch_get_decoding_linearization_rules( relations=relations, rm_eos=True, rm_bos=True))
         return Grammar(formatted_grammar_plain_text, name=crt_grammar_name)
 
@@ -74,7 +74,7 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
 
     @property
     @abstractmethod
-    def Subject_marker(self):
+    def SubjectMarker(self):
         """
         This enforce the subclass to define a template property.
         we define an abstract base class Animal that has a name property defined as an abstract method using the @property and @abstractmethod decorators.
@@ -84,7 +84,7 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
 
     @property
     @abstractmethod
-    def Relation_marker(self):
+    def RelationMarker(self):
         """
         This enforce the subclass to define a template property.
         we define an abstract base class Animal that has a name property defined as an abstract method using the @property and @abstractmethod decorators.
@@ -94,7 +94,7 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
 
     @property
     @abstractmethod
-    def Object_marker(self):
+    def objectMarker(self):
         """
         This enforce the subclass to define a template property.
         we define an abstract base class Animal that has a name property defined as an abstract method using the @property and @abstractmethod decorators.
@@ -104,7 +104,7 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
 
     @property
     @abstractmethod
-    def Triplet_ending_marker(self):
+    def TripletEndingMarker(self):
         """
         This enforce the subclass to define a template property.
         we define an abstract base class Animal that has a name property defined as an abstract method using the @property and @abstractmethod decorators.
@@ -118,10 +118,10 @@ class GenieFullyExpandedCrtGrammarBuilder(GenieCrtGrammarBuilder):
     template = os.path.join(TEMPLATE_DIR, "IE", "GenieFullyExpandedCrtTemplate.hs")
     grammar_prefix = "" # "FullyExpanded"
 
-    Subject_marker = "[s]"
-    Relation_marker = "[r]"
-    Object_marker = "[o]"
-    Triplet_ending_marker = "[e]"
+    SubjectMarker = "[s]"
+    RelationMarker = "[r]"
+    objectMarker = "[o]"
+    TripletEndingMarker = "[e]"
 
     Default_BOS_marker = "0"
 
@@ -131,9 +131,9 @@ class GenieSubjectCollapsedCrtGrammarBuilder(GenieCrtGrammarBuilder):
     template = os.path.join(TEMPLATE_DIR, "IE", "GenieSubjectCollapsedCrtTemplate.hs")
     grammar_prefix = "" # "SubjectCollapsed"
 
-    Subject_marker = "[s]"
-    Relation_marker = "[r]"
-    Object_marker = "[o]"
-    Triplet_ending_marker = "[e]"
+    SubjectMarker = "[s]"
+    RelationMarker = "[r]"
+    objectMarker = "[o]"
+    TripletEndingMarker = "[e]"
 
     Default_BOS_marker = "0"

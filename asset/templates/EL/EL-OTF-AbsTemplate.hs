@@ -3,12 +3,15 @@ abstract {abs_grammar_name} = {{
   flags startcat = Text ;
   -- Leicestershire (UK Parliament constituency) --
   cat
-    Text ; BOG ; EOG ; Entity ;
+    Text ; BOG ; EOG ; Mention; Entity ; OpenBracket ; CloseBracket ;
   fun
-    Start: BOG -> Entity -> EOG -> Text ;
+    Start: BOG -> Mention -> OpenBracket -> Entity -> CloseBracket -> EOG -> Text ;
     Materialise_BOG: BOG;
     Materialise_EOG: EOG;
+    Materialise_OpenBracket: OpenBracket;
+    Materialise_CloseBracket: CloseBracket;
+    Materialise_Mention: Mention;
 
     -- the following should be automatically generated --
-    {entities_str}: Entity; -- line to replace, "Germany, France, UK, US" --
+    {Materialize_Entities}: Entity; -- line to replace, "Entity1, Entity2, Entity3, Entity4" --
 }}

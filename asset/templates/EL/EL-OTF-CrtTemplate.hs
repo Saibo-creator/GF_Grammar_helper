@@ -1,12 +1,15 @@
 concrete {crt_grammar_name} of {abs_grammar_name} = {{
   -- Leicestershire (UK Parliament constituency) --
   lincat
-    Text , BOG , EOG , Entity = Str;
+    Text , BOG , EOG , Mention , Entity , OpenBracket , CloseBracket = Str;
   lin
-    Start x y z = x ++ y ++ z;
+    Start a b c d e f = a ++ b ++ c ++ d ++ e ++ f;
     Materialise_BOG = {bog_tokens};
     Materialise_EOG = {eog_tokens};
+    Materialise_OpenBracket = {open_bracket_tokens};
+    Materialise_CloseBracket = {close_bracket_tokens};
+    Materialise_Mention = {mention_tokens};
 
     -- the following should be automatically generated --
-    {entity_lin_str} --Germany = "ger"++"many"; France = "fra"++"nce"; UK = "u"++"k"; US = "u"++"s"; line to replace--
+    {Materialize_Entities}
 }}

@@ -10,5 +10,5 @@ abstract {abs_grammar_name} = {{
     Materialise_EOG: EOG;
 
     -- the following should be automatically generated --
-    {entities_str}: Entity;
+    {Materialize_Entities}: Entity;
 }}

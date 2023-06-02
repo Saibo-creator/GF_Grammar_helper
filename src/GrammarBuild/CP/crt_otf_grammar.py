@@ -57,8 +57,6 @@ class CPotfCrtGrammarBuilder(CPCrtGrammarBuilder):
 
     def add_input_substring_materialise_rules(self, input_sentence: str):
         token_ids = self.tokenizer.encode(input_sentence, add_special_tokens=False)
-        if self.literal:
-            token_ids = [self.tokenizer.decode(token_id) for token_id in token_ids]
         rules = []
         input_token_num = len(token_ids)
         for i in range(input_token_num):

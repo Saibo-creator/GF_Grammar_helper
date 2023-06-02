@@ -5,8 +5,11 @@
 # @Project: GF-Grammar-Factory
 # @AUTHOR : Saibo Geng
 # @Desc :
+import json
 import os
 import pdb
+
+from tqdm import tqdm
 
 from src.config.config import GF_AUTO_GEN_GF_DIR,DATA_DIR,EL_TRAINING_DATA_PATH
 from src.GrammarBuild.base_grammar import AbsCrtGrammarPair
@@ -27,9 +30,8 @@ if __name__ == '__main__':
     parser.add_argument("--debug", action="store_true", help="whether to use debug mode, which will generate a small grammar from list of entities and relations")
     parser.add_argument("--literal", action="store_true", help="whether to use literal grammar")
     parser.add_argument("--otf", action="store_true", help="whether to use OTF grammar")
+    parser.add_argument("--otf-input-file", type=str, default=f"{DATA_DIR}/CP/ptb/ptb-test-only-text.jsonl", help="input file for OTF grammar")
     args = parser.parse_args()
-
-    output_dir = os.path.join(GF_AUTO_GEN_GF_DIR, f"CP")
 
 
     if args.grammar_name == "auto":
@@ -46,15 +48,27 @@ if __name__ == '__main__':
     else:
         grammar_name = args.grammar_name
 
+    output_dir = os.path.join(GF_AUTO_GEN_GF_DIR, f"CP", grammar_name+"_literal" if args.literal else grammar_name)
+
     if args.otf:
-        abs_builder = CPotfAbsGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)
-        crt_builder = CPotfCrtGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)
+        otf_input_file = args.otf_input_file
 
-        abs_grammar = abs_builder.build(base_grammar_name=grammar_name,input_sentence="hello world")
-        crt_grammar = crt_builder.build(base_grammar_name=grammar_name,input_sentence="hello world")
+        with open(otf_input_file, "r", encoding="utf-8") as f:
+            entries = [json.loads(line) for line in f]
 
-        grammar_pair = AbsCrtGrammarPair(abs_grammar=abs_grammar, crt_grammar=crt_grammar)
-        grammar_pair.save(output_dir=output_dir, compile=args.compile)
+        for entry in tqdm(entries):
+            text = entry["text"]
+            entry_id = entry["id"]
+            grammar_entry_name = grammar_name + f"_{entry_id}"
+
+            abs_builder = CPotfAbsGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)
+            crt_builder = CPotfCrtGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)
+
+            abs_grammar = abs_builder.build(base_grammar_name=grammar_entry_name,input_sentence=text)
+            crt_grammar = crt_builder.build(base_grammar_name=grammar_entry_name,input_sentence=text)
+
+            grammar_pair = AbsCrtGrammarPair(abs_grammar=abs_grammar, crt_grammar=crt_grammar)
+            grammar_pair.save(output_dir=output_dir, compile=args.compile, only_keep_pgf=False, individual_dir=False)
 
     else:
         abs_builder = CPAbsGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)

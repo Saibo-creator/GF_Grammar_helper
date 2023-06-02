@@ -37,7 +37,7 @@ class ELCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
         formatted_grammar_plain_text: str = grammar.format(abs_grammar_name=abs_grammar_name, crt_grammar_name=crt_grammar_name,
                                                 bog_tokens="[]",
                                                 eog_tokens=f'"{self.tokenizer.encode(self.tokenizer.eos_token, add_special_tokens=False)[0]}"',
-                                                entity_lin_str=self.batch_get_decoding_linearization_rules(entities=entities, rm_eos=True, rm_bos=True))
+                                                Materialize_Entities=self.batch_get_decoding_linearization_rules(entities=entities, rm_eos=True, rm_bos=True))
         return Grammar(formatted_grammar_plain_text, name=crt_grammar_name)
 
 

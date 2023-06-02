@@ -29,8 +29,8 @@ class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):
         abs_grammar_name = self.get_grammar_name(base_grammar_name)
 
         formatted_grammar_plain_text: str = grammar.format(abs_grammar_name=abs_grammar_name,
-                                                entities_str=self.add_entities_derivative_rules(entities=entities),
-                                                relations_str=self.add_relations_derivative_rules(relations=relations))
+                                                Materialize_Entities=self.add_entities_derivative_rules(entities=entities),
+                                                Materialize_Relations=self.add_relations_derivative_rules(relations=relations))
         grammar_meta = self.build_meta(entities=entities, relations=relations)
 
         return Grammar(formatted_grammar_plain_text, name=abs_grammar_name, meta=grammar_meta)

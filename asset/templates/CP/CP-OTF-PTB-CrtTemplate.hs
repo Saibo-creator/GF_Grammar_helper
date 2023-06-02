@@ -87,6 +87,6 @@ concrete {crt_grammar_name} of {abs_grammar_name} = {{
 
     -- the following should be automatically generated --
 
-    {input_substring_materialise_rules} --Germany = ger"++"many"; France = "fra"++"nce"; UK = "u"++"k"; US = "u"++"s"; line to replace--
+    {input_substring_materialise_rules}
 
 }}
