@@ -21,7 +21,7 @@ class CPAbsGrammarBuilder(TemplateTokenGrammarBuilder):
     def __init__(self, tokenizer_or_path:str, literal=False):
         super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
 
-    def build(self, base_grammar_name: str) -> Grammar:
+    def build(self, base_grammar_name: str, *args, **kwargs) -> Grammar:
         grammar: str = self.read_template()
 
         abs_grammar_name = self.get_grammar_name(base_grammar_name)

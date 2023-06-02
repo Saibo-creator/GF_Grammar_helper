@@ -6,4 +6,6 @@
 # @AUTHOR : Saibo Geng
 from .abs_grammar import CPAbsGrammarBuilder
 from .crt_grammar import CPCrtGrammarBuilder
+from .abs_otf_grammar import CPotfAbsGrammarBuilder
+from .crt_otf_grammar import CPotfCrtGrammarBuilder
 

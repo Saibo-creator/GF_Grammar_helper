@@ -37,20 +37,20 @@ class ELCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
         formatted_grammar_plain_text: str = grammar.format(abs_grammar_name=abs_grammar_name, crt_grammar_name=crt_grammar_name,
                                                 bog_tokens="[]",
                                                 eog_tokens=f'"{self.tokenizer.encode(self.tokenizer.eos_token, add_special_tokens=False)[0]}"',
-                                                entity_lin_str=self.batch_get_decoding_linearization_rules(entities=entities, literal=literal, rm_eos=True, rm_bos=True))
+                                                entity_lin_str=self.batch_get_decoding_linearization_rules(entities=entities, rm_eos=True, rm_bos=True))
         return Grammar(formatted_grammar_plain_text, name=crt_grammar_name)
 
 
-    def batch_get_decoding_linearization_rules(self, entities: List[str] = None, relations: List[str] = None, literal=False, rm_bos=True, rm_eos=False) -> str:
+    def batch_get_decoding_linearization_rules(self, entities: List[str] = None, relations: List[str] = None, rm_bos=True, rm_eos=False) -> str:
         if entities:
-            statements = [self.get_entity_or_rel_decoding_linearization_rule(entity=entity, literal=literal, rm_bos=rm_bos, rm_eos=rm_eos) for entity in tqdm(entities, desc="get linearization for entities")]
+            statements = [self.get_entity_or_rel_decoding_linearization_rule(entity=entity, rm_bos=rm_bos, rm_eos=rm_eos) for entity in tqdm(entities, desc="get linearization for entities")]
         elif relations:
-            statements = [self.get_entity_or_rel_decoding_linearization_rule(rel=rel, literal=literal, rm_bos=rm_bos, rm_eos=rm_eos) for rel in tqdm(relations, desc="get linearization for relations")]
+            statements = [self.get_entity_or_rel_decoding_linearization_rule(rel=rel, rm_bos=rm_bos, rm_eos=rm_eos) for rel in tqdm(relations, desc="get linearization for relations")]
         else:
             raise ValueError("No input_ids provided!")
         return self.join_statements_multi_line(statements)
 
-    def get_entity_or_rel_decoding_linearization_rule(self, entity: str = None, rel: str = None, literal=False, rm_bos=True, rm_eos=False) -> str:
+    def get_entity_or_rel_decoding_linearization_rule(self, entity: str = None, rel: str = None, rm_bos=True, rm_eos=False) -> str:
         """Germany = "ger"++"many"; France = "fra"++"nce"; UK = "u"++"k"; US = "u"++"s";"""
         if entity:
             func_name: str = self.get_tokenization_func_name(entity=entity)

@@ -44,10 +44,10 @@ class ELotfCrtGrammarBuilder(ELCrtGrammarBuilder, ABC):
         formatted_grammar_plain_text: str = grammar.format(abs_grammar_name=abs_grammar_name, crt_grammar_name=crt_grammar_name,
                                                            bog_tokens="[]",  #self.get_entity_tokens(tokenizer.bos_token, tokenizer, literal, rm_eos=True,rm_bos=False)
                                                            eog_tokens= f'"{self.tokenizer.encode(self.tokenizer.eos_token, add_special_tokens=False)[0]}"',  # "2" for llama and "1" for T5
-                                                           mention_tokens= self.get_entity_tokens(entity=mention, literal=literal, rm_eos=True),
-                                                           open_bracket_tokens = self.get_entity_tokens(self.Open_bracket_marker, literal=literal, rm_eos=True),
-                                                           close_bracket_tokens = self.get_entity_tokens(self.Close_bracket_marker, literal=literal, rm_eos=True),
-                                                           entity_lin_str=self.batch_get_decoding_linearization_rules(entities=entities, literal=literal, rm_eos=True, rm_bos=True))
+                                                           mention_tokens= self.get_entity_tokens(entity=mention,  rm_eos=True),
+                                                           open_bracket_tokens = self.get_entity_tokens(self.Open_bracket_marker,  rm_eos=True),
+                                                           close_bracket_tokens = self.get_entity_tokens(self.Close_bracket_marker,  rm_eos=True),
+                                                           entity_lin_str=self.batch_get_decoding_linearization_rules(entities=entities,  rm_eos=True, rm_bos=True))
         return Grammar(formatted_grammar_plain_text, name=crt_grammar_name)
 
 
@@ -77,15 +77,15 @@ class ELotfCrtGrammarBuilder(ELCrtGrammarBuilder, ABC):
 #         formatted_grammar: str = grammar.format(abs_grammar_name=abs_grammar_name, crt_grammar_name=crt_grammar_name,
 #                                                 bog_tokens="[]",#self.get_entity_tokens(tokenizer.bos_token, tokenizer, literal, rm_eos=True,rm_bos=False)
 #                                                 eog_tokens= f'"{tokenizer.encode(tokenizer.eos_token, add_special_tokens=False)[0]}"', # "2" for llama and "1" for T5
-#                                                 entity_lin_str=self.batch_get_decoding_linearization_rules(tokenizer, entities=entities, literal=literal,rm_eos=True, rm_bos=True))
+#                                                 entity_lin_str=self.batch_get_decoding_linearization_rules(tokenizer, entities=entities, rm_eos=True, rm_bos=True))
 #         return Grammar(formatted_grammar, name=crt_grammar_name)
 #
 #
 #     def batch_get_decoding_linearization_rules(self, tokenizer, entities: List[str] = None, relations: List[str] = None,literal=False, rm_bos=True, rm_eos=False) -> str:
 #         if entities:
-#             statements = [self.get_entity_or_rel_decoding_linearization_rule(entity=entity, tokenizer=tokenizer, literal=literal, rm_bos=rm_bos, rm_eos=rm_eos) for entity in tqdm(entities, desc="get linearization for entities")]
+#             statements = [self.get_entity_or_rel_decoding_linearization_rule(entity=entity, tokenizer=tokenizer,  rm_bos=rm_bos, rm_eos=rm_eos) for entity in tqdm(entities, desc="get linearization for entities")]
 #         elif relations:
-#             statements = [self.get_entity_or_rel_decoding_linearization_rule(rel=rel, tokenizer=tokenizer, literal=literal, rm_bos=rm_bos, rm_eos=rm_eos) for rel in tqdm(relations, desc="get linearization for relations")]
+#             statements = [self.get_entity_or_rel_decoding_linearization_rule(rel=rel, tokenizer=tokenizer,  rm_bos=rm_bos, rm_eos=rm_eos) for rel in tqdm(relations, desc="get linearization for relations")]
 #         else:
 #             raise ValueError("No input_ids provided!")
 #         return self.join_statements_multi_line(statements)
@@ -101,7 +101,7 @@ class ELotfCrtGrammarBuilder(ELCrtGrammarBuilder, ABC):
 #             raise ValueError("No input_ids provided!")
 #         assert tokenizer is not None, "tokenizer is None! This is not allowed!"
 #         token_ids: List[int] = tokenizer.encode(entity)
-#         processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(token_ids, tokenizer, literal=literal, rm_bos=rm_bos, rm_eos=rm_eos)
+#         processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(token_ids, tokenizer,  rm_bos=rm_bos, rm_eos=rm_eos)
 #         token_id_in_quotes: List[str] = [f'"{token_id}"' for token_id in processed_token_ids]
 #         # token_cats: List[str] = [self.token_id2tok_cat(tok_id) for tok_id in token_ids] # tok_0, tok_1, ...
 #         tokens_concat = " ++ ".join(token_id_in_quotes)
@@ -111,7 +111,7 @@ class ELotfCrtGrammarBuilder(ELCrtGrammarBuilder, ABC):
 #         # chunk = "[s]"
 #         assert entity is not None, "entity is None! This is not allowed!"
 #         token_ids: List[int] = tokenizer.encode(entity)
-#         processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(token_ids, literal=literal, tokenizer=tokenizer, rm_bos=rm_bos, rm_eos=rm_eos)
+#         processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(token_ids,  tokenizer=tokenizer, rm_bos=rm_bos, rm_eos=rm_eos)
 #         token_id_in_quotes: List[str] = [f'"{token_id}"' for token_id in processed_token_ids]
 #         # token_cats: List[str] = [self.token_id2tok_cat(tok_id) for tok_id in token_ids] # tok_0, tok_1, ...
 #         tokens_concat = " ++ ".join(token_id_in_quotes)

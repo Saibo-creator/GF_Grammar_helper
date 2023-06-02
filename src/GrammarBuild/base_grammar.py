@@ -197,7 +197,7 @@ class TemplateTokenGrammarBuilder:
         return f"\n{TemplateTokenGrammarBuilder.INDENT}".join(statements)
 
 
-    def get_entity_tokens(self, entity:str, rm_bos=True, rm_eos=False, pseudo_prefix=False) -> str:
+    def get_entity_tokens(self, entity:str, rm_bos=True, rm_eos=False, pseudo_prefix=False, start_idx=0, end_idx=None) -> List[str]:
         # chunk = "[s]"
         # pseudo_prefix = "(" for example
         assert entity is not None, "entity is None! This is not allowed!"
@@ -205,17 +205,22 @@ class TemplateTokenGrammarBuilder:
             entity = self.PSEUDO_PREFIX+entity
         token_ids: List[int] = self.tokenizer.encode(entity)
         processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(token_ids, rm_bos=rm_bos, rm_eos=rm_eos, pseudo_prefix=pseudo_prefix)
+
+        assert start_idx >= 0 and start_idx < len(token_ids), f"start_idx={start_idx} is not valid!"
+        assert end_idx is None or (end_idx >= 0 and end_idx < len(token_ids)), f"end_idx={end_idx} is not valid!"
+        processed_token_ids = processed_token_ids[start_idx:end_idx] if end_idx is not None else processed_token_ids[start_idx:]
+
         token_id_in_quotes: List[str] = [f'"{token_id}"' for token_id in processed_token_ids]
         # token_cats: List[str] = [self.token_id2tok_cat(tok_id) for tok_id in token_ids] # tok_0, tok_1, ...
         tokens_concat = " ++ ".join(token_id_in_quotes)
         return tokens_concat
 
-    def get_materialization_rule(self, rule_name:str, entity:str, pseudo_prefix=False) -> str:
+    def get_materialization_rule(self, rule_name:str, entity:str, pseudo_prefix=False, start_idx=0, end_idx=None) -> str:
         "beta"
         if type(entity) != str:
             print(f"entity {entity} is not a string! It is {type(entity)}. Converting to string...")
             entity = str(entity)
 
-        tokens_concat = self.get_entity_tokens(entity, rm_bos=True, rm_eos=True, pseudo_prefix=pseudo_prefix)
+        tokens_concat = self.get_entity_tokens(entity, rm_bos=True, rm_eos=True, pseudo_prefix=pseudo_prefix, start_idx=start_idx, end_idx=end_idx)
         rule = f"{rule_name} = {tokens_concat};"
         return rule
