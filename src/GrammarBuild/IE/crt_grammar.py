@@ -25,8 +25,8 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
         super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
 
 
-    def build(self, base_grammar_name: str, entities_or_path: Union[List[str], str],
-              relations_or_path: Union[List[str], str], crt_grammar_name=None) -> Grammar:
+    def build(self, base_grammar_name: str, entities_or_path: Union[List[str], str, List[List[str]]],
+              relations_or_path: Union[List[str], str, List[List[str]]], crt_grammar_name=None) -> Grammar:
         grammar: str = self.read_template()
         abs_grammar_name = self.get_grammar_name(base_grammar_name=base_grammar_name)
         if crt_grammar_name is None:
@@ -46,7 +46,7 @@ class GenieCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
         return Grammar(formatted_grammar_plain_text, name=crt_grammar_name)
 
 
-    def batch_get_decoding_linearization_rules(self, entities: List[str] = None, relations: List[str] = None, literal=False, rm_bos=True, rm_eos=False) -> str:
+    def batch_get_decoding_linearization_rules(self, entities: List[str] = None, relations: List[str] = None, rm_bos=True, rm_eos=False) -> str:
         if entities:
             statements = [self.get_entity_or_rel_decoding_linearization_rule(entity=entity, rm_bos=rm_bos, rm_eos=rm_eos) for entity in tqdm(entities, desc="get linearization for entities")]
         elif relations:

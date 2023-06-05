@@ -28,7 +28,7 @@ class ELCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
     def __init__(self, tokenizer_or_path:str, literal=False):
         super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
 
-    def build(self, base_grammar_name: str, entities_or_path: Union[List[str], str], crt_grammar_name=None, literal=False, **kwargs) -> Grammar:
+    def build(self, base_grammar_name: str, entities_or_path: Union[List[str], str, List[List[str]]], crt_grammar_name=None,  **kwargs) -> Grammar:
         grammar: str = self.read_template()
         abs_grammar_name = self.get_grammar_name(base_grammar_name=base_grammar_name)
         if crt_grammar_name is None:

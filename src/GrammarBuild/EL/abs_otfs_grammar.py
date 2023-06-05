@@ -13,7 +13,7 @@ from src.GrammarBuild.base_grammar import Grammar, TemplateTokenGrammarBuilder
 from .abs_grammar import ELAbsGrammarBuilder
 
 
-class ELotfAbsGrammarBuilder(ELAbsGrammarBuilder):
+class ELotfsAbsGrammarBuilder(ELAbsGrammarBuilder):
 
     template = os.path.join(TEMPLATE_DIR, "EL", "EL-OTF-sentence-AbsTemplate.hs")
     grammar_prefix = ""
@@ -21,4 +21,3 @@ class ELotfAbsGrammarBuilder(ELAbsGrammarBuilder):
 
     def __init__(self, tokenizer_or_path:str, literal=False):
         super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
-

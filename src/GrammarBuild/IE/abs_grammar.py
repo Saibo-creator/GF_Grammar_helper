@@ -18,8 +18,8 @@ class GenieAbsGrammarBuilder(TemplateTokenGrammarBuilder):
         super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
 
 
-    def build(self, base_grammar_name: str, entities_or_path: Union[List[str], str],
-              relations_or_path: Union[List[str], str]) -> Grammar:
+    def build(self, base_grammar_name: str, entities_or_path: Union[List[str], str, List[List[str]]],
+              relations_or_path: Union[List[str], str, List[List[str]]]) -> Grammar:
         grammar: str = self.read_template()
         entities: List[str] = self.read_jsonl(entities_or_path) if isinstance(entities_or_path,
                                                                               str) else entities_or_path

@@ -160,10 +160,11 @@ class TemplateTokenGrammarBuilder:
 
     def post_process_token_ids(self, token_ids: List[int], rm_bos=True, rm_eos=False, pseudo_prefix=False) -> List[Union[int,str]]:
         "remove_bos=True, remove_eos=False"
-        if token_ids[0] == self.tokenizer.bos_token_id and rm_bos:
+        # N.B. case where token_ids is empty
+        if len(token_ids) != 0 and token_ids[0] == self.tokenizer.bos_token_id and rm_bos:
             token_ids = token_ids[1:]
 
-        if token_ids[-1] == self.tokenizer.eos_token_id and rm_eos:
+        if len(token_ids) != 0 and token_ids[-1] == self.tokenizer.eos_token_id and rm_eos:
             token_ids = token_ids[:-1]
 
         pseudo_prefix_token_id = self.tokenizer.encode(self.PSEUDO_PREFIX,add_special_tokens=False)[0] if pseudo_prefix else None
@@ -198,9 +199,8 @@ class TemplateTokenGrammarBuilder:
         return f"\n{TemplateTokenGrammarBuilder.INDENT}".join(statements)
 
 
-    def get_entity_tokens(self, entity:str, rm_bos=True, rm_eos=False, pseudo_prefix=False, start_idx=0, end_idx=None) -> List[str]:
-        # chunk = "[s]"
-        # pseudo_prefix = "(" for example
+    def get_entity_tokens(self, entity:str, rm_bos=True, rm_eos=False, pseudo_prefix=False, start_idx=0, end_idx=None) -> str:
+        # TODO, change function name to get_entity_token_linearization
         assert entity is not None, "entity is None! This is not allowed!"
         if pseudo_prefix:
             entity = self.PSEUDO_PREFIX+entity

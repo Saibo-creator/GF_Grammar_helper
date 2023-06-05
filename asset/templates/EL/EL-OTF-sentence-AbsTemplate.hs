@@ -1,7 +1,7 @@
 abstract {abs_grammar_name} = {{
   flags coding = utf8 ;
   flags startcat = Text ;
-  -- Leicestershire (UK Parliament constituency) --
+
   cat
     Text ; BOG ; EOG ; Mention; Entity ; OpenBracket ; CloseBracket ; LeftContext ; RightContext ; StartMarker ; EndMarker ;
   fun

@@ -34,7 +34,7 @@ class ELotfCrtGrammarBuilder(ELCrtGrammarBuilder, ABC):
     def __init__(self, tokenizer_or_path:str, literal=False):
         super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
 
-    def build(self, base_grammar_name: str, entities_or_path: Union[List[str], str], crt_grammar_name=None, literal=False, mention:str=None) -> Grammar:
+    def build(self, base_grammar_name: str, entities_or_path: Union[List[str], str, List[List[str]]], crt_grammar_name=None, mention:str=None, **kwargs) -> Grammar:
         assert mention is not None, "mention should not be None"
         grammar: str = self.read_template()
         abs_grammar_name = self.get_grammar_name(base_grammar_name=base_grammar_name)
@@ -65,7 +65,7 @@ class ELotfCrtGrammarBuilder(ELCrtGrammarBuilder, ABC):
 #     def __init__(self):
 #         super().__init__()
 #
-#     def build(self, base_grammar_name: str, mention:str, entities_or_path: Union[List[str], str],
+#     def build(self, base_grammar_name: str, mention:str, entities_or_path: Union[List[str], str, List[List[str]]],
 #               tokenizer_or_path, crt_grammar_name=None, literal=False) -> Grammar:
 #         grammar: str = self.read_template()
 #         abs_grammar_name = self.get_grammar_name(base_grammar_name=base_grammar_name)
