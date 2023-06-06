@@ -36,40 +36,52 @@ DATA_DIR = os.path.join(ROOT_DIR, "data")
 TEMPLATE_DIR = os.path.join(ASSET_DIR, "templates")
 
 # entity file paths
-IE_TRAINING_DATA_PATH ={
-    "wiki_ner": {
-        "entity":os.path.join(DATA_DIR, "IE", "jsonl", "small", "wiki_ner_entity_trie_original_strings.jsonl"),
-        "relation":os.path.join(DATA_DIR, "IE", "jsonl", "small", "wiki_ner_relation_trie_original_strings.jsonl"),
+IE_DATA_PATH ={
+    "KB": {
+        "wiki_ner": {
+            "entity":os.path.join(DATA_DIR, "IE", "KB", "small", "wiki_ner_entity_trie_original_strings.jsonl"),
+            "relation":os.path.join(DATA_DIR, "IE", "KB", "small", "wiki_ner_relation_trie_original_strings.jsonl"),
+        },
+        "rebel": {
+            "entity": os.path.join(DATA_DIR, "IE", "KB", "large", "rebel_entity_trie_original_strings.jsonl"),
+            "relation": os.path.join(DATA_DIR, "IE", "KB", "large", "rebel_relation_trie_original_strings.jsonl"),
+        },
+        "rebel_medium": {
+            "entity": os.path.join(DATA_DIR, "IE", "KB", "medium", "llama_constrained_rebel_entity_names.jsonl"),
+            "relation": os.path.join(DATA_DIR, "IE", "KB", "medium", "llama_constrained_rebel_relation_names.jsonl"),
+        }
     },
-    "rebel": {
-        "entity": os.path.join(DATA_DIR, "IE", "jsonl", "large", "rebel_entity_trie_original_strings.jsonl"),
-        "relation": os.path.join(DATA_DIR, "IE", "jsonl", "large", "rebel_relation_trie_original_strings.jsonl"),
+    "Tasks": None,
+}
+
+ED_DATA_PATH = {
+    "KB": {
+        "kilt_wikipedia": {
+            "entity": os.path.join(DATA_DIR, "ED", "KB", "kilt_wikipedia_entities.jsonl"),
+        }
     },
-    "rebel_medium": {
-        "entity": os.path.join(DATA_DIR, "IE", "jsonl", "medium", "llama_constrained_rebel_entity_names.jsonl"),
-        "relation": os.path.join(DATA_DIR, "IE", "jsonl", "medium", "llama_constrained_rebel_relation_names.jsonl"),
+    "Tasks": {
+        "ace2004": os.path.join(DATA_DIR, "ED", "Tasks", "ace2004-kilt-test-processed-short.jsonl"),
+        "aida": os.path.join(DATA_DIR, "ED", "Tasks", "aida-kilt-test-processed-short.jsonl"),
+        "aquaint": os.path.join(DATA_DIR, "ED", "Tasks", "aquaint-kilt-test-processed-short.jsonl"),
+        "clueweb": os.path.join(DATA_DIR, "ED", "Tasks", "clueweb-kilt-test-processed-short.jsonl"),
+        "msnbc": os.path.join(DATA_DIR, "ED", "Tasks", "msnbc-kilt-test-processed-short.jsonl"),
+        "wiki": os.path.join(DATA_DIR, "ED", "Tasks", "wiki-kilt-test-processed-short.jsonl"),
+        "wikiLinksNED": os.path.join(DATA_DIR, "ED", "Tasks", "wikiLinksNED-test-processed-short.jsonl"),
+    },
+}
+
+CP_DATA_PATH = {
+    "KB": None,
+    "Tasks": {
+        "ptb": os.path.join(DATA_DIR, "CP", "Tasks", "ptb-test-processed.jsonl"),
     }
 }
 
-EL_TRAINING_DATA_PATH ={
-    "aida-train": {
-        "entity":os.path.join(DATA_DIR, "EL", "aida-train-kilt-entities.jsonl")},
-    "aida-test": {
-        "entity":os.path.join(DATA_DIR, "EL", "aida-test-kilt-entities.jsonl")},
-    "aida-dev": {
-        "entity":os.path.join(DATA_DIR, "EL", "aida-dev-kilt-entities.jsonl")},
-    "aida-all": {
-        "entity":os.path.join(DATA_DIR, "EL", "aida-all-kilt-entities.jsonl")},
-}
-
-AB_TRAINING_DATA_PATH ={
-    "trial": {
-        "entity":os.path.join(DATA_DIR, "AB", "trial_entities.jsonl")},
-}
 
 DATA_PATHS = {
-    "IE": IE_TRAINING_DATA_PATH,
-    "EL": EL_TRAINING_DATA_PATH,
-    "AB": AB_TRAINING_DATA_PATH,
+    "IE": IE_DATA_PATH,
+    "ED": ED_DATA_PATH,
+    "CP": CP_DATA_PATH,
 }
 

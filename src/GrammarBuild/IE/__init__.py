@@ -5,5 +5,6 @@ Fully Expanded Form
 
 """
 
-from .abs_grammar import GenieFullyExpandedAbsGrammarBuilder, GenieSubjectCollapsedAbsGrammarBuilder
-from .crt_grammar import GenieFullyExpandedCrtGrammarBuilder, GenieSubjectCollapsedCrtGrammarBuilder
+from src.GrammarBuild.IE.indep.indep_abs_grammar import IE_IndepFullyExpandedAbsGrammarBuilder, IE_IndepSubjectCollapsedAbsGrammarBuilder
+from src.GrammarBuild.IE.indep.indep_crt_grammar import IE_IndepFullyExpandedCrtGrammarBuilder, IE_IndepSubjectCollapsedCrtGrammarBuilder
+

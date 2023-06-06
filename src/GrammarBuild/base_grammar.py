@@ -110,8 +110,9 @@ class TemplateTokenGrammarBuilder:
     PSEUDO_PREFIX = "Ж" # using character so that tokenizer independent
 
     def __init__(self, tokenizer_or_path: str, literal=False):
-        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_or_path, use_fast=False) if isinstance(tokenizer_or_path,
-                                                                                                   str) else tokenizer_or_path
+        assert isinstance(tokenizer_or_path, str), "tokenizer_or_path must be a string, passing a tokenizer object is not supported yet"
+        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_or_path, use_fast=False)
+        self.tokenizer_name = tokenizer_or_path.split('/')[-1].replace('-', '_')
         self.literal = literal
         if self.literal:
             self.grammar_suffix = "_literal"
@@ -192,7 +193,10 @@ class TemplateTokenGrammarBuilder:
         FullyExpanded + GenieWiki + Crt
         example: FullyExpandedGenieWikiCrt
         """
-        return f"{self.grammar_prefix}{base_grammar_name}{self.grammar_suffix}" if not crt else f"{self.grammar_prefix}{base_grammar_name}{self.grammar_suffix}_Crt"
+        if not crt:
+            return f"{base_grammar_name}{self.grammar_suffix}"
+        else:
+            return f"{base_grammar_name}{self.grammar_suffix}_{self.tokenizer_name}_Crt"
 
     @staticmethod
     def join_statements_multi_line(statements: List[str]) -> str:

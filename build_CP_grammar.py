@@ -11,9 +11,9 @@ import pdb
 
 from tqdm import tqdm
 
-from src.config.config import GF_AUTO_GEN_GF_DIR,DATA_DIR,EL_TRAINING_DATA_PATH
+from src.config.config import GF_AUTO_GEN_GF_DIR,DATA_DIR,ED_DATA_PATH
 from src.GrammarBuild.base_grammar import AbsCrtGrammarPair
-from src.GrammarBuild.CP import CPAbsGrammarBuilder, CPCrtGrammarBuilder, CPotfAbsGrammarBuilder, CPotfCrtGrammarBuilder
+from src.GrammarBuild.CP import CP_IndepPtbAbsGrammarBuilder, CPCrtGrammarBuilder, CP_DepPtbAbsGrammarBuilder, CPotfCrtGrammarBuilder
 
 
 
@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     import argparse
     parser = argparse.ArgumentParser()
-    # parser.add_argument("--dataset", type=str, default="aida", help="dataset name", choices=["aida"])
+    # parser.add_argument("--dataset", type=str, minimal="aida", help="dataset name", choices=["aida"])
     parser.add_argument("--tokenizer-path", type=str, default=f"{LLAMA_DIR}/7B", help="martinjosifoski/genie-rw, /dlabdata1/llama_hf/7B, t5-small")
     parser.add_argument("--grammar-name", type=str, default="auto", help="name of the grammar") # genie_llama_fully_expanded
     parser.add_argument("--compile", action="store_true", help="whether to compile the grammar")
@@ -61,7 +61,7 @@ if __name__ == '__main__':
             entry_id = entry["id"]
             grammar_entry_name = grammar_name + f"_{entry_id}"
 
-            abs_builder = CPotfAbsGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)
+            abs_builder = CP_DepPtbAbsGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)
             crt_builder = CPotfCrtGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)
 
             abs_grammar = abs_builder.build(base_grammar_name=grammar_entry_name,input_sentence=text)
@@ -71,7 +71,7 @@ if __name__ == '__main__':
             grammar_pair.save(output_dir=output_dir, compile=args.compile, only_keep_pgf=False, individual_dir=False)
 
     else:
-        abs_builder = CPAbsGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)
+        abs_builder = CP_IndepPtbAbsGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)
         crt_builder = CPCrtGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)
 
 
