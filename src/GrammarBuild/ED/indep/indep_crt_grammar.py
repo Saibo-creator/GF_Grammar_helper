@@ -24,6 +24,9 @@ class ED_IndepMinimalCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
     template = os.path.join(TEMPLATE_DIR, "ED", "indep", "minimal", "ED-Indep-Minimal-CrtTemplate.hs")
     grammar_prefix = "" # "SubjectCollapsed"
 
+    Open_bracket_marker = "["
+    Close_bracket_marker = "]"
+
 
     def __init__(self, tokenizer_or_path:str, literal=False):
         super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
@@ -37,6 +40,8 @@ class ED_IndepMinimalCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
         formatted_grammar_plain_text: str = grammar.format(abs_grammar_name=abs_grammar_name, crt_grammar_name=crt_grammar_name,
                                                 bog_tokens="[]",
                                                 eog_tokens=f'"{self.tokenizer.encode(self.tokenizer.eos_token, add_special_tokens=False)[0]}"',
+                                                open_bracket_tokens=self.get_entity_tokens(self.Open_bracket_marker, rm_eos=True),
+                                                close_bracket_tokens=self.get_entity_tokens(self.Close_bracket_marker, rm_eos=True),
                                                 Materialize_Entities=self.batch_get_decoding_linearization_rules(entities=entities, rm_eos=True, rm_bos=True))
         return Grammar(formatted_grammar_plain_text, name=crt_grammar_name)
 

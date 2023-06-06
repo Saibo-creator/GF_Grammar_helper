@@ -56,8 +56,8 @@ IE_DATA_PATH ={
 
 ED_DATA_PATH = {
     "KB": {
-        "kilt_wikipedia": {
-            "entity": os.path.join(DATA_DIR, "ED", "KB", "kilt_wikipedia_entities.jsonl"),
+        "kilt_wiki": {
+            "entity": os.path.join(DATA_DIR, "ED", "KB", "kilt_wikipedia_entities_test.jsonl"),
         }
     },
     "Tasks": {

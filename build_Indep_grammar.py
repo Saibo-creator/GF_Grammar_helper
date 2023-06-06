@@ -35,7 +35,7 @@ if __name__ == '__main__':
         assert args.KB is None, f"KB should be None for CP task"
         assert args.grammar in ["Ptb"], f"grammar {args.grammar} not implemented, choose from [Ptb]"
     elif args.task == "ED":
-        assert args.KB in ["kilt_wikipedia"], f"KB {args.KB} not implemented, choose from [wikipedia-kilt]"
+        assert args.KB in ["kilt_wiki"], f"KB {args.KB} not implemented, choose from [wikipedia-kilt]"
         assert args.grammar in ["Minimal"], f"grammar {args.grammar} not implemented, choose from [Minimal]"
     else:
         raise NotImplementedError
