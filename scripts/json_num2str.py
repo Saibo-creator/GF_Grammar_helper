@@ -12,7 +12,7 @@ from src import entity_num2str
 
 sys.path.append("..")
 
-DATA_DIR = "../res/genie-data"
+DATA_DIR = "../data/genie-data"
 
 if __name__ == '__main__':
     rel_trie = entity_num2str(os.path.join(DATA_DIR, "small", "wiki-ner-relation-num.json"), save=True,

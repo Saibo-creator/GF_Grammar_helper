@@ -31,23 +31,57 @@ BENCHMARK_DIR = os.path.join(OUTPUT_DIR, "benchmarks")
 
 
 # Set the resource directory
-RES_DIR = os.path.join(ROOT_DIR, "res")
+DATA_DIR = os.path.join(ROOT_DIR, "data")
 # Set the templates directory
-TEMPLATE_DIR = os.path.join(RES_DIR, "GF-grammars", "templates")
+TEMPLATE_DIR = os.path.join(ASSET_DIR, "templates")
 
 # entity file paths
-TRAINING_DATA_PATH ={
-    "wiki-ner": {
-        "entity":os.path.join(RES_DIR, "genie-data", "jsonl", "small", "wiki_ner_entity_trie_original_strings.jsonl"),
-        "relation":os.path.join(RES_DIR, "genie-data", "jsonl", "small", "wiki_ner_relation_trie_original_strings.jsonl"),
+IE_DATA_PATH ={
+    "KB": {
+        "wiki_ner": {
+            "entity":os.path.join(DATA_DIR, "IE", "KB", "small", "wiki_ner_entity_trie_original_strings.jsonl"),
+            "relation":os.path.join(DATA_DIR, "IE", "KB", "small", "wiki_ner_relation_trie_original_strings.jsonl"),
+        },
+        "rebel": {
+            "entity": os.path.join(DATA_DIR, "IE", "KB", "large", "rebel_entity_trie_original_strings.jsonl"),
+            "relation": os.path.join(DATA_DIR, "IE", "KB", "large", "rebel_relation_trie_original_strings.jsonl"),
+        },
+        "rebel_medium": {
+            "entity": os.path.join(DATA_DIR, "IE", "KB", "medium", "llama_constrained_rebel_entity_names.jsonl"),
+            "relation": os.path.join(DATA_DIR, "IE", "KB", "medium", "llama_constrained_rebel_relation_names.jsonl"),
+        }
     },
-    "rebel": {
-        "entity": os.path.join(RES_DIR, "genie-data", "jsonl", "large", "rebel_entity_trie_original_strings.jsonl"),
-        "relation": os.path.join(RES_DIR, "genie-data", "jsonl", "large", "rebel_relation_trie_original_strings.jsonl"),
+    "Tasks": None,
+}
+
+ED_DATA_PATH = {
+    "KB": {
+        "kilt_wiki": {
+            "entity": os.path.join(DATA_DIR, "ED", "KB", "kilt_wikipedia_entities.jsonl"),
+        }
     },
-    "rebel-medium": {
-        "entity": os.path.join(RES_DIR, "genie-data", "jsonl", "medium", "llama_constrained_rebel_entity_names.jsonl"),
-        "relation": os.path.join(RES_DIR, "genie-data", "jsonl", "medium", "llama_constrained_rebel_relation_names.jsonl"),
+    "Tasks": {
+        "ace2004": os.path.join(DATA_DIR, "ED", "Tasks", "ace2004-test-processed-short.jsonl"),
+        "aida": os.path.join(DATA_DIR, "ED", "Tasks", "aida-test-processed-short.jsonl"),
+        "aquaint": os.path.join(DATA_DIR, "ED", "Tasks", "aquaint-test-processed-short.jsonl"),
+        "clueweb": os.path.join(DATA_DIR, "ED", "Tasks", "clueweb-test-processed-short.jsonl"),
+        "msnbc": os.path.join(DATA_DIR, "ED", "Tasks", "msnbc-test-processed-short.jsonl"),
+        "wiki": os.path.join(DATA_DIR, "ED", "Tasks", "wiki-test-processed-short.jsonl"),
+        "wikiLinksNED": os.path.join(DATA_DIR, "ED", "Tasks", "wikiLinksNED-test-processed-short.jsonl"),
+    },
+}
+
+CP_DATA_PATH = {
+    "KB": None,
+    "Tasks": {
+        "ptb": os.path.join(DATA_DIR, "CP", "Tasks", "ptb-test-processed.jsonl"),
     }
+}
+
+
+DATA_PATHS = {
+    "IE": IE_DATA_PATH,
+    "ED": ED_DATA_PATH,
+    "CP": CP_DATA_PATH,
 }
 

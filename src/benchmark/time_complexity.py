@@ -18,9 +18,10 @@ from src.config.config import PGF_ASSET_DIR, BENCHMARK_DIR
 from src.benchmark.visualization import plot_time_complexity
 
 
-def measure_speed(pgf_name='FullyExpandedGenieWiki', port=41296, pgf_dir=PGF_ASSET_DIR, num_repeat=6, max_seq_len=1024):
+def measure_speed(pgf_name='FullyExpandedGenieWiki', port=41296, pgf_dir=PGF_ASSET_DIR, num_repeat=6, max_seq_len=1024, tokens2exclude=None):
     pgf_fname = pgf_name + ".pgf"
     pgf = HttpPgf(pgf=pgf_fname, port=port, root_dir=pgf_dir)
+    tokens2exclude = tokens2exclude or []
 
     times_matrix = np.zeros((num_repeat, max_seq_len))
     for i in tqdm(range(num_repeat), desc="Repeat"):
@@ -32,6 +33,9 @@ def measure_speed(pgf_name='FullyExpandedGenieWiki', port=41296, pgf_dir=PGF_ASS
             if len(completions) > 0:
                 idx = np.random.randint(0, len(completions))
                 next_token_id = completions[idx]
+                while next_token_id in tokens2exclude:
+                    idx = np.random.randint(0, len(completions))
+                    next_token_id = completions[idx]
                 end_time = time.time()
                 times_matrix[i][j] = round(end_time - start_time, 4)
                 prefix += " " + next_token_id
@@ -57,7 +61,9 @@ if __name__ == '__main__':
     arg_parser.add_argument('--pgf_dir', type=str, default=PGF_ASSET_DIR)
     arg_parser.add_argument('--num_repeat', type=int, default=6)
     arg_parser.add_argument('--max_seq_len', type=int, default=1024)
+    arg_parser.add_argument('--tokens2exclude', type=list, default=[])
     args = arg_parser.parse_args()
 
-    csv_fpath = measure_speed(pgf_name=args.pgf, port=args.port, pgf_dir=args.pgf_dir, num_repeat=args.num_repeat, max_seq_len=args.max_seq_len)
+    csv_fpath = measure_speed(pgf_name=args.pgf, port=args.port, pgf_dir=args.pgf_dir, num_repeat=args.num_repeat,
+                              max_seq_len=args.max_seq_len, tokens2exclude=args.tokens2exclude)
     plot_time_complexity(csv_fpath)
