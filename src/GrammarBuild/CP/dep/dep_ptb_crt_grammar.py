@@ -26,8 +26,9 @@ class CP_DepPtbCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
         self.Input_Word = "XX"
         self.Space = " "
 
-    def build(self, base_grammar_name: str, crt_grammar_name=None, input_sentence=None) -> Grammar:
-        assert input_sentence is not None, "input_sentence should not be None"
+    def build(self, base_grammar_name: str, **kwargs) -> Grammar:
+        crt_grammar_name = kwargs.get("crt_grammar_name", None)
+        input_sentence = kwargs["text"]
         grammar: str = self.read_template()
         abs_grammar_name = self.get_grammar_name(base_grammar_name=base_grammar_name)
         if crt_grammar_name is None:

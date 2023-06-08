@@ -10,7 +10,8 @@ from typing import List, Union, Dict
 from src.config.config import TEMPLATE_DIR
 from src.GrammarBuild.CP.const import PHRASE_LEVEL_TAGS, FUNCTIONAL_TAGS, WORD_LEVEL_TAGS, NUM_TAGS
 
-from src.GrammarBuild.base_grammar import Grammar, TemplateTokenGrammarBuilder
+from src.GrammarBuild.base_grammar import Grammar
+from src.GrammarBuild.grammar_builder import TemplateTokenGrammarBuilder
 
 
 class CP_IndepPtbAbsGrammarBuilder(TemplateTokenGrammarBuilder):
@@ -21,7 +22,7 @@ class CP_IndepPtbAbsGrammarBuilder(TemplateTokenGrammarBuilder):
     def __init__(self, tokenizer_or_path:str, literal=False):
         super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
 
-    def build(self, base_grammar_name: str, *args, **kwargs) -> Grammar:
+    def build(self, base_grammar_name: str, **kwargs) -> Grammar:
         grammar: str = self.read_template()
 
         abs_grammar_name = self.get_grammar_name(base_grammar_name)

@@ -61,12 +61,12 @@ ED_DATA_PATH = {
         }
     },
     "Tasks": {
-        "ace2004": os.path.join(DATA_DIR, "ED", "Tasks", "ace2004-kilt-test-processed-short.jsonl"),
-        "aida": os.path.join(DATA_DIR, "ED", "Tasks", "aida-kilt-test-processed-short.jsonl"),
-        "aquaint": os.path.join(DATA_DIR, "ED", "Tasks", "aquaint-kilt-test-processed-short.jsonl"),
-        "clueweb": os.path.join(DATA_DIR, "ED", "Tasks", "clueweb-kilt-test-processed-short.jsonl"),
-        "msnbc": os.path.join(DATA_DIR, "ED", "Tasks", "msnbc-kilt-test-processed-short.jsonl"),
-        "wiki": os.path.join(DATA_DIR, "ED", "Tasks", "wiki-kilt-test-processed-short.jsonl"),
+        "ace2004": os.path.join(DATA_DIR, "ED", "Tasks", "ace2004-test-processed-short.jsonl"),
+        "aida": os.path.join(DATA_DIR, "ED", "Tasks", "aida-test-processed-short.jsonl"),
+        "aquaint": os.path.join(DATA_DIR, "ED", "Tasks", "aquaint-test-processed-short.jsonl"),
+        "clueweb": os.path.join(DATA_DIR, "ED", "Tasks", "clueweb-test-processed-short.jsonl"),
+        "msnbc": os.path.join(DATA_DIR, "ED", "Tasks", "msnbc-test-processed-short.jsonl"),
+        "wiki": os.path.join(DATA_DIR, "ED", "Tasks", "wiki-test-processed-short.jsonl"),
         "wikiLinksNED": os.path.join(DATA_DIR, "ED", "Tasks", "wikiLinksNED-test-processed-short.jsonl"),
     },
 }

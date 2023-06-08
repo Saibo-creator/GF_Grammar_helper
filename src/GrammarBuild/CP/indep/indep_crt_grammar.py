@@ -16,7 +16,8 @@ from src.config.config import TEMPLATE_DIR
 
 from transformers import AutoTokenizer
 
-from src.GrammarBuild.base_grammar import Grammar, TemplateTokenGrammarBuilder
+from src.GrammarBuild.base_grammar import Grammar
+from src.GrammarBuild.grammar_builder import TemplateTokenGrammarBuilder
 from src.GrammarBuild.CP.const import PHRASE_LEVEL_TAGS, FUNCTIONAL_TAGS, WORD_LEVEL_TAGS, NUM_TAGS
 
 
@@ -34,7 +35,9 @@ class CP_IndepPtbCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
         self.Input_Word = "XX"
         self.Space = " "
 
-    def build(self, base_grammar_name: str, crt_grammar_name=None, **kwargs) -> Grammar:
+    def build(self, base_grammar_name: str, **kwargs) -> Grammar:
+
+        crt_grammar_name = kwargs.get("crt_grammar_name", None)
         grammar: str = self.read_template()
         abs_grammar_name = self.get_grammar_name(base_grammar_name=base_grammar_name)
         if crt_grammar_name is None:

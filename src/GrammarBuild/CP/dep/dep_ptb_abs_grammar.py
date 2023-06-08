@@ -6,6 +6,8 @@
 # @AUTHOR : Saibo Geng
 # @Desc :
 import os
+import pdb
+
 from src.config.config import TEMPLATE_DIR
 
 from src.GrammarBuild.base_grammar import Grammar
@@ -20,8 +22,9 @@ class CP_DepPtbAbsGrammarBuilder(CP_IndepPtbAbsGrammarBuilder):
     def __init__(self, tokenizer_or_path: str, literal=False):
         super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
 
-    def build(self, base_grammar_name: str, input_sentence:str) -> Grammar:
+    def build(self, base_grammar_name: str, **kwargs) -> Grammar:
         grammar: str = self.read_template()
+        input_sentence: str = kwargs["text"]
 
         abs_grammar_name = self.get_grammar_name(base_grammar_name)
 

@@ -30,8 +30,11 @@ class ED_DepMultiMentionAbsGrammarBuilder(ED_IndepMinimalAbsGrammarBuilder):
     def __init__(self, tokenizer_or_path:str, literal=False):
         super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
 
-    def build(self, base_grammar_name: str, entities_or_path: Union[List[str], str, List[List[str]]], num_mentions:int=None, **kwargs) -> Grammar:
+    def build(self, base_grammar_name: str, **kwargs) -> Grammar:
         grammar: str = self.read_template()
+
+        entities_or_path: Union[List[str], str, List[List[str]]] = kwargs["entities"]
+        num_mentions: int = kwargs["num_mentions"]
         assert type(entities_or_path) == list and type(
             entities_or_path[0]) == list, "entities should be list of list of entities"
         abs_grammar_name = self.get_grammar_name(base_grammar_name)
