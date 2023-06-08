@@ -17,7 +17,7 @@ from src.GrammarBuild.ED.indep.indep_crt_grammar import ED_IndepMinimalCrtGramma
 
 class ED_DepSentenceCrtGrammarBuilder(ED_IndepMinimalCrtGrammarBuilder, ABC):
 
-    template = os.path.join(TEMPLATE_DIR, "ED", "dep", "sentence", "ED-DEP-sentence-CrtTemplate.hs")
+    template = os.path.join(TEMPLATE_DIR, "ED", "Dep", "sentence", "ED-Dep-sentence-CrtTemplate.hs")
     grammar_prefix = ""
 
 

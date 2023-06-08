@@ -19,8 +19,8 @@ class IE_AbsGrammarBuilder(TemplateTokenGrammarBuilder):
         super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
 
     def build(self, base_grammar_name: str, **kwargs) -> Grammar:
-        entities_or_path: Union[List[str], str, List[List[str]]] = kwargs["entities"]
-        relations_or_path: Union[List[str], str, List[List[str]]] = kwargs["relations"]
+        entities_or_path: Union[List[str], str, List[List[str]]] = kwargs["entities_or_path"]
+        relations_or_path: Union[List[str], str, List[List[str]]] = kwargs["relationss_or_path"]
         grammar: str = self.read_template()
         entities: List[str] = self.read_jsonl(entities_or_path) if isinstance(entities_or_path,
                                                                               str) else entities_or_path
@@ -59,7 +59,7 @@ class IE_AbsGrammarBuilder(TemplateTokenGrammarBuilder):
 
 
 class IE_IndepFullyExpandedAbsGrammarBuilder(IE_AbsGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "IE", "indep", "FE", "IE-Indep-FullyExpanded-AbsTemplate.hs")
+    template = os.path.join(TEMPLATE_DIR, "IE", "InDep", "FE", "IE-Indep-FullyExpanded-AbsTemplate.hs")
     grammar_prefix = "" # "FullyExpanded"
 
 
@@ -68,7 +68,7 @@ class IE_IndepFullyExpandedAbsGrammarBuilder(IE_AbsGrammarBuilder):
 
 
 class IE_IndepSubjectCollapsedAbsGrammarBuilder(IE_AbsGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "IE", "indep", "SC", "IE-Indep-SubjectCollapsed-AbsTemplate.hs")
+    template = os.path.join(TEMPLATE_DIR, "IE", "InDep", "SC", "IE-Indep-SubjectCollapsed-AbsTemplate.hs")
     grammar_prefix = "" # "SubjectCollapsed"
 
 

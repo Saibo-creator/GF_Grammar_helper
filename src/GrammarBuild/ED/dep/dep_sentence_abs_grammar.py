@@ -13,7 +13,7 @@ from src.GrammarBuild.ED.indep.indep_abs_grammar import ED_IndepMinimalAbsGramma
 
 class ED_DepSentenceAbsGrammarBuilder(ED_IndepMinimalAbsGrammarBuilder):
 
-    template = os.path.join(TEMPLATE_DIR, "ED", "dep", "sentence", "ED-DEP-sentence-AbsTemplate.hs")
+    template = os.path.join(TEMPLATE_DIR, "ED", "Dep", "sentence", "ED-Dep-sentence-AbsTemplate.hs")
     grammar_prefix = ""
 
 

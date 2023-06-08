@@ -16,7 +16,7 @@ from src.GrammarBuild.ED.indep.indep_crt_grammar import ED_IndepMinimalCrtGramma
 
 
 class ED_DepMultiMentionCrtGrammarBuilder(ED_IndepMinimalCrtGrammarBuilder, ABC):
-    template = os.path.join(TEMPLATE_DIR, "ED", "dep", "multi-mention", "ED-DEP-multi-mention-CrtTemplate.hs")
+    template = os.path.join(TEMPLATE_DIR, "ED", "Dep", "multi-mention", "ED-Dep-multi-mention-CrtTemplate.hs")
     grammar_prefix = ""
 
     Open_bracket_marker = "["

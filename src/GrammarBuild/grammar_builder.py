@@ -101,15 +101,21 @@ class TemplateTokenGrammarBuilder:
         else:
             raise ValueError("Must specify either entity or relation or token_id")
 
-    def get_grammar_name(self, base_grammar_name: str, crt=False) -> str:
+    def get_grammar_name(self, base_grammar_name: str, crt=False, idx=None) -> str:
         """
         FullyExpanded + GenieWiki + Crt
         example: FullyExpandedGenieWikiCrt
         """
-        if not crt:
-            return f"{base_grammar_name}{self.grammar_suffix}"
-        else:
-            return f"{base_grammar_name}{self.grammar_suffix}_{self.tokenizer_name}_Crt"
+        # if not crt:
+        #     return f"{base_grammar_name}{self.grammar_suffix}_{self.tokenizer_name}"
+        # else:
+        #     return f"{base_grammar_name}{self.grammar_suffix}_{self.tokenizer_name}_Crt"
+        # if idx is not None:
+        #     grammar_name =  f"{base_grammar_name}{self.grammar_suffix}_{self.tokenizer_name}_{idx}"
+        # else:
+        #     grammar_name = f"{base_grammar_name}{self.grammar_suffix}_{self.tokenizer_name}"
+
+        return f"{base_grammar_name}{self.grammar_suffix}" if not crt else f"{base_grammar_name}{self.grammar_suffix}_Crt"
 
     @staticmethod
     def join_statements_multi_line(statements: List[str]) -> str:

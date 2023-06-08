@@ -31,6 +31,7 @@ if __name__ == '__main__':
     parser.add_argument("--compile", action="store_true", help="whether to compile the grammar")
     parser.add_argument("--literal", action="store_true", help="whether to use literal grammar")
     parser.add_argument("--debug", action="store_true", help="whether to use debug mode, which will generate a small grammar from list of entities and relations")
+    parser.add_argument("--clean", action="store_true", help="whether to clean the grammar")
     args = parser.parse_args()
     dependency = "Dep" if args.dep else "Indep"
     
@@ -41,13 +42,16 @@ if __name__ == '__main__':
         assert args.KB is None, f"KB should be None for CP task"
         assert args.grammar in ["Ptb"], f"grammar {args.grammar} not implemented, choose from [Ptb]"
     elif args.task == "ED":
-        assert args.KB in ["kilt_wiki"], f"KB {args.KB} not implemented, choose from [wikipedia-kilt]"
+        if args.dep:
+            assert args.KB is None, f"KB should be None for ED task"
+        else:
+            assert args.KB in ["kilt_wiki"], f"KB {args.KB} not implemented, choose from [wiki-kilt]"
         assert args.grammar in ["Minimal"], f"grammar {args.grammar} not implemented, choose from [Minimal]"
     else:
         raise NotImplementedError
 
     KB_name = args.KB if args.KB is not None else "NoKB"
-    grammar_name = f"{args.task}_{KB_name}_{args.grammar}"
+    grammar_name = f"{args.task}_{KB_name}_{args.grammar}_{args.tokenizer_path.split('/')[-1].replace('-','_')}"
     grammar_name += "_debug" if args.debug else ""
 
     submodule_name = args.grammar
@@ -72,7 +76,7 @@ if __name__ == '__main__':
         entities_path = None
         relations_path = None
     elif args.task == "ED":
-        entities_path = DATA_PATHS[args.task]["KB"][args.KB]["entity"]
+        entities_path = DATA_PATHS[args.task]["KB"][args.KB]["entity"] if not args.dep else None
         relations_path = None
     else:
         raise NotImplementedError
@@ -88,16 +92,20 @@ if __name__ == '__main__':
         print("finished building concrete grammar...")
 
         grammar_pair = AbsCrtGrammarPair(abs_grammar=abs_grammar, crt_grammar=crt_grammar)
-        grammar_pair.save(output_dir=output_dir, compile=args.compile)
+        grammar_pair.save(output_dir=output_dir, compile=args.compile,only_keep_pgf=args.clean)
     else:
         dataset_jsonl = DATA_PATHS[args.task]["Tasks"][args.dataset]
 
         with open(dataset_jsonl, "r", encoding="utf-8") as f:
             entries = [json.loads(line) for line in f]
 
+        empty_entries = 0
         for entry in tqdm(entries):
             mention = entry.get("mention", None)
-            entities = entry.get("entities", None)
+            entities = entry.get("candidates", None)
+            if entities == []:
+                empty_entries += 1
+                continue
             left_context = entry.get("left_context", None)
             right_context = entry.get("right_context", None)
             entry_id = entry.get("id", None)
@@ -110,8 +118,10 @@ if __name__ == '__main__':
                                             mention=mention, left_context=left_context, right_context=right_context, text=text)
 
             grammar_pair = AbsCrtGrammarPair(abs_grammar=abs_grammar, crt_grammar=crt_grammar)
-            grammar_pair.save(output_dir=output_dir, compile=args.compile, only_keep_pgf=False,
+            grammar_pair.save(output_dir=output_dir, compile=args.compile, only_keep_pgf=args.clean,
                               individual_dir=False)
+
+        print(f"empty_entries: {empty_entries}")
 
 
 

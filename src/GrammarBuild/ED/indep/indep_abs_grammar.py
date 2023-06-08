@@ -14,7 +14,7 @@ from src.GrammarBuild.grammar_builder import TemplateTokenGrammarBuilder
 
 
 class ED_IndepMinimalAbsGrammarBuilder(TemplateTokenGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "ED", "indep", "minimal", "ED-Indep-Minimal-AbsTemplate.hs")
+    template = os.path.join(TEMPLATE_DIR, "ED", "InDep", "minimal", "ED-Indep-Minimal-AbsTemplate.hs")
     grammar_prefix = ""  # "SubjectCollapsed"
 
 
@@ -23,7 +23,7 @@ class ED_IndepMinimalAbsGrammarBuilder(TemplateTokenGrammarBuilder):
 
     def build(self, base_grammar_name: str, **kwargs) -> Grammar:
         grammar: str = self.read_template()
-        entities_or_path: Union[List[str], str, List[List[str]]] = kwargs["entities"]
+        entities_or_path: Union[List[str], str, List[List[str]]] = kwargs["entities_or_path"]
         entities: List[str] = self.read_jsonl(entities_or_path) if isinstance(entities_or_path,
                                                                               str) else entities_or_path
         abs_grammar_name = self.get_grammar_name(base_grammar_name)

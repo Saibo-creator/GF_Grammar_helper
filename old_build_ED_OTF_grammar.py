@@ -69,5 +69,5 @@ if __name__ == '__main__':
         crt_grammar = crt_builder.build(base_grammar_name=grammar_entry_name, entities_or_path=entities, mention=mention, left_context=left_context, right_context=right_context)
 
         grammar_pair = AbsCrtGrammarPair(abs_grammar=abs_grammar, crt_grammar=crt_grammar)
-        grammar_pair.save(output_dir=output_dir, compile=args.compile, only_keep_pgf=False, individual_dir=False)
+        grammar_pair.save(output_dir=output_dir, compile=args.compile, only_keep_pgf=True, individual_dir=False)
 

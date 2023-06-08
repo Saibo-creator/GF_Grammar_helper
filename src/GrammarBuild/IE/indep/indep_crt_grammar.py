@@ -119,7 +119,7 @@ class IE_CrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
 
 class IE_IndepFullyExpandedCrtGrammarBuilder(IE_CrtGrammarBuilder):
 
-    template = os.path.join(TEMPLATE_DIR, "IE", "indep", "FE", "IE-Indep-FullyExpanded-CrtTemplate.hs")
+    template = os.path.join(TEMPLATE_DIR, "IE", "InDep", "FE", "IE-Indep-FullyExpanded-CrtTemplate.hs")
     grammar_prefix = "" # "FullyExpanded"
 
     SubjectMarker = "[s]"
@@ -132,7 +132,7 @@ class IE_IndepFullyExpandedCrtGrammarBuilder(IE_CrtGrammarBuilder):
 
 class IE_IndepSubjectCollapsedCrtGrammarBuilder(IE_CrtGrammarBuilder):
 
-    template = os.path.join(TEMPLATE_DIR, "IE", "indep", "SC", "IE-Indep-SubjectCollapsed-CrtTemplate.hs")
+    template = os.path.join(TEMPLATE_DIR, "IE", "InDep", "SC", "IE-Indep-SubjectCollapsed-CrtTemplate.hs")
     grammar_prefix = "" # "SubjectCollapsed"
 
     SubjectMarker = "[s]"

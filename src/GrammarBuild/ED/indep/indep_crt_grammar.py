@@ -22,7 +22,7 @@ from src.GrammarBuild.grammar_builder import TemplateTokenGrammarBuilder
 
 class ED_IndepMinimalCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
 
-    template = os.path.join(TEMPLATE_DIR, "ED", "indep", "minimal", "ED-Indep-Minimal-CrtTemplate.hs")
+    template = os.path.join(TEMPLATE_DIR, "ED", "InDep", "minimal", "ED-Indep-Minimal-CrtTemplate.hs")
     grammar_prefix = "" # "SubjectCollapsed"
 
     Open_bracket_marker = "["

@@ -15,7 +15,7 @@ from src.GrammarBuild.ED.indep.indep_abs_grammar import ED_IndepMinimalAbsGramma
 
 class ED_DepMultiMentionAbsGrammarBuilder(ED_IndepMinimalAbsGrammarBuilder):
 
-    template = os.path.join(TEMPLATE_DIR, "ED", "dep", "multi-mention", "ED-DEP-multi-mention-AbsTemplate.hs")
+    template = os.path.join(TEMPLATE_DIR, "ED", "Dep", "multi-mention", "ED-Dep-multi-mention-AbsTemplate.hs")
     grammar_prefix = ""
 
     NUMERATED_MENTION_TEMPLATE = "Mention{i}"
@@ -33,7 +33,7 @@ class ED_DepMultiMentionAbsGrammarBuilder(ED_IndepMinimalAbsGrammarBuilder):
     def build(self, base_grammar_name: str, **kwargs) -> Grammar:
         grammar: str = self.read_template()
 
-        entities_or_path: Union[List[str], str, List[List[str]]] = kwargs["entities"]
+        entities_or_path: Union[List[str], str, List[List[str]]] = kwargs["entities_or_path"]
         num_mentions: int = kwargs["num_mentions"]
         assert type(entities_or_path) == list and type(
             entities_or_path[0]) == list, "entities should be list of list of entities"
@@ -102,7 +102,7 @@ class ED_DepMultiMentionAbsGrammarBuilder(ED_IndepMinimalAbsGrammarBuilder):
 if __name__ == '__main__':
     grammar = ED_DepMultiMentionAbsGrammarBuilder(tokenizer_or_path="/Users/saibo/Research/llama_hf/7B", literal=True) \
         .build(base_grammar_name="ED-OTFE", num_mentions=2, entities_or_path=[["Q1", "Q2", "Q3", "Q4"], ["Q5", "Q6", "Q7", "Q8"]])
-    grammar.save("./ED-DEP-multi-mention-AbsTemplate.hs")
+    grammar.save("./ED-Dep-multi-mention-AbsTemplate.hs")
 
 
 

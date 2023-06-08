@@ -17,14 +17,13 @@ from src.GrammarBuild.ED.indep.indep_crt_grammar import ED_IndepMinimalCrtGramma
 
 class ED_DepMinimalCrtGrammarBuilder(ED_IndepMinimalCrtGrammarBuilder, ABC):
 
-    template = os.path.join(TEMPLATE_DIR, "ED", "dep", "minimal", "ED-DEP-CrtTemplate.hs")
+    template = os.path.join(TEMPLATE_DIR, "ED", "Dep", "minimal", "ED-Dep-Minimal-CrtTemplate.hs")
     grammar_prefix = ""
 
 
     Open_bracket_marker = "["
     Close_bracket_marker = "]"
 
-    
 
     def __init__(self, tokenizer_or_path:str, literal=False):
         super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
@@ -53,7 +52,7 @@ class ED_DepMinimalCrtGrammarBuilder(ED_IndepMinimalCrtGrammarBuilder, ABC):
 #
 # class ED_DepMinimalCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
 #
-#     template = os.path.join(TEMPLATE_DIR, "ED", "dep","ED-DEP-CrtTemplate.hs")
+#     template = os.path.join(TEMPLATE_DIR, "ED", "dep","ED-Dep-CrtTemplate.hs")
 #     grammar_prefix = ""
 #
 #

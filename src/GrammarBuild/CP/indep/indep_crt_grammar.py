@@ -22,7 +22,7 @@ from src.GrammarBuild.CP.const import PHRASE_LEVEL_TAGS, FUNCTIONAL_TAGS, WORD_L
 
 
 class CP_IndepPtbCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
-    template = os.path.join(TEMPLATE_DIR, "CP", "indep", "ptb", "CP-Indep-PTB-CrtTemplate.hs")
+    template = os.path.join(TEMPLATE_DIR, "CP", "InDep", "ptb", "CP-Indep-PTB-CrtTemplate.hs")
     grammar_prefix = ""  # "SubjectCollapsed"
 
 
