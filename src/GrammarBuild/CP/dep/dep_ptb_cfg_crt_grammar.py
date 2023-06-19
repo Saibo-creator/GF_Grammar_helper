@@ -13,7 +13,7 @@ from src.GrammarBuild.base_grammar import Grammar
 from src.GrammarBuild.CP.indep.indep_crt_grammar import CP_IndepPtbCrtGrammarBuilder
 
 class CP_DepPtbCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "CP", "Dep", "ptb", "CP-Dep-PTB-CrtTemplate.hs")
+    template = os.path.join(TEMPLATE_DIR, "CP", "dep", "ptb-cfg", "CP-Dep-PTB-CrtTemplate.hs")
     grammar_prefix = ""  # "SubjectCollapsed"
 
 
@@ -44,7 +44,7 @@ class CP_DepPtbCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
         input_substring_materialise_rules = self.add_input_substring_materialise_rules(input_sentence=input_sentence)
         formatted_grammar_plain_text: str = grammar.format(abs_grammar_name=abs_grammar_name,
                                                            crt_grammar_name=crt_grammar_name,
-                                                           Hyphen=self.get_entity_tokens(entity=self.Hyphen, rm_bos=True, rm_eos=True),  #, pseudo_prefix="Ж"
+                                                           Hyphen=self.get_entity_tokens(entity=self.Hyphen, rm_bos=True, rm_eos=True),#, pseudo_prefix="Ж"
                                                            S=self.get_entity_tokens(entity=self.S, rm_bos=True, rm_eos=True),
                                                            Space=self.get_entity_tokens(entity=self.Space, rm_bos=True, rm_eos=True),
                                                            Left_Paren=self.get_entity_tokens(entity=self.Left_Paren, rm_bos=True, rm_eos=True),

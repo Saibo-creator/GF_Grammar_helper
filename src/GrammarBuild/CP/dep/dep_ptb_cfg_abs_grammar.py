@@ -16,7 +16,7 @@ from src.GrammarBuild.CP.indep.indep_abs_grammar import CP_IndepPtbAbsGrammarBui
 
 class CP_DepPtbAbsGrammarBuilder(CP_IndepPtbAbsGrammarBuilder):
 
-    template = os.path.join(TEMPLATE_DIR, "CP", "Dep", "ptb", "CP-Dep-PTB-AbsTemplate.hs")
+    template = os.path.join(TEMPLATE_DIR, "CP", "Dep", "ptb-cfg", "CP-Dep-PTB-AbsTemplate.hs")
     grammar_prefix = ""
 
     def __init__(self, tokenizer_or_path: str, literal=False):
