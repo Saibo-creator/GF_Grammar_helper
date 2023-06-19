@@ -13,5 +13,7 @@ from src.GrammarBuild.ED.dep.dep_minimal_crt_grammar import ED_DepMinimalCrtGram
 from src.GrammarBuild.ED.dep.dep_minimal_abs_grammar import ED_DepMinimalAbsGrammarBuilder
 from src.GrammarBuild.ED.dep.dep_sentence_abs_grammar import ED_DepSentenceAbsGrammarBuilder
 from src.GrammarBuild.ED.dep.dep_sentence_crt_grammar import ED_DepSentenceCrtGrammarBuilder
+from src.GrammarBuild.ED.dep.dep_canonical_abs_grammar import ED_DepCanonicalAbsGrammarBuilder
+from src.GrammarBuild.ED.dep.dep_canonical_crt_grammar import ED_DepCanonicalCrtGrammarBuilder
 
 

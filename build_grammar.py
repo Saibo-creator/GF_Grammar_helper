@@ -45,13 +45,14 @@ if __name__ == '__main__':
         if args.dep:
             assert args.KB is None, f"KB should be None for ED task"
         else:
-            assert args.KB in ["kilt_wiki"], f"KB {args.KB} not implemented, choose from [wiki-kilt]"
-        assert args.grammar in ["Minimal"], f"grammar {args.grammar} not implemented, choose from [Minimal]"
+            assert args.KB in ["kilt_wiki", "YAGO_KB"], f"KB {args.KB} not implemented, choose from [wiki_kilt, YAGO_KB]"
+        assert args.grammar in ["Minimal", "Canonical"], f"grammar {args.grammar} not implemented, choose from [Minimal]"
     else:
         raise NotImplementedError
 
     KB_name = args.KB if args.KB is not None else "NoKB"
-    grammar_name = f"{args.task}_{KB_name}_{args.grammar}_{args.tokenizer_path.split('/')[-1].replace('-','_')}"
+    dataset = f"_{args.dataset}" if args.dataset is not None else ""
+    grammar_name = f"{args.task}{dataset}_{KB_name}_{args.grammar}_{args.tokenizer_path.split('/')[-1].replace('-','_')}"
     grammar_name += "_debug" if args.debug else ""
 
     submodule_name = args.grammar
@@ -65,7 +66,7 @@ if __name__ == '__main__':
     abs_builder = absGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)
     crt_builder = crtGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)
 
-    output_dir = os.path.join(GF_AUTO_GEN_GF_DIR, f"{args.task}", f"{dependency}", submodule_name)
+    output_dir = os.path.join(GF_AUTO_GEN_GF_DIR, f"{args.task}", f"{dependency}", grammar_name)
 
     if args.task == "IE":
 

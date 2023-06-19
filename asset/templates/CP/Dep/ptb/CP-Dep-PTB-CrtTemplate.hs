@@ -1,11 +1,16 @@
 concrete {crt_grammar_name} of {abs_grammar_name} = {{
   lincat
-    StartTree , Trees , Tree , SentenceTag , Left , Right , FullPhraseLevelTag , PhraseLevelTag , HyphenFunctionTags , HyphenFunctionTag , HyphenNumTag , Hyphen , FunctionTag , WordTag , Num , Input_word = Str;
+    StartTree , Trees , Tree , SentenceTag , Left , Right , FullPhraseLevelTag , PhraseLevelTag , HyphenFunctionTags , HyphenFunctionTag , HyphenNumTag , Hyphen , FunctionTag , WordTag , Num , Input_word , BOG , EOG , OpenBracket , CloseBracket = Str;
     --Text , BOG , EOG , Entity = Str;--
   lin
 
     --Derive_StartTree: Left -> SentenceTag -> Trees -> Right -> StartTree;--
-    Derive_StartTree a b c d = a ++ b ++ c ++ d;
+    Derive_StartTree a b c d e f g h = a ++ b ++ c ++ d ++ e ++ f ++ g ++ h;
+
+    Materialise_BOG = {bog_tokens};
+    Materialise_EOG = {eog_tokens};
+    Materialise_OpenBracket = {open_bracket_tokens};
+    Materialise_CloseBracket = {close_bracket_tokens};
 
     -- Repeat:  Tree -> Trees -> Trees ; --
     Repeat a b = a ++ b; -- (VP (VBN based) (PP-LOC-CLR (IN in) (NP (NNP New) (NNP York))--
@@ -39,7 +44,6 @@ concrete {crt_grammar_name} of {abs_grammar_name} = {{
 
     --Empty_HyphenFunctionTag: HyphenFunctionTag;--
     Empty_HyphenFunctionTag = ""; -- --    --Derive_StartTree: Left -> SentenceTag -> Trees -> Right -> StartTree;--
-    Derive_StartTree a b c d = a ++ b ++ c ++ d;
 
     -- Repeat:  Tree -> Trees -> Trees ; --
     Repeat a b = a ++ b; -- (VP (VBN based) (PP-LOC-CLR (IN in) (NP (NNP New) (NNP York))--

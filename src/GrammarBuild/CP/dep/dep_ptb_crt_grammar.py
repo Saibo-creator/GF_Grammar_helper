@@ -17,14 +17,20 @@ class CP_DepPtbCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
     grammar_prefix = ""  # "SubjectCollapsed"
 
 
+    Open_bracket_marker = "["
+    Close_bracket_marker = "]"
+
+    Hyphen = "-"
+    S = "S"
+    Left_Paren = "("
+    Right_Paren = ")"
+    Input_Word = "XX"
+    Space = " "
+
+
     def __init__(self, tokenizer_or_path: str, literal=False):
         super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
-        self.Hyphen = "-"
-        self.S = "S"
-        self.Left_Paren = "("
-        self.Right_Paren = ")"
-        self.Input_Word = "XX"
-        self.Space = " "
+
 
     def build(self, base_grammar_name: str, **kwargs) -> Grammar:
         crt_grammar_name = kwargs.get("crt_grammar_name", None)
@@ -38,14 +44,18 @@ class CP_DepPtbCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
         input_substring_materialise_rules = self.add_input_substring_materialise_rules(input_sentence=input_sentence)
         formatted_grammar_plain_text: str = grammar.format(abs_grammar_name=abs_grammar_name,
                                                            crt_grammar_name=crt_grammar_name,
-                                                           Hyphen=self.get_entity_tokens(entity=self.Hyphen, rm_bos=True, rm_eos=True),#, pseudo_prefix="Ж"
+                                                           Hyphen=self.get_entity_tokens(entity=self.Hyphen, rm_bos=True, rm_eos=True),  #, pseudo_prefix="Ж"
                                                            S=self.get_entity_tokens(entity=self.S, rm_bos=True, rm_eos=True),
                                                            Space=self.get_entity_tokens(entity=self.Space, rm_bos=True, rm_eos=True),
                                                            Left_Paren=self.get_entity_tokens(entity=self.Left_Paren, rm_bos=True, rm_eos=True),
                                                            Right_Paren=self.get_entity_tokens(entity=self.Right_Paren, rm_bos=True, rm_eos=True),
                                                            Input_Word=self.get_entity_tokens(entity=self.Input_Word, rm_bos=True, rm_eos=True),
                                                            constituency_linerization_rules=constituency_linearization_rules,
-                                                           input_substring_materialise_rules=input_substring_materialise_rules)
+                                                           input_substring_materialise_rules=input_substring_materialise_rules,
+                                                           bog_tokens="[]",
+                                                           eog_tokens=f'"{self.tokenizer.encode(self.tokenizer.eos_token, add_special_tokens=False)[0]}"',
+                                                           open_bracket_tokens=self.get_entity_tokens(self.Open_bracket_marker, rm_eos=True),
+                                                           close_bracket_tokens=self.get_entity_tokens(self.Close_bracket_marker, rm_eos=True))
         return Grammar(formatted_grammar_plain_text, name=crt_grammar_name)
 
     def add_input_substring_materialise_rules(self, input_sentence: str):
