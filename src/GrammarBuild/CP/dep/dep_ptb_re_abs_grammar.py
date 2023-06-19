@@ -14,7 +14,7 @@ from src.GrammarBuild.base_grammar import Grammar
 from src.GrammarBuild.CP.indep.indep_abs_grammar import CP_IndepPtbAbsGrammarBuilder
 from src.GrammarBuild.CP.const import WORD_LEVEL_TAGS, FULL_PHRASE_LEVEL_TAGS
 
-class CP_DepPtbAbsGrammarBuilder(CP_IndepPtbAbsGrammarBuilder):
+class CP_DepPtbReAbsGrammarBuilder(CP_IndepPtbAbsGrammarBuilder):
 
     template = os.path.join(TEMPLATE_DIR, "CP", "dep", "ptb-re", "CP-Dep-PTB-AbsTemplate.hs")
     grammar_prefix = ""

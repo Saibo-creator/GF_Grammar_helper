@@ -12,7 +12,7 @@ import pdb
 
 from tqdm import tqdm
 
-from src.config.config import GF_AUTO_GEN_GF_DIR,DATA_DIR,DATA_PATHS
+from src.config.config import GF_AUTO_GEN_GF_DIR,DATA_PATHS
 from src.GrammarBuild.base_grammar import AbsCrtGrammarPair
 
 
@@ -40,7 +40,7 @@ if __name__ == '__main__':
         assert args.grammar in ["FullyExpanded", "SubjectCollapsed"], f"grammar {args.grammar} not implemented, choose from [FullyExpanded, SubjectCollapsed]"
     elif args.task == "CP":
         assert args.KB is None, f"KB should be None for CP task"
-        assert args.grammar in ["Ptb"], f"grammar {args.grammar} not implemented, choose from [Ptb]"
+        assert args.grammar in ["PtbRe", "PtbCfg"], f"grammar {args.grammar} not implemented, choose from [PtbRe, PtbCfg]"
     elif args.task == "ED":
         if args.dep:
             assert args.KB is None, f"KB should be None for ED task"
@@ -111,12 +111,13 @@ if __name__ == '__main__':
             right_context = entry.get("right_context", None)
             entry_id = entry.get("id", None)
             text = entry.get("text", None)
+            tokens = entry.get("tokens", None)
             print(f"entry_id: {entry_id}")
             grammar_entry_name = grammar_name + f"_{entry_id}"
-            abs_grammar = abs_builder.build(base_grammar_name=grammar_entry_name, entities_or_path=entities, mention=mention, left_context=left_context, right_context=right_context, text=text)
+            abs_grammar = abs_builder.build(base_grammar_name=grammar_entry_name, entities_or_path=entities, mention=mention, left_context=left_context, right_context=right_context, text=text, words=tokens)
 
             crt_grammar = crt_builder.build(base_grammar_name=grammar_entry_name, entities_or_path=entities,
-                                            mention=mention, left_context=left_context, right_context=right_context, text=text)
+                                            mention=mention, left_context=left_context, right_context=right_context, text=text, words=tokens)
 
             grammar_pair = AbsCrtGrammarPair(abs_grammar=abs_grammar, crt_grammar=crt_grammar)
             grammar_pair.save(output_dir=output_dir, compile=args.compile, only_keep_pgf=args.clean,

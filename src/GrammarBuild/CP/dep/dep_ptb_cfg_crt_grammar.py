@@ -12,7 +12,7 @@ from src.config.config import TEMPLATE_DIR
 from src.GrammarBuild.base_grammar import Grammar
 from src.GrammarBuild.CP.indep.indep_crt_grammar import CP_IndepPtbCrtGrammarBuilder
 
-class CP_DepPtbCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
+class CP_DepPtbCfgCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
     template = os.path.join(TEMPLATE_DIR, "CP", "dep", "ptb-cfg", "CP-Dep-PTB-CrtTemplate.hs")
     grammar_prefix = ""  # "SubjectCollapsed"
 

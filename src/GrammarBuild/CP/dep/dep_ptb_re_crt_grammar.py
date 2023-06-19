@@ -14,7 +14,7 @@ from src.GrammarBuild.CP.const import WORD_LEVEL_TAGS, FULL_PHRASE_LEVEL_TAGS
 from src.GrammarBuild.base_grammar import Grammar
 from src.GrammarBuild.CP.indep.indep_crt_grammar import CP_IndepPtbCrtGrammarBuilder
 
-class CP_DepPtbCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
+class CP_DepPtbReCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
     template = os.path.join(TEMPLATE_DIR, "CP", "dep", "ptb-re", "CP-Dep-PTB-CrtTemplate.hs")
     grammar_prefix = ""  # "SubjectCollapsed"
     Left_Paren = "("

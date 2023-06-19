@@ -10,7 +10,8 @@
 python build_grammar.py --task CP --grammar Ptb --compile
 
 # input dependent grammars
-python build_grammar.py --task CP --grammar Ptb --compile --dataset ptb --dep
+python build_grammar.py --task CP --grammar PtbCfg --compile --dataset ptb --dep
+python build_grammar.py --task CP --grammar PtbRe --compile --dataset ptb --dep
 
 
 #########################
