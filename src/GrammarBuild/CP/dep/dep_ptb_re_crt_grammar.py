@@ -15,13 +15,16 @@ from src.GrammarBuild.base_grammar import Grammar
 from src.GrammarBuild.CP.indep.indep_crt_grammar import CP_IndepPtbCrtGrammarBuilder
 
 class CP_DepPtbReCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
-    template = os.path.join(TEMPLATE_DIR, "CP", "dep", "ptb-re", "CP-Dep-PTB-CrtTemplate.hs")
+    template = os.path.join(TEMPLATE_DIR, "CP", "Dep", "ptb-re", "CP-Dep-PTB-CrtTemplate.hs")
     grammar_prefix = ""  # "SubjectCollapsed"
     Left_Paren = "("
     Right_Paren = ")"
     Space = " "
+    Open_bracket_marker = "["
+    Close_bracket_marker = "]"
     FullPhraseLevelTags = FULL_PHRASE_LEVEL_TAGS
     WordLevelTags = WORD_LEVEL_TAGS
+
 
     def __init__(self, tokenizer_or_path: str, literal=False):
         super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
@@ -39,7 +42,7 @@ class CP_DepPtbReCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
         input_words: list = kwargs["words"]
         num_input_words: int = len(input_words)
 
-        Rule0_0D = self.get_Rule0_0D()
+        # Rule0_0D = self.get_Rule0_0D()
         Rule1_2D = self.get_Rule1_2D(n_words=num_input_words)
         Rule2_2D = self.get_Rule2_2D(n_words=num_input_words)
         Rule3_2D = "" # Rule3_2D = self.get_Rule3_2D(n_words=num_input_words)
@@ -62,12 +65,9 @@ class CP_DepPtbReCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
 
         formatted_grammar_plain_text: str = grammar.format(abs_grammar_name=abs_grammar_name,
                                                            crt_grammar_name=crt_grammar_name,
-                                                           Hyphen=self.get_entity_tokens(entity=self.Hyphen, rm_bos=True, rm_eos=True),#, pseudo_prefix="Ж"
-                                                           S=self.get_entity_tokens(entity=self.S, rm_bos=True, rm_eos=True),
-                                                           Space=self.get_entity_tokens(entity=self.Space, rm_bos=True, rm_eos=True),
                                                            Left_Paren=self.get_entity_tokens(entity=self.Left_Paren, rm_bos=True, rm_eos=True),
                                                            Right_Paren=self.get_entity_tokens(entity=self.Right_Paren, rm_bos=True, rm_eos=True),
-                                                           Rule0_0D=Rule0_0D,
+                                                           # Rule0_0D=Rule0_0D,
                                                            Rule1_2D=Rule1_2D,
                                                            Rule2_2D=Rule2_2D,
                                                            Rule3_2D=Rule3_2D,
@@ -84,6 +84,12 @@ class CP_DepPtbReCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
                                                            cat_W_1D=cat_W_1D,
                                                            Derive_FullPhraseLevelTags=Derive_FullPhraseLevelTags,
                                                            Derive_WordTags=Derive_WordTags,
+                                                           bog_tokens="[]",
+                                                           eog_tokens=f'"{self.tokenizer.encode(self.tokenizer.eos_token, add_special_tokens=False)[0]}"',
+                                                           open_bracket_tokens=self.get_entity_tokens(
+                                                               self.Open_bracket_marker, rm_eos=True),
+                                                           close_bracket_tokens=self.get_entity_tokens(
+                                                               self.Close_bracket_marker, rm_eos=True)
                                                            )
         return Grammar(formatted_grammar_plain_text, name=crt_grammar_name)
 
@@ -113,10 +119,10 @@ class CP_DepPtbReCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
         return f"W{i}"
 
 
-    def get_Rule0_0D(self) -> str:
-        "Rule0 : B_0_0 -> S;"
-
-        return "Rule0 a b c d = a ++ b ++ c ++ d ;"
+    # def get_Rule0_0D(self) -> str:
+    #     "Rule0 : B_0_0 -> S;"
+    #
+    #     return "Rule0 a b c d = a ++ b ++ c ++ d ;"
 
     def get_Rule1_2D(self, n_words:int) -> str:
         return self.join_statements_multi_line(statements=[self.get_Rule1_2D_single(i, j ) for i in range(n_words) for j in range(n_words)])
@@ -129,7 +135,7 @@ class CP_DepPtbReCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
         return self.join_statements_multi_line(statements=[self.get_Rule2_2D_single(i, j ) for i in range(n_words) for j in range(n_words+1)])
 
     def get_Rule2_2D_single(self, i:int, j:int) -> str:
-        "    Rule2_B_0_0 :=Left -> FullPhraseLevelTag -> C_0_1 -> B_0_0 ;"
+        "    Rule2_B_0_0 :=Left -> WordLevelTag -> C_0_1 -> B_0_0 ;"
         return f"Rule2_B_{i}_{j} a b c = a ++ b ++ c ;"
 
     def get_Rule3_2D(self, n_words:int) -> str:
@@ -213,6 +219,6 @@ class CP_DepPtbReCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
 
 if __name__ == '__main__':
 
-    grammar_builder = CP_DepPtbCrtGrammarBuilder(tokenizer_or_path="/Users/saibo/Research/llama_hf/7B", literal=True)
+    grammar_builder = CP_DepPtbReCrtGrammarBuilder(tokenizer_or_path="/Users/saibo/Research/llama_hf/7B", literal=True)
     grammar = grammar_builder.build(base_grammar_name="CP_PTB_RE", crt_grammar_name="CP_PTB_RE_Crt", words=["I", "love", "you"])
     grammar.save("./CP-PTB-OTF-RE")

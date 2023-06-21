@@ -16,7 +16,7 @@ from src.GrammarBuild.CP.const import WORD_LEVEL_TAGS, FULL_PHRASE_LEVEL_TAGS
 
 class CP_DepPtbReAbsGrammarBuilder(CP_IndepPtbAbsGrammarBuilder):
 
-    template = os.path.join(TEMPLATE_DIR, "CP", "dep", "ptb-re", "CP-Dep-PTB-AbsTemplate.hs")
+    template = os.path.join(TEMPLATE_DIR, "CP", "Dep", "ptb-re", "CP-Dep-PTB-AbsTemplate.hs")
     grammar_prefix = ""
 
     FullPhraseLevelTags = FULL_PHRASE_LEVEL_TAGS
@@ -32,7 +32,7 @@ class CP_DepPtbReAbsGrammarBuilder(CP_IndepPtbAbsGrammarBuilder):
 
         abs_grammar_name = self.get_grammar_name(base_grammar_name)
 
-        Rule0_0D = self.get_Rule0_0D()
+        # Rule0_0D = self.get_Rule0_0D()
         Rule1_2D = self.get_Rule1_2D(n_words=num_input_words)
         Rule2_2D = self.get_Rule2_2D(n_words=num_input_words)
         Rule3_2D = ""# Rule3_2D = self.get_Rule3_2D(n_words=num_input_words)
@@ -59,7 +59,7 @@ class CP_DepPtbReAbsGrammarBuilder(CP_IndepPtbAbsGrammarBuilder):
         # input_substring_materialise_rules = self.add_input_substring_materialise_rules(input_sentence=input_sentence)
 
         formatted_grammar_plain_text: str = grammar.format(abs_grammar_name=abs_grammar_name,
-                                                           Rule0_0D=Rule0_0D,
+                                                           # Rule0_0D=Rule0_0D,
                                                            Rule1_2D=Rule1_2D,
                                                            Rule2_2D=Rule2_2D,
                                                            Rule3_2D=Rule3_2D,
@@ -105,9 +105,9 @@ class CP_DepPtbReAbsGrammarBuilder(CP_IndepPtbAbsGrammarBuilder):
         return f"W{i}"
 
 
-    def get_Rule0_0D(self) -> str:
-        "Rule0 : B_0_0 -> S;"
-        return "Rule0 : Left -> FullPhraseLevelTag -> B_0_0 -> Right -> S;"
+    # def get_Rule0_0D(self) -> str:
+    #     "Rule0 : B_0_0 -> S;"
+    #     return "Rule0 : Left -> FullPhraseLevelTag -> B_0_0 -> Right -> S;"
 
     def get_Rule1_2D(self, n_words:int) -> str:
         return self.join_statements_multi_line(statements=[self.get_Rule1_2D_single(i, j ) for i in range(n_words) for j in range(n_words)])
@@ -121,7 +121,7 @@ class CP_DepPtbReAbsGrammarBuilder(CP_IndepPtbAbsGrammarBuilder):
 
     def get_Rule2_2D_single(self, i:int, j:int) -> str:
         "    Rule2_B_0_0 : Left -> FullPhraseLevelTag -> C_0_1 -> B_0_0 ;"
-        return f"Rule2_B_{i}_{j} : Left -> FullPhraseLevelTag -> C_{i}_{j+1} -> B_{i}_{j} ;"
+        return f"Rule2_B_{i}_{j} : Left -> WordLevelTag -> C_{i}_{j+1} -> B_{i}_{j} ;"
 
     def get_Rule3_2D(self, n_words:int) -> str:
         raise NotImplementedError
@@ -208,6 +208,6 @@ class CP_DepPtbReAbsGrammarBuilder(CP_IndepPtbAbsGrammarBuilder):
 
 
 if __name__ == '__main__':
-    grammar = CP_DepPtbAbsGrammarBuilder(tokenizer_or_path="/Users/saibo/Research/llama_hf/7B", literal=True) \
+    grammar = CP_DepPtbReAbsGrammarBuilder(tokenizer_or_path="/Users/saibo/Research/llama_hf/7B", literal=True) \
         .build(base_grammar_name="CP_PTB_RE", words=["I", "love", "you"])
     grammar.save("./CP-PTB-OTF-RE")

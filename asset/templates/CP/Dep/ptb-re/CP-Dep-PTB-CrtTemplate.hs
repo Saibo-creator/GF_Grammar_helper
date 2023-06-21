@@ -1,10 +1,10 @@
 concrete {crt_grammar_name} of {abs_grammar_name} = {{
   lincat
     S , {cat_B_2D} , {cat_C_2D} , {cat_E_2D} , {cat_W_1D} = Str;
-    Left , Right , FullPhraseLevelTag , WordLevelTag  = Str;
+    Left , Right , FullPhraseLevelTag , WordLevelTag , BOG , EOG , OpenBracket , CloseBracket = Str;
   lin
 
-    {Rule0_0D}
+    Rule0 a b c d e f g h = a ++ b ++ c ++ d ++ e ++ f ++ g ++ h;
     {Rule1_2D}
     {Rule2_2D}
     {Rule3_2D}
@@ -33,8 +33,12 @@ concrete {crt_grammar_name} of {abs_grammar_name} = {{
 --
 --
 --    Materialize_Hyphen = "-";
-    Materialize_Left = "(";
-    Materialize_Right = ")";
+    Materialise_BOG = {bog_tokens};
+    Materialise_EOG = {eog_tokens};
+    Materialise_OpenBracket = {open_bracket_tokens};
+    Materialise_CloseBracket = {close_bracket_tokens};
+    Materialize_Left = {Left_Paren}; --"("; --
+    Materialize_Right = {Right_Paren}; --")"; --
 
 --    Derive_PhraseLevelTag_S = "S";
 --    Derive_PhraseLevelTag_SBAR = "SBAR";

@@ -3,9 +3,9 @@ abstract {abs_grammar_name} = {{
   flags startcat = S ;
   cat
     S ; {cat_B_2D} ; {cat_C_2D} ; {cat_E_2D} ; {cat_W_1D}
-    ; Left ; Right ; FullPhraseLevelTag ; WordLevelTag ;
+    ; Left ; Right ; FullPhraseLevelTag ; WordLevelTag ; BOG ; EOG ; OpenBracket ; CloseBracket ;
   fun
-    {Rule0_0D}
+    Rule0 : BOG -> OpenBracket -> Left -> FullPhraseLevelTag -> B_0_0 -> Right -> CloseBracket -> EOG -> S;
     {Rule1_2D}
     {Rule2_2D}
     {Rule3_2D}
@@ -31,6 +31,10 @@ abstract {abs_grammar_name} = {{
 --    Materialize_Hyphen: Hyphen;
     Materialize_Left: Left;
     Materialize_Right: Right;
+    Materialise_BOG: BOG;
+    Materialise_EOG: EOG;
+    Materialise_OpenBracket: OpenBracket;
+    Materialise_CloseBracket: CloseBracket;
 
     -- the following should be automatically generated --
 --    Derive_PhraseLevelTag_S, Derive_PhraseLevelTag_SBAR, Derive_PhraseLevelTag_SBARQ, Derive_PhraseLevelTag_SINV, Derive_PhraseLevelTag_SQ, Derive_PhraseLevelTag_ADJP, Derive_PhraseLevelTag_ADVP, Derive_PhraseLevelTag_CONJP, Derive_PhraseLevelTag_FRAG, Derive_PhraseLevelTag_INTJ, Derive_PhraseLevelTag_LST, Derive_PhraseLevelTag_NAC, Derive_PhraseLevelTag_NP, Derive_PhraseLevelTag_NX, Derive_PhraseLevelTag_PP, Derive_PhraseLevelTag_PRN, Derive_PhraseLevelTag_PRT, Derive_PhraseLevelTag_QP, Derive_PhraseLevelTag_RRC, Derive_PhraseLevelTag_UCP, Derive_PhraseLevelTag_VP, Derive_PhraseLevelTag_WHADJP, Derive_PhraseLevelTag_WHADVP, Derive_PhraseLevelTag_WHNP, Derive_PhraseLevelTag_WHPP, Derive_PhraseLevelTag_X: PhraseLevelTag;
