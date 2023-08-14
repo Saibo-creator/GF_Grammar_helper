@@ -219,6 +219,6 @@ class CP_DepPtbReCrtGrammarBuilder(CP_IndepPtbCrtGrammarBuilder):
 
 if __name__ == '__main__':
 
-    grammar_builder = CP_DepPtbReCrtGrammarBuilder(tokenizer_or_path="/Users/saibo/Research/llama_hf/7B", literal=True)
+    grammar_builder = CP_DepPtbReCrtGrammarBuilder(tokenizer_or_path="/home/saibo/Research/llama_models/7B", literal=True)
     grammar = grammar_builder.build(base_grammar_name="CP_PTB_RE", crt_grammar_name="CP_PTB_RE_Crt", words=["I", "love", "you"])
     grammar.save("./CP-PTB-OTF-RE")

@@ -8,6 +8,7 @@
 import os
 import pdb
 
+from src.GrammarBuild.CP.const import FULL_PHRASE_LEVEL_TAGS, WORD_LEVEL_TAGS
 from src.config.config import TEMPLATE_DIR
 
 from src.GrammarBuild.base_grammar import Grammar
@@ -19,6 +20,9 @@ class CP_DepPtbCfgAbsGrammarBuilder(CP_IndepPtbAbsGrammarBuilder):
     template = os.path.join(TEMPLATE_DIR, "CP", "Dep", "ptb-cfg", "CP-Dep-PTB-AbsTemplate.hs")
     grammar_prefix = ""
 
+    FullPhraseLevelTags = FULL_PHRASE_LEVEL_TAGS
+    WordLevelTags = WORD_LEVEL_TAGS
+
     def __init__(self, tokenizer_or_path: str, literal=False):
         super().__init__(tokenizer_or_path=tokenizer_or_path, literal=literal)
 
@@ -28,12 +32,15 @@ class CP_DepPtbCfgAbsGrammarBuilder(CP_IndepPtbAbsGrammarBuilder):
 
         abs_grammar_name = self.get_grammar_name(base_grammar_name)
 
-        constituency_derivation_rules = self.add_constituency_derivation_rules()
+        # constituency_derivation_rules = self.add_constituency_derivation_rules()
+        Derive_FullPhraseLevelTags = self.get_Derive_FullPhraseLevelTags()
+        Derive_WordTags = self.get_Derive_WordLevelTags()
 
         input_substring_materialise_rules = self.add_input_substring_materialise_rules(input_sentence=input_sentence)
 
         formatted_grammar_plain_text: str = grammar.format(abs_grammar_name=abs_grammar_name,
-                                                           constituency_derivation_rules=constituency_derivation_rules,
+                                                           Derive_FullPhraseLevelTags=Derive_FullPhraseLevelTags,
+                                                           Derive_WordTags=Derive_WordTags,
                                                            input_substring_materialise_rules=input_substring_materialise_rules)
 
         return Grammar(formatted_grammar_plain_text, name=abs_grammar_name)
@@ -52,9 +59,24 @@ class CP_DepPtbCfgAbsGrammarBuilder(CP_IndepPtbAbsGrammarBuilder):
         return f"Derive_InputSubstring_{start_idx}_{end_idx}: Input_word ;"
 
 
+    def get_Derive_FullPhraseLevelTags(self) -> str:
+        return self.join_statements_multi_line(statements=[self.get_Derive_FullPhraseLevelTags_single(tag.replace("-","_")) for tag in self.FullPhraseLevelTags])
+
+    def get_Derive_FullPhraseLevelTags_single(self, tag:str) -> str:
+        "Derive_FullPhraseLevelTag_NP : FullPhraseLevelTag;"
+        return f"Derive_FullPhraseLevelTag_{tag} : FullPhraseLevelTag ;"
+
+    def get_Derive_WordLevelTags(self) -> str:
+        return self.join_statements_multi_line(statements=[self.get_Derive_WordLevelTags_single(tag.replace("-","_").replace("$","Dollar")) for tag in self.WordLevelTags])
+
+    def get_Derive_WordLevelTags_single(self, tag:str) -> str:
+        "Derive_WordLevelTag_NN : WordLevelTag;"
+        return f"Derive_WordLevelTag_{tag} : WordLevelTag ;"
+
+
 
 
 if __name__ == '__main__':
-    grammar = CP_DepPtbAbsGrammarBuilder(tokenizer_or_path="/Users/saibo/Research/llama_hf/7B", literal=False) \
-        .build(base_grammar_name="CP-PTB", input_sentence="Hello World")
+    grammar = CP_DepPtbCfgAbsGrammarBuilder(tokenizer_or_path="/home/saibo/Research/llama_models/7B", literal=False) \
+        .build(base_grammar_name="CP_PTB", text="Hello World")
     grammar.save("./CP-PTB-OTF")

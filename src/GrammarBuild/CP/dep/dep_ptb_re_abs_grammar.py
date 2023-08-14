@@ -208,6 +208,6 @@ class CP_DepPtbReAbsGrammarBuilder(CP_IndepPtbAbsGrammarBuilder):
 
 
 if __name__ == '__main__':
-    grammar = CP_DepPtbReAbsGrammarBuilder(tokenizer_or_path="/Users/saibo/Research/llama_hf/7B", literal=True) \
+    grammar = CP_DepPtbReAbsGrammarBuilder(tokenizer_or_path="/home/saibo/Research/llama_models/7B", literal=True) \
         .build(base_grammar_name="CP_PTB_RE", words=["I", "love", "you"])
     grammar.save("./CP-PTB-OTF-RE")
