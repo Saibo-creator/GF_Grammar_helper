@@ -1,11 +1,16 @@
 concrete {crt_grammar_name} of {abs_grammar_name} = {{
   lincat
-    StartTree , Trees , Tree , SentenceTag , Left , Right , FullPhraseLevelTag , PhraseLevelTag , HyphenFunctionTags , HyphenFunctionTag , HyphenNumTag , Hyphen , FunctionTag , WordTag , Num , Input_word = Str;
+    StartTree , Trees , Tree , SentenceTag , Left , Right , FullPhraseLevelTag , PhraseLevelTag , HyphenFunctionTags , HyphenFunctionTag , HyphenNumTag , Hyphen , FunctionTag , WordTag , Num , Input_word , BOG , EOG , OpenBracket , CloseBracket = Str;
     --Text , BOG , EOG , Entity = Str;--
   lin
 
     --Derive_StartTree: Left -> SentenceTag -> Trees -> Right -> StartTree;--
-    Derive_StartTree a b c d = a ++ b ++ " " ++ c ++ d;
+    Derive_StartTree a b c d e f g h = a ++ b ++ c ++ d ++ e ++ f ++ g ++ h;
+
+    Materialise_BOG = {bog_tokens};
+    Materialise_EOG = {eog_tokens};
+    Materialise_OpenBracket = {open_bracket_tokens};
+    Materialise_CloseBracket = {close_bracket_tokens};
 
     -- Repeat:  Tree -> Trees -> Trees ; --
     Repeat a b = a ++ " " ++ b; -- (VP (VBN based) (PP-LOC-CLR (IN in) (NP (NNP New) (NNP York))--
@@ -107,6 +112,13 @@ concrete {crt_grammar_name} of {abs_grammar_name} = {{
     Derive_FunctionTag_HLN = {HLN}; -- "HLN" --
     Derive_FunctionTag_TTL = {TTL}; -- "TTL" --
 
+
+    Derive_WordTag_ADD = {ADD}; -- "ADD" --
+    Derive_WordTag_AFX = {AFX}; -- "AFX" --
+
+
+
+
     Derive_WordTag_CC = {CC}; -- "CC" --
     Derive_WordTag_CD = {CD}; -- "CD" --
     Derive_WordTag_DT = {DT}; -- "DT" --
@@ -143,6 +155,59 @@ concrete {crt_grammar_name} of {abs_grammar_name} = {{
     Derive_WordTag_WP = {WP}; -- "WP" --
     Derive_WordTag_WP_dollar = {WP_dollar}; -- "WP$" --
     Derive_WordTag_WRB = {WRB}; -- "WRB" --
+
+    Derive_WordTag_ADD = {ADD}; -- "ADD" --
+    Derive_WordTag_NFP = {NFP}; -- "NFP" --
+    Derive_WordTag_AFX = {AFX}; -- "AFX" --
+    Derive_WordTag_HYPH = {HYPH}; -- "HYPH" --
+    Derive_WordTag_NIL = {NIL}; -- "NIL" --
+    Derive_WordTag_LS = {LS}; -- "LS" --
+    Derive_WordTag_EOS = {EOS}; -- "EOS" --
+    Derive_WordTag_GW = {GW}; -- "GW" --
+    Derive_WordTag_BN = {BN}; -- "BN" --
+    Derive_WordTag_BX = {BX}; -- "BX" --
+    Derive_WordTag_BQ = {BQ}; -- "BQ" --
+    Derive_WordTag_BM = {BM}; -- "BM" --
+    Derive_WordTag_BF = {BF}; -- "BF" --
+    Derive_WordTag_BZ = {BZ}; -- "BZ" --
+    Derive_WordTag_CC = {CC}; -- "CC" --
+    Derive_WordTag_CD = {CD}; -- "CD" --
+    Derive_WordTag_DT = {DT}; -- "DT" --
+    Derive_WordTag_EX = {EX}; -- "EX" --
+    Derive_WordTag_FW = {FW}; -- "FW" --
+    Derive_WordTag_IN = {IN}; -- "IN" --
+    Derive_WordTag_JJ = {JJ}; -- "JJ" --
+    Derive_WordTag_JJR = {JJR}; -- "JJR" --
+    Derive_WordTag_JJS = {JJS}; -- "JJS" --
+    Derive_WordTag_LS = {LS}; -- "LS" --
+    Derive_WordTag_MD = {MD}; -- "MD" --
+    Derive_WordTag_NN = {NN}; -- "NN" --
+    Derive_WordTag_NNS = {NNS}; -- "NNS" --
+    Derive_WordTag_NNP = {NNP}; -- "NNP" --
+    Derive_WordTag_NNPS = {NNPS}; -- "NNPS" --
+    Derive_WordTag_PDT = {PDT}; -- "PDT" --
+    Derive_WordTag_POS = {POS}; -- "POS" --
+    Derive_WordTag_PRP = {PRP}; -- "PRP" --
+    Derive_WordTag_PRP_dollar = {PRP_dollar}; -- "PRP$" --
+
+    Derive_WordTag_RB = {RB}; -- "RB" --
+    Derive_WordTag_RBR = {RBR}; -- "RBR" --
+    Derive_WordTag_RBS = {RBS}; -- "RBS" --
+    Derive_WordTag_RP = {RP}; -- "RP" --
+    Derive_WordTag_SYM = {SYM}; -- "SYM" --
+    Derive_WordTag_TO = {TO}; -- "TO" --
+    Derive_WordTag_UH = {UH}; -- "UH" --
+    Derive_WordTag_VB = {VB}; -- "VB" --
+    Derive_WordTag_VBD = {VBD}; -- "VBD" --
+    Derive_WordTag_VBG = {VBG}; -- "VBG" --
+    Derive_WordTag_VBN = {VBN}; -- "VBN" --
+    Derive_WordTag_VBP = {VBP}; -- "VBP" --
+    Derive_WordTag_VBZ = {VBZ}; -- "VBZ" --
+    Derive_WordTag_WDT = {WDT}; -- "WDT" --
+    Derive_WordTag_WP = {WP}; -- "WP" --
+    Derive_WordTag_WP_dollar = {WP_dollar}; -- "WP$" --
+    Derive_WordTag_WRB = {WRB}; -- "WRB" --
+
 
     Derive_Num1 = {num1}; -- "1" --
     Derive_Num2 = {num2}; -- "2" --

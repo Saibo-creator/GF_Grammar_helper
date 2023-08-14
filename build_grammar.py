@@ -12,7 +12,7 @@ import pdb
 
 from tqdm import tqdm
 
-from src.config.config import GF_AUTO_GEN_GF_DIR,DATA_DIR,DATA_PATHS
+from src.config.config import GF_AUTO_GEN_GF_DIR,DATA_PATHS
 from src.GrammarBuild.base_grammar import AbsCrtGrammarPair
 
 
@@ -40,18 +40,19 @@ if __name__ == '__main__':
         assert args.grammar in ["FullyExpanded", "SubjectCollapsed"], f"grammar {args.grammar} not implemented, choose from [FullyExpanded, SubjectCollapsed]"
     elif args.task == "CP":
         assert args.KB is None, f"KB should be None for CP task"
-        assert args.grammar in ["Ptb"], f"grammar {args.grammar} not implemented, choose from [Ptb]"
+        assert args.grammar in ["PtbRe", "PtbCfg"], f"grammar {args.grammar} not implemented, choose from [PtbRe, PtbCfg]"
     elif args.task == "ED":
         if args.dep:
             assert args.KB is None, f"KB should be None for ED task"
         else:
-            assert args.KB in ["kilt_wiki"], f"KB {args.KB} not implemented, choose from [wiki-kilt]"
-        assert args.grammar in ["Minimal"], f"grammar {args.grammar} not implemented, choose from [Minimal]"
+            assert args.KB in ["kilt_wiki", "YAGO_KB"], f"KB {args.KB} not implemented, choose from [wiki_kilt, YAGO_KB]"
+        assert args.grammar in ["Minimal", "Canonical"], f"grammar {args.grammar} not implemented, choose from [Minimal]"
     else:
         raise NotImplementedError
 
     KB_name = args.KB if args.KB is not None else "NoKB"
-    grammar_name = f"{args.task}_{KB_name}_{args.grammar}_{args.tokenizer_path.split('/')[-1].replace('-','_')}"
+    dataset = f"_{args.dataset}" if args.dataset is not None else ""
+    grammar_name = f"{args.task}{dataset}_{KB_name}_{args.grammar}_{args.tokenizer_path.split('/')[-1].replace('-','_')}"
     grammar_name += "_debug" if args.debug else ""
 
     submodule_name = args.grammar
@@ -65,7 +66,7 @@ if __name__ == '__main__':
     abs_builder = absGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)
     crt_builder = crtGrammarBuilder(tokenizer_or_path=args.tokenizer_path, literal=args.literal)
 
-    output_dir = os.path.join(GF_AUTO_GEN_GF_DIR, f"{args.task}", f"{dependency}", submodule_name)
+    output_dir = os.path.join(GF_AUTO_GEN_GF_DIR, f"{args.task}", f"{dependency}", grammar_name)
 
     if args.task == "IE":
 
@@ -110,12 +111,13 @@ if __name__ == '__main__':
             right_context = entry.get("right_context", None)
             entry_id = entry.get("id", None)
             text = entry.get("text", None)
+            tokens = entry.get("tokens", None)
             print(f"entry_id: {entry_id}")
             grammar_entry_name = grammar_name + f"_{entry_id}"
-            abs_grammar = abs_builder.build(base_grammar_name=grammar_entry_name, entities_or_path=entities, mention=mention, left_context=left_context, right_context=right_context, text=text)
+            abs_grammar = abs_builder.build(base_grammar_name=grammar_entry_name, entities_or_path=entities, mention=mention, left_context=left_context, right_context=right_context, text=text, words=tokens)
 
             crt_grammar = crt_builder.build(base_grammar_name=grammar_entry_name, entities_or_path=entities,
-                                            mention=mention, left_context=left_context, right_context=right_context, text=text)
+                                            mention=mention, left_context=left_context, right_context=right_context, text=text, words=tokens)
 
             grammar_pair = AbsCrtGrammarPair(abs_grammar=abs_grammar, crt_grammar=crt_grammar)
             grammar_pair.save(output_dir=output_dir, compile=args.compile, only_keep_pgf=args.clean,

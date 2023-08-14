@@ -2,10 +2,15 @@ abstract {abs_grammar_name} = {{
   flags coding = utf8 ;
   flags startcat = StartTree ;
   cat
-    StartTree ; Trees ; Tree; SentenceTag ; Left ; Right ; FullPhraseLevelTag ; PhraseLevelTag ; HyphenFunctionTags ; HyphenFunctionTag ; HyphenNumTag ; Hyphen ; FunctionTag ; WordTag ; Num ; Input_word ;
+    StartTree ; Trees ; Tree; SentenceTag ; Left ; Right ; FullPhraseLevelTag ; PhraseLevelTag ; HyphenFunctionTags ; HyphenFunctionTag ; HyphenNumTag ; Hyphen ; FunctionTag ; WordTag ; Num ; Input_word ; BOG ; EOG ; OpenBracket ; CloseBracket ;
   fun
-    Derive_StartTree: Left -> SentenceTag -> Trees -> Right -> StartTree;
+    Derive_StartTree: BOG -> OpenBracket -> Left -> SentenceTag -> Trees -> Right -> CloseBracket -> EOG -> StartTree;
     Repeat:  Tree -> Trees -> Trees ;
+
+    Materialise_BOG: BOG;
+    Materialise_EOG: EOG;
+    Materialise_OpenBracket: OpenBracket;
+    Materialise_CloseBracket: CloseBracket;
 
     Derive_Tree:  Left -> FullPhraseLevelTag -> Trees -> Right -> Tree;
     Derive_Trees:  Left -> FullPhraseLevelTag -> Trees -> Right -> Trees;

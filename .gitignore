@@ -11,7 +11,7 @@ output/grammars/autogen
 # C extensions
 *.so
 
-data/genie-data
+data
 
 # Distribution / packaging
 .Python
