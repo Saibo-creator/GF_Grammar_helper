@@ -1,0 +1,26 @@
+{
+  "name": "Foods",
+  "start": "Comment",
+  "categories": [
+    "Comment",
+    "Item",
+    "Kind",
+    "Quantity"
+  ],
+  "productions": [
+    "Pred: Item -> Quantity -> Comment",
+    "This: Kind -> Item",
+    "That: Kind -> Item",
+    "Mod: Quantity -> Kind -> Kind",
+    "Wine: Kind",
+    "Cheese: Kind",
+    "Fish: Kind",
+    "Very: Quantity -> Quantity",
+    "Fresh: Quantity",
+    "Warm: Quantity",
+    "Italian: Quantity",
+    "Expensive: Quantity",
+    "Delicious: Quantity",
+    "Boring: Quantity"
+  ]
+}
