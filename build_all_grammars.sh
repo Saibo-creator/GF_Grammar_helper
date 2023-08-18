@@ -7,7 +7,7 @@
 
 
 # input independent grammars
-python build_grammar.py --task CP --grammar Ptb --compile
+#python build_grammar.py --task CP --grammar Ptb --compile # not supported anymore
 
 # input dependent grammars
 python build_grammar.py --task CP --grammar PtbCfg --compile --dataset ptb --dep
