@@ -1,0 +1,21 @@
+{
+    "name": "FoodEng",
+    "abstract_grammar_name": "Foods",
+  "categories":["Comment", "Item", "Kind", "Quantity"],
+  "productions": [
+      "Pred item quantity = item ++ \"is\" ++ quantity",
+      "This kind = \"this\" ++ kind",
+      "That kind = \"that\" ++ kind",
+      "Mod quantity kind = quantity ++ kind",
+      "Wine  = \"wine\"",
+      "Cheese  = \"cheese\"",
+      "Fish  = \"fish\"",
+      "Very quantity = \"very\" ++ quantity",
+      "Fresh  = \"fresh\"",
+      "Warm  = \"warm\"",
+      "Italian  = \"Italian\"",
+      "Expensive  = \"expensive\"",
+      "Delicious  = \"delicious\"",
+      "Boring  = \"boring\""
+  ]
+}
