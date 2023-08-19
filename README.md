@@ -4,6 +4,7 @@
 
 ```
 export PYTHONPATH=/path/to/my_project:$PYTHONPATH # this is required to run scripts in `example/` folder
+export PYTHONPATH=/Users/saibo/Research/Projects/GCD/GF_editor:$PYTHONPATH # this is required to run scripts in `example/` folder
 ```
 
 ## Quick Start

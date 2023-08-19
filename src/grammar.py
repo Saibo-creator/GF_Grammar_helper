@@ -127,7 +127,7 @@ class AbstractProduction(Production):
         name = _name.strip()
         _elements = _production_body.split("->")
         elements = [element.strip() for element in _elements]
-        lhs = elements[:-2]
+        lhs = elements[:-1]
         rhs = elements[-1]
         return {"name": name, "lhs": lhs, "rhs": rhs}
 
@@ -250,6 +250,8 @@ class Grammar:
         # Ensure the path ends with .gf
         if not path.endswith('.gf'):
             path += '.gf'
+
+        self._save(path)
 
 
     # @classmethod
