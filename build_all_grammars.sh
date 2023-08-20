@@ -44,3 +44,9 @@ python build_grammar.py --task ED --grammar Canonical --compile  --dataset wikiL
 
 # input dependent grammars - sentence
 python build_grammar.py --task ED --grammar sentence --compile  --dataset kilt_wiki --dep
+
+#########################
+# Information Extraction
+#########################
+
+python build_grammar.py --task IE --grammar FullyExpanded --compile --KB wiki_ner  --clean

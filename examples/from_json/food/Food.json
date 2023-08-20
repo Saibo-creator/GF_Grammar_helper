@@ -1,12 +1,7 @@
 {
+  "type": "abstract",
   "name": "Foods",
   "start": "Comment",
-  "categories": [
-    "Comment",
-    "Item",
-    "Kind",
-    "Quantity"
-  ],
   "productions": [
     "Pred: Item -> Quantity -> Comment",
     "This: Kind -> Item",

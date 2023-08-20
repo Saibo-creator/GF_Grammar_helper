@@ -1,8 +1,9 @@
 {
+    "type": "concrete",
     "name": "FoodEng",
     "abstract_grammar_name": "Foods",
-  "categories":["Comment", "Item", "Kind", "Quantity"],
-  "productions": [
+    "categories":["Comment", "Item", "Kind", "Quantity"],
+    "productions": [
       "Pred item quantity = item ++ \"is\" ++ quantity",
       "This kind = \"this\" ++ kind",
       "That kind = \"that\" ++ kind",
