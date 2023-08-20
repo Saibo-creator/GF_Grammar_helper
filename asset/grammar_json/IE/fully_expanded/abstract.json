@@ -1,0 +1,23 @@
+{
+  "type": "abstract",
+  "name": "IE_fe",
+  "start": "Text",
+  "productions": [
+    "Start: BOG -> Triplets -> EOG -> Text",
+    "Repeat:  Triplet -> Triplets -> Triplets",
+    "Empty_triplet: Triplet",
+    "Empty_triplets: Triplets",
+    "Derive_triplet : Subject -> Relation -> Object -> TripletEndingMarker -> Triplet",
+    "Derive_triplets : Subject -> Relation -> Object -> TripletEndingMarker -> Triplets",
+    "Derive_subject: SubjectMarker -> Entity -> Subject",
+    "Derive_relation: RelationMarker -> Rel -> Relation",
+    "Derive_object: objectMarker -> Entity -> Object",
+
+    "Materialise_BOG: BOG",
+    "Materialise_EOG: EOG",
+    "Materialise_SubjectMarker: SubjectMarker",
+    "Materialise_RelationMarker: RelationMarker",
+    "Materialise_ObjectMarker: objectMarker",
+    "Materialise_TripletEndingMarker: TripletEndingMarker"
+  ]
+}

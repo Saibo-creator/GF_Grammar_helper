@@ -1,0 +1,17 @@
+{
+  "type": "concrete",
+  "name": "IE_fe_concrete",
+  "abstract_grammar_name": "IE_fe",
+  "categories":["Text" , "BOG" , "EOG" , "Triplet" , "Triplets" , "Subject" , "Relation" , "Object" , "TripletEndingMarker" , "SubjectMarker" , "RelationMarker" , "objectMarker" , "Rel" , "Entity"],
+  "productions": [
+    "Start x y z = x ++ y ++ z",
+    "Repeat x y = x ++ y",
+    "Empty_triplet = []",
+    "Empty_triplets = []",
+    "Derive_triplet x y z w = x ++ y ++ z ++ w",
+    "Derive_triplets x y z w = x ++ y ++ z ++ w",
+    "Derive_relation x y = x ++ y",
+    "Derive_subject x y = x ++ y",
+    "Derive_object x y = x ++ y"
+  ]
+}
