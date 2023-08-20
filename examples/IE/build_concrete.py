@@ -35,46 +35,6 @@ if __name__ == "__main__":
     entities: List[str] = read_jsonl(entities_path)
     relations: List[str] = read_jsonl(relations_path)
 
-    # # Create terminal items from entities and relations
-    # entity_terminals: List[TerminalItem] = [
-    #     EntityTerminalItem(entity=entity) for entity in entities
-    # ]
-    # relation_terminals: List[TerminalItem] = [
-    #     RelationTerminalItem(relation=relation) for relation in relations
-    # ]
-    #
-    # special_marker_terminals: List[TerminalItem] = [
-    #     TerminalItem(text="[s]", name="Materialise_SubjectMarker"),
-    #     TerminalItem(text="[o]", name="Materialise_ObjectMarker"),
-    #     TerminalItem(text="[r]", name="Materialise_RelationMarker"),
-    #     TerminalItem(text="[e]", name="Materialise_TripletEndingMarker"),
-    # ]
-    #
-    # all_terminals: List[TerminalItem] = (
-    #     special_marker_terminals + entity_terminals + relation_terminals
-    # )
-    #
-    # # Create terminal productions from terminal items
-    # prod_rules: List[CrtTerminalProduction] = []
-    # for terminal in tqdm(all_terminals):
-    #     prod_rules.append(
-    #         CrtTerminalProduction.from_terminal(
-    #             terminal=terminal, tokenizer=tokenizer, literal=LITERAL
-    #         )
-    #     )
-    #
-    # prod_rules.extend(
-    #     [
-    #         CrtTerminalProduction(name="Materialise_BOG", lhs=[], rhs=["[]"]),
-    #         CrtTerminalProduction(
-    #             name="Materialise_EOG", lhs=[], rhs=[LiteralStr(tokenizer.eos_token_id)]
-    #         ),
-    #     ]
-    # )
-    #
-    # # Create concrete grammar by adding production rules to the base concrete grammar
-    # crt_grammar = ConcreteGrammar.from_json(path=IE_CRT_BASE_JSON_PATH)
-
     crt_grammar = build_concrete_grammar_for_IE(
         base_concrete_grammar_path=IE_CRT_BASE_JSON_PATH,
         entities=entities,
@@ -87,7 +47,7 @@ if __name__ == "__main__":
 
     str_or_int = "str" if LITERAL else "int"
     crt_grammar.set_concrete_name(
-        abs_name="IE_wiki_ner_fe", str_or_int=str_or_int, tokenizer="llama"
+        abs_name=abs_grammar_name, str_or_int=str_or_int, tokenizer="llama"
     )
 
     crt_grammar.save(dir=os.path.join(WORKING_FILE_DIR))

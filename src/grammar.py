@@ -471,15 +471,16 @@ class ConcreteGrammar(Grammar):
             )
         super().set_name(name)
 
-    def set_concrete_name(
-        self, abs_name, str_or_int: str, tokenizer: str, concrete_postfix="concrete"
-    ):
+    def set_concrete_name(self, abs_name, str_or_int: str, tokenizer: str, **kwargs):
         self._validate_name(abs_name)
         self._abstract_grammar_name = abs_name
         str_or_int = str_or_int.lower().strip("_")
         tokenizer = tokenizer.lower().strip("_")
-        concrete_postfix = concrete_postfix.lower().strip("_")
-        crt_name = "_".join([abs_name, str_or_int, tokenizer, concrete_postfix])
+        crt_name = "_".join([abs_name, str_or_int, tokenizer])
+        for k, v in kwargs.items():
+            if v is not None:
+                v = v.lower().strip("_")
+                crt_name += f"_{v}"
         self._validate_name(crt_name)
         self._name = crt_name
 

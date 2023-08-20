@@ -1,0 +1,9 @@
+{
+  "type": "concrete",
+  "name": "IE_fe_concrete",
+  "abstract_grammar_name": "IE_fe",
+  "categories":["Text", "BOG" , "EOG" , "Mention" , "Entity" , "OpenBracket" , "CloseBracket" , "Canonical_phrase"],
+  "productions": [
+    "Start a b c d e f g = a ++ b ++ c ++ d ++ e ++ f ++ g"
+  ]
+}

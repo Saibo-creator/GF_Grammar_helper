@@ -1,0 +1,14 @@
+{
+  "type": "abstract",
+  "name": "ED_canonical",
+  "start": "Text",
+  "productions": [
+    "Start: BOG -> Mention -> Canonical_phrase -> OpenBracket -> Entity -> CloseBracket -> EOG -> Text",
+    "Materialise_BOG: BOG",
+    "Materialise_EOG: EOG",
+    "Materialise_OpenBracket: OpenBracket",
+    "Materialise_CloseBracket: CloseBracket",
+    "Materialise_Mention: Mention",
+    "Materialise_Canonical_phrase: Canonical_phrase"
+  ]
+}

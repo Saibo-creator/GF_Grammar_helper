@@ -10,7 +10,10 @@ from typing import List, Union, Dict
 from src.config.config import TEMPLATE_DIR
 
 from src.GrammarBuild.base_grammar import Grammar
-from src.GrammarBuild.grammar_builder import TemplateTokenGrammarBuilder
+from src.GrammarBuild.grammar_builder import (
+    TemplateTokenGrammarBuilder,
+    get_tokenization_func_name,
+)
 
 
 class ED_IndepMinimalAbsGrammarBuilder(TemplateTokenGrammarBuilder):

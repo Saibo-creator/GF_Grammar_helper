@@ -6,16 +6,15 @@ from src.grammar import (
     ConcreteGrammar,
     TerminalItem,
     EntityTerminalItem,
-    RelationTerminalItem,
     CrtTerminalProduction,
 )
 from src.new_utils import LiteralStr
 
 
-def build_concrete_grammar_for_IE(
+def build_concrete_grammar_for_ED(
     base_concrete_grammar_path: str,
+    mention: str,
     entities: List[str],
-    relations: List[str],
     tokenizer,
     literal: bool,
 ) -> ConcreteGrammar:
@@ -26,33 +25,8 @@ def build_concrete_grammar_for_IE(
     :return: list of production rules
     """
 
-    # Create terminal items from entities and relations
-    entity_terminals: List[TerminalItem] = [
-        EntityTerminalItem(entity=entity) for entity in entities
-    ]
-    relation_terminals: List[TerminalItem] = [
-        RelationTerminalItem(relation=relation) for relation in relations
-    ]
-
-    special_marker_terminals: List[TerminalItem] = [
-        TerminalItem(text="[s]", name="Materialise_SubjectMarker"),
-        TerminalItem(text="[o]", name="Materialise_ObjectMarker"),
-        TerminalItem(text="[r]", name="Materialise_RelationMarker"),
-        TerminalItem(text="[e]", name="Materialise_TripletEndingMarker"),
-    ]
-
-    all_terminals: List[TerminalItem] = (
-        special_marker_terminals + entity_terminals + relation_terminals
-    )
-
     # Create terminal productions from terminal items
     prod_rules: List[CrtTerminalProduction] = []
-    for terminal in tqdm(all_terminals):
-        prod_rules.append(
-            CrtTerminalProduction.from_terminal(
-                terminal=terminal, tokenizer=tokenizer, literal=literal
-            )
-        )
 
     prod_rules.extend(
         [
@@ -62,6 +36,27 @@ def build_concrete_grammar_for_IE(
             ),
         ]
     )
+
+    # Create terminal items from entities and relations
+    entity_terminals: List[TerminalItem] = [
+        EntityTerminalItem(entity=entity) for entity in entities
+    ]
+
+    special_marker_terminals: List[TerminalItem] = [
+        TerminalItem(text="[", name="Materialise_OpenBracket"),
+        TerminalItem(text="]", name="Materialise_CloseBracket"),
+        TerminalItem(text=mention, name="Materialise_Mention"),
+        TerminalItem(text=": Canonical Form", name="Materialise_Canonical_phrase"),
+    ]
+
+    all_terminals: List[TerminalItem] = special_marker_terminals + entity_terminals
+
+    for terminal in tqdm(all_terminals):
+        prod_rules.append(
+            CrtTerminalProduction.from_terminal(
+                terminal=terminal, tokenizer=tokenizer, literal=literal
+            )
+        )
 
     # Create concrete grammar by adding production rules to the base concrete grammar
     crt_grammar = ConcreteGrammar.from_json(path=base_concrete_grammar_path)

@@ -16,7 +16,10 @@ from src.config.config import TEMPLATE_DIR
 from transformers import AutoTokenizer
 
 from src.GrammarBuild.base_grammar import Grammar
-from src.GrammarBuild.grammar_builder import TemplateTokenGrammarBuilder
+from src.GrammarBuild.grammar_builder import (
+    TemplateTokenGrammarBuilder,
+    get_tokenization_func_name,
+)
 
 
 class ED_IndepMinimalCrtGrammarBuilder(TemplateTokenGrammarBuilder, ABC):
