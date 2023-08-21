@@ -32,7 +32,7 @@ if __name__ == "__main__":
         words: List[str] = dp.get("words", None)
 
         crt_grammar = CP_ConcreteGrammar(
-            base_concrete_grammar_path=BASE_JSON_PATH,
+            base_crt_grammar_path=BASE_JSON_PATH,
             words=words,
             tokenizer=tokenizer,
             literal=LITERAL,

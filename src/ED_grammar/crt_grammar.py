@@ -11,6 +11,7 @@ from src.new_utils import LiteralStr
 
 def ED_ConcreteGrammar(
     base_crt_grammar_path: str,
+    categories: set[str],
     mention: str,
     entities: List[str],
     tokenizer,
@@ -60,5 +61,6 @@ def ED_ConcreteGrammar(
 
     # Create concrete grammar by adding production rules to the base concrete grammar
     crt_grammar = ConcreteGrammar.from_json(path=base_crt_grammar_path)
+    crt_grammar.add_categories(categories=categories)
     crt_grammar.add_production_rules(prod_rules=prod_rules)
     return crt_grammar

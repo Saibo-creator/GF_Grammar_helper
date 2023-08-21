@@ -82,8 +82,12 @@ if __name__ == "__main__":
 
     submodule_name = args.grammar
 
-    task_abs_grammar_module = importlib.import_module(f"src.GrammarBuild.{args.task}")
-    task_crt_grammar_module = importlib.import_module(f"src.GrammarBuild.{args.task}")
+    task_abs_grammar_module = importlib.import_module(
+        f"src.legacy_GrammarBuild.{args.task}"
+    )
+    task_crt_grammar_module = importlib.import_module(
+        f"src.legacy_GrammarBuild.{args.task}"
+    )
 
     absGrammarBuilder = getattr(
         task_abs_grammar_module,

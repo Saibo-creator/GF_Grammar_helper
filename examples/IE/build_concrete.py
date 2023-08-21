@@ -1,22 +1,10 @@
 import os
 from typing import List
 
-from tqdm import tqdm
 from transformers import AutoTokenizer
 
 from src.IE_grammar.crt_grammar import IE_ConcreteGrammar
-from src.grammar import (
-    ConcreteGrammar,
-)
-from src.production import (
-    TerminalItem,
-    EntityTerminalItem,
-    RelationTerminalItem,
-    Production,
-    CrtTerminalProduction,
-)
 from src.config.config import DATA_PATHS, GRAMMAR_JSON_CONFIG_ASSET_DIR
-from src.new_utils import LiteralStr
 from src.utils import read_jsonl
 
 if __name__ == "__main__":
@@ -26,7 +14,7 @@ if __name__ == "__main__":
 
     WORKING_FILE_DIR = os.path.dirname(os.path.abspath(__file__))
     IE_CRT_BASE_JSON_PATH = os.path.join(
-        GRAMMAR_JSON_CONFIG_ASSET_DIR, "IE", "fully_expanded", "concrete.json"
+        GRAMMAR_JSON_CONFIG_ASSET_DIR, "IE", "fe", "concrete.json"
     )
 
     KB = "wiki_ner"
@@ -38,7 +26,7 @@ if __name__ == "__main__":
     relations: List[str] = read_jsonl(relations_path)
 
     crt_grammar = IE_ConcreteGrammar(
-        base_concrete_grammar_path=IE_CRT_BASE_JSON_PATH,
+        base_abs_grammar_path=IE_CRT_BASE_JSON_PATH,
         entities=entities,
         relations=relations,
         tokenizer=tokenizer,

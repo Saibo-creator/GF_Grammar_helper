@@ -15,7 +15,8 @@ from src.new_utils import LiteralStr
 
 
 def IE_ConcreteGrammar(
-    base_concrete_grammar_path: str,
+    base_crt_grammar_path: str,
+    categories: List[str],
     entities: List[str],
     relations: List[str],
     tokenizer,
@@ -68,6 +69,7 @@ def IE_ConcreteGrammar(
     )
 
     # Create concrete grammar by adding production rules to the base concrete grammar
-    crt_grammar = ConcreteGrammar.from_json(path=base_concrete_grammar_path)
+    crt_grammar = ConcreteGrammar.from_json(path=base_crt_grammar_path)
+    crt_grammar.add_categories(categories=categories)
     crt_grammar.add_production_rules(prod_rules=prod_rules)
     return crt_grammar

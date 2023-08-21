@@ -14,7 +14,7 @@ if __name__ == "__main__":
     WORKING_FILE_DIR = os.path.dirname(os.path.abspath(__file__))
 
     ABS_BASE_JSON_PATH = os.path.join(
-        GRAMMAR_JSON_CONFIG_ASSET_DIR, "IE", "fully_expanded", "abstract.json"
+        GRAMMAR_JSON_CONFIG_ASSET_DIR, "IE", "fe", "abstract.json"
     )
 
     KB = "wiki_ner"

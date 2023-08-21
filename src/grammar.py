@@ -25,7 +25,7 @@ class Grammar:
         self.set_name(name)
         self._start = start
         self._productions = productions
-        self._categories = categories or self._infer_categories()
+        self._categories = categories or set()
         self._flags = self._default_flags.copy()
         self._flags.update({"startcat": start})
         self._flags.update(flags or {})
@@ -75,6 +75,13 @@ class Grammar:
 
     def _infer_categories(self):
         raise NotImplementedError
+
+    def add_categories(self, categories: Set[str]):
+        if categories is None:
+            return
+        if not isinstance(categories, set):
+            raise ValueError(f"Expected set but got {type(categories)}")
+        self._categories.update(categories)
 
     def _get_grammar_header_str(self) -> str:
         raise NotImplementedError
@@ -141,6 +148,9 @@ class Grammar:
         ]
         start = json_obj.pop("start", None)
         categories = json_obj.pop("categories", None)
+        categories = (
+            set(categories) if categories is not None else None
+        )  # json only supports list, so we need to convert it to set
 
         # remaining is kwargs
         kwargs = json_obj
@@ -158,6 +168,7 @@ class AbstractGrammar(Grammar):
     ):
         # categories are not mandatory for abstract grammars
         super().__init__(name, start, productions, flags=flags, **kwargs)
+        self.add_categories(self._infer_categories())
 
     def _infer_categories(self):
         categories = set()

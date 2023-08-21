@@ -2,7 +2,7 @@ import os.path
 from typing import Tuple, Callable, Dict
 
 from src.bigrammar import BiGrammar
-from src.config.config import GF_AUTO_GEN_GF_DIR, GRAMMAR_JSON_CONFIG_ASSET_DIR
+from src.config.config import NEW_GF_AUTO_GEN_GF_DIR, GRAMMAR_JSON_CONFIG_ASSET_DIR
 from src.CP_grammar.abs_grammar import CP_AbstractGrammar
 from src.CP_grammar.crt_grammar import CP_ConcreteGrammar
 from src.ED_grammar.abs_grammar import ED_AbstractGrammar
@@ -55,7 +55,7 @@ def _lookup_grammar_base_json_config(task, grammar_type):
 class GrammarFactory:
 
     _default_grammar_json_config_asset_dir = GRAMMAR_JSON_CONFIG_ASSET_DIR
-    _default_grammar_output_dir = GF_AUTO_GEN_GF_DIR
+    _default_grammar_output_dir = NEW_GF_AUTO_GEN_GF_DIR
     _grammar_product_kind: str = None
 
     def __init__(
@@ -103,6 +103,10 @@ class GrammarFactory:
     def _postprocess_crt_grammar(
         self, crt_grammar: ConcreteGrammar, **kwargs
     ) -> ConcreteGrammar:
+        abs_name = kwargs["abs_name"]
+        str_or_int = "str" if self.literal else "int"
+        tokenizer = "llama"
+        crt_grammar.set_concrete_name(abs_name, str_or_int, tokenizer)
         return crt_grammar
 
     def _build_abs_grammar(
@@ -135,12 +139,14 @@ class GrammarFactory:
         grammar = self.Crt_grammar_cls(**dp_config, **custom_config)
         return self._postprocess_crt_grammar(grammar, **postprocess_kwargs)
 
-    def build_bigrammar(self, data_point, custom_config=None):
+    def build_bigrammar(self, data_point, abs_extra_config=None, crt_extra_config=None):
         if self.__validate_data_point(data_point):
-            abs_grammar = self._build_abs_grammar(data_point, custom_config)
+            abs_grammar = self._build_abs_grammar(data_point, abs_extra_config)
+            crt_extra_config = crt_extra_config or {}
+            crt_extra_config["categories"] = abs_grammar.categories
             crt_grammar = self._build_crt_grammar(
                 data_point,
-                custom_config,
+                crt_extra_config,
                 postprocess_kwargs={"abs_name": abs_grammar.name},
             )
             return BiGrammar(abs_grammar, crt_grammar)
@@ -149,7 +155,8 @@ class GrammarFactory:
         """
         dataset: a dictionary containing two keys: 'name' and 'dps'(a list of data points)
         """
-        total = min(total, len(dataset)) if total is not None else len(dataset)
+        num_dp = len(dataset["dps"])
+        total = min(total, num_dp) if total is not None else num_dp
         bigrammars = []
         dataset_name = dataset["name"]
         output_dir = os.path.join(self._default_grammar_output_dir, dataset_name)
@@ -162,4 +169,4 @@ class GrammarFactory:
             if save_to_gf:
                 bigrammar.save_to_gf(output_dir)
 
-        return bigrammars
+        return bigrammars, output_dir
