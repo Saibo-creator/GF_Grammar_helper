@@ -155,8 +155,6 @@ class TemplateTokenGrammarBuilder:
         rm_bos=True,
         rm_eos=False,
         pseudo_prefix=False,
-        start_idx=0,
-        end_idx=None,
     ) -> str:
         # TODO, change function name to get_entity_token_linearization
         assert entity is not None, "entity is None! This is not allowed!"
@@ -165,18 +163,6 @@ class TemplateTokenGrammarBuilder:
         token_ids: List[int] = self.tokenizer.encode(entity)
         processed_token_ids: List[Union[int, str]] = self.post_process_token_ids(
             token_ids, rm_bos=rm_bos, rm_eos=rm_eos, pseudo_prefix=pseudo_prefix
-        )
-
-        assert start_idx >= 0 and start_idx < len(
-            token_ids
-        ), f"start_idx={start_idx} is not valid!"
-        assert end_idx is None or (
-            end_idx >= 0 and end_idx < len(token_ids)
-        ), f"end_idx={end_idx} is not valid!"
-        processed_token_ids = (
-            processed_token_ids[start_idx:end_idx]
-            if end_idx is not None
-            else processed_token_ids[start_idx:]
         )
 
         token_id_in_quotes: List[str] = [
@@ -191,8 +177,6 @@ class TemplateTokenGrammarBuilder:
         rule_name: str,
         entity: str,
         pseudo_prefix=False,
-        start_idx=0,
-        end_idx=None,
     ) -> str:
         "beta"
         if type(entity) != str:
@@ -206,8 +190,6 @@ class TemplateTokenGrammarBuilder:
             rm_bos=True,
             rm_eos=True,
             pseudo_prefix=pseudo_prefix,
-            start_idx=start_idx,
-            end_idx=end_idx,
         )
         rule = f"{rule_name} = {tokens_concat};"
         return rule

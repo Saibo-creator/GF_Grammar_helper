@@ -4,6 +4,8 @@ from tqdm import tqdm
 
 from src.grammar import (
     ConcreteGrammar,
+)
+from src.production import (
     TerminalItem,
     EntityTerminalItem,
     RelationTerminalItem,
@@ -12,7 +14,7 @@ from src.grammar import (
 from src.new_utils import LiteralStr
 
 
-def build_concrete_grammar_for_IE(
+def IE_ConcreteGrammar(
     base_concrete_grammar_path: str,
     entities: List[str],
     relations: List[str],
@@ -56,9 +58,11 @@ def build_concrete_grammar_for_IE(
 
     prod_rules.extend(
         [
-            CrtTerminalProduction(name="Materialise_BOG", lhs=[], rhs=["[]"]),
+            CrtTerminalProduction(name="Materialise_BOG", lhs=[], rhs="[]"),
             CrtTerminalProduction(
-                name="Materialise_EOG", lhs=[], rhs=[LiteralStr(tokenizer.eos_token_id)]
+                name="Materialise_EOG",
+                lhs=[],
+                rhs_elements=[LiteralStr(tokenizer.eos_token_id)],
             ),
         ]
     )

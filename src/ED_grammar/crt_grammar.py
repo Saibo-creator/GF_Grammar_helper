@@ -4,14 +4,12 @@ from tqdm import tqdm
 
 from src.grammar import (
     ConcreteGrammar,
-    TerminalItem,
-    EntityTerminalItem,
-    CrtTerminalProduction,
 )
+from src.production import TerminalItem, EntityTerminalItem, CrtTerminalProduction
 from src.new_utils import LiteralStr
 
 
-def build_concrete_grammar_for_ED(
+def ED_ConcreteGrammar(
     base_concrete_grammar_path: str,
     mention: str,
     entities: List[str],
@@ -30,9 +28,11 @@ def build_concrete_grammar_for_ED(
 
     prod_rules.extend(
         [
-            CrtTerminalProduction(name="Materialise_BOG", lhs=[], rhs=["[]"]),
+            CrtTerminalProduction(name="Materialise_BOG", lhs=[], rhs_elements=["[]"]),
             CrtTerminalProduction(
-                name="Materialise_EOG", lhs=[], rhs=[LiteralStr(tokenizer.eos_token_id)]
+                name="Materialise_EOG",
+                lhs=[],
+                rhs_elements=[LiteralStr(tokenizer.eos_token_id)],
             ),
         ]
     )

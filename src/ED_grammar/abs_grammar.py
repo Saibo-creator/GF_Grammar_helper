@@ -3,12 +3,11 @@ from typing import List
 
 from src.ED_grammar import production
 from src.config.config import JSON_GF_ASSET_DIR
-from src.grammar import Production, AbstractProduction, AbstractGrammar
+from src.grammar import AbstractGrammar
+from src.production import Production, AbstractProduction
 
 
-def build_abstract_grammar_for_ED(
-    base_abs_grammar_path: str, entities: List[str], name: str
-):
+def ED_AbstractGrammar(base_abs_grammar_path: str, entities: List[str], name: str):
     """
     Build abstract grammar for IE
     :param entities: list of entities
@@ -18,9 +17,7 @@ def build_abstract_grammar_for_ED(
 
     abs_grammar = AbstractGrammar.from_json(path=base_abs_grammar_path)
 
-    _prod_rules: List[str] = production.get_production_rules_for_ed(entities=entities)[
-        "production_rules"
-    ]
+    _prod_rules: List[str] = production.get_production_rules_for_ed(entities=entities)
     prod_rules: List[Production] = [
         AbstractProduction.from_str(prod_rule) for prod_rule in _prod_rules
     ]

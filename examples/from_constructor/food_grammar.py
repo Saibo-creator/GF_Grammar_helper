@@ -3,10 +3,9 @@ import os
 from src.grammar import (
     AbstractGrammar,
     ConcreteGrammar,
-    AbstractProduction,
-    ConcreteProduction,
-    LiteralStr,
 )
+from src.production import AbstractProduction, ConcreteProduction
+from src.new_utils import LiteralStr
 
 if __name__ == "__main__":
     abstract_grammar = AbstractGrammar(
@@ -42,29 +41,43 @@ if __name__ == "__main__":
             ConcreteProduction(
                 name="Pred",
                 lhs=["item", "quantity"],
-                rhs=["item", LiteralStr("is"), "quantity"],
+                rhs_elements=["item", LiteralStr("is"), "quantity"],
             ),
             ConcreteProduction(
-                name="This", lhs=["kind"], rhs=[LiteralStr("this"), "kind"]
+                name="This", lhs=["kind"], rhs_elements=[LiteralStr("this"), "kind"]
             ),
             ConcreteProduction(
-                name="That", lhs=["kind"], rhs=[LiteralStr("that"), "kind"]
+                name="That", lhs=["kind"], rhs_elements=[LiteralStr("that"), "kind"]
             ),
             ConcreteProduction(
-                name="Mod", lhs=["quantity", "kind"], rhs=["quantity", "kind"]
+                name="Mod", lhs=["quantity", "kind"], rhs_elements=["quantity", "kind"]
             ),
-            ConcreteProduction(name="Wine", lhs=[], rhs=[LiteralStr("wine")]),
-            ConcreteProduction(name="Cheese", lhs=[], rhs=[LiteralStr("cheese")]),
-            ConcreteProduction(name="Fish", lhs=[], rhs=[LiteralStr("fish")]),
+            ConcreteProduction(name="Wine", lhs=[], rhs_elements=[LiteralStr("wine")]),
             ConcreteProduction(
-                name="Very", lhs=["quantity"], rhs=[LiteralStr("very"), "quantity"]
+                name="Cheese", lhs=[], rhs_elements=[LiteralStr("cheese")]
             ),
-            ConcreteProduction(name="Fresh", lhs=[], rhs=[LiteralStr("fresh")]),
-            ConcreteProduction(name="Warm", lhs=[], rhs=[LiteralStr("warm")]),
-            ConcreteProduction(name="Italian", lhs=[], rhs=[LiteralStr("Italian")]),
-            ConcreteProduction(name="Expensive", lhs=[], rhs=[LiteralStr("expensive")]),
-            ConcreteProduction(name="Delicious", lhs=[], rhs=[LiteralStr("delicious")]),
-            ConcreteProduction(name="Boring", lhs=[], rhs=[LiteralStr("boring")]),
+            ConcreteProduction(name="Fish", lhs=[], rhs_elements=[LiteralStr("fish")]),
+            ConcreteProduction(
+                name="Very",
+                lhs=["quantity"],
+                rhs_elements=[LiteralStr("very"), "quantity"],
+            ),
+            ConcreteProduction(
+                name="Fresh", lhs=[], rhs_elements=[LiteralStr("fresh")]
+            ),
+            ConcreteProduction(name="Warm", lhs=[], rhs_elements=[LiteralStr("warm")]),
+            ConcreteProduction(
+                name="Italian", lhs=[], rhs_elements=[LiteralStr("Italian")]
+            ),
+            ConcreteProduction(
+                name="Expensive", lhs=[], rhs_elements=[LiteralStr("expensive")]
+            ),
+            ConcreteProduction(
+                name="Delicious", lhs=[], rhs_elements=[LiteralStr("delicious")]
+            ),
+            ConcreteProduction(
+                name="Boring", lhs=[], rhs_elements=[LiteralStr("boring")]
+            ),
         ],
     )
 

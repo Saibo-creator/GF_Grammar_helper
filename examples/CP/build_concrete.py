@@ -4,21 +4,24 @@ from typing import List, Dict
 
 from transformers import AutoTokenizer
 
-from src.ED_grammar.crt_grammar import ED_ConcreteGrammar
+from src.CP_grammar.crt_grammar import CP_ConcreteGrammar
 from src.config.config import DATA_PATHS, JSON_GF_ASSET_DIR
 
 if __name__ == "__main__":
 
     LITERAL = False
+
+    task, grammar_type, dataset = "CP", "re", "ptb"
+
     tokenizer = AutoTokenizer.from_pretrained("saibo/llama-7B", use_fast=False)
 
     WORKING_FILE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-    BASE_JSON_PATH = os.path.join(JSON_GF_ASSET_DIR, "ED", "canonical", "concrete.json")
+    BASE_JSON_PATH = os.path.join(
+        JSON_GF_ASSET_DIR, task, grammar_type, "concrete.json"
+    )
 
-    dataset = "aida"
-
-    dataset_jsonl = DATA_PATHS["ED"]["Tasks"][dataset]
+    dataset_jsonl = DATA_PATHS[task]["Tasks"][dataset]
 
     # entities_path = DATA_PATHS["ED"]["KB"][None]["entity"]
     # entities: List[str] = read_jsonl(entities_path)
@@ -26,17 +29,16 @@ if __name__ == "__main__":
         dps: List[Dict] = [json.loads(line) for line in f]
 
     for dp in dps[:1]:
-        entities: List[str] = dp.get("candidates", None)
+        words: List[str] = dp.get("words", None)
 
-        crt_grammar = ED_ConcreteGrammar(
+        crt_grammar = CP_ConcreteGrammar(
             base_concrete_grammar_path=BASE_JSON_PATH,
-            entities=entities,
-            mention=dp["mention"],
+            words=words,
             tokenizer=tokenizer,
             literal=LITERAL,
         )
 
-        abs_grammar_name = "ED_canonical_aida_dp0"
+        abs_grammar_name = "CP_re_ptb_dp0"
 
         str_or_int = "str" if LITERAL else "int"
         crt_grammar.set_concrete_name(

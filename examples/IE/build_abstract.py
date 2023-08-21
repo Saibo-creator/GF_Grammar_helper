@@ -1,8 +1,9 @@
 import os
 from typing import List
 
-from src.IE_grammar.abs_grammar import build_abstract_grammar_for_IE
-from src.grammar import AbstractGrammar, Production, AbstractProduction
+from src.IE_grammar.abs_grammar import IE_AbstractGrammar
+from src.grammar import AbstractGrammar
+from src.production import Production, AbstractProduction
 from src.IE_grammar import production
 from src.config.config import DATA_PATHS, JSON_GF_ASSET_DIR
 from src.utils import read_jsonl
@@ -25,7 +26,7 @@ if __name__ == "__main__":
 
     # build grammar for IE
 
-    abs_grammar = build_abstract_grammar_for_IE(
+    abs_grammar = IE_AbstractGrammar(
         base_abs_grammar_path=ABS_BASE_JSON_PATH,
         entities=entities,
         relations=relations,

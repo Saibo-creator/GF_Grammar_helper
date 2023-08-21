@@ -2,25 +2,20 @@ import json
 import os
 from typing import List, Dict
 
-import src.ED_grammar.production
-from src.ED_grammar.abs_grammar import ED_AbstractGrammar
-from src.grammar import AbstractGrammar
-from src.production import Production, AbstractProduction
-from src.IE_grammar import production
+from src.CP_grammar.abs_grammar import CP_AbstractGrammar
 from src.config.config import DATA_PATHS, JSON_GF_ASSET_DIR
-from src.utils import read_jsonl
 
 if __name__ == "__main__":
 
     WORKING_FILE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+    task, grammar_type, dataset = "CP", "re", "ptb"
+
     ABS_BASE_JSON_PATH = os.path.join(
-        JSON_GF_ASSET_DIR, "ED", "canonical", "abstract.json"
+        JSON_GF_ASSET_DIR, task, grammar_type, "abstract.json"
     )
 
-    dataset = "aida"
-
-    dataset_jsonl = DATA_PATHS["ED"]["Tasks"][dataset]
+    dataset_jsonl = DATA_PATHS[task]["Tasks"][dataset]
 
     # entities_path = DATA_PATHS["ED"]["KB"][None]["entity"]
     # entities: List[str] = read_jsonl(entities_path)
@@ -28,12 +23,12 @@ if __name__ == "__main__":
         dps: List[Dict] = [json.loads(line) for line in f]
 
     for dp in dps[:1]:
-        entities: List[str] = dp.get("candidates", None)
+        tokens = dp.get("tokens", None)
 
-        abs_grammar = ED_AbstractGrammar(
+        abs_grammar = CP_AbstractGrammar(
             base_abs_grammar_path=ABS_BASE_JSON_PATH,
-            entities=entities,
-            name="ED_canonical_aida_dp0",
+            num_input_words=len(tokens),
+            name="CP_re_ptb_dp0",
         )
         abs_grammar.save(dir=os.path.join(WORKING_FILE_DIR))
 

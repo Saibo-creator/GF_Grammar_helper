@@ -1,5 +1,24 @@
 # GF GrammarHelper
 
+This is a helper library to generate GF grammar files for NLP tasks.
+
+This library
+- Provides an abstraction of `Grammar` and `ProductionRule` to represent a GF grammar.
+- Provides a `IE_grammar`, `ED_grammar` and `CP_grammar` three modules to generate GF grammar files for Information Extraction, Entity Disambiguation and Consituency Parsing tasks respectively.
+
+## High level design
+
+As shown in the paper xxx, one can use formal grammar to represent the language of a task.
+Given a runtime that supports partial parsing, one can use the formal grammar to incrementally parse a sentence and get the next allowed tokens.
+
+With this library, the task of using formal grammar to do constrained language generation is divided into two three steps:
+- Step 1: Define the formal grammar for the task by creating a task-specific `Grammar` object(see `grammar.py`).
+- Step 2: Save the `Grammar` object to a GF grammar file by calling `Grammar.save()`.
+- Step 3: Use the GF runtime to compile the GF grammar file into `pgf` file
+- Step 4: Use the python gf wrapper to load the `pgf` file and do constrained text generation.(see `xxx` repository for an example)
+
+
+
 ## Requirements
 
 ```
@@ -28,7 +47,6 @@ and press `Tab` key, you should see the following output
 ```terminal
 Italian    boring     cheese     delicious  expensive  fish       fresh      very       warm       wine
 ```
-
 
 
 
@@ -80,4 +98,3 @@ CP_OTF_llama_0_literal> gr -depth=22  | l
 
 - It takes 28.9G memory to run the constrained decoding on REBEL dataset
 - It takes 9.8G memory to run the constrained decoding on WIKI-NRE dataset
-

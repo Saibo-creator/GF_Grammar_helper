@@ -4,13 +4,15 @@ from typing import List
 from tqdm import tqdm
 from transformers import AutoTokenizer
 
-from src.IE_grammar.crt_grammar import build_concrete_grammar_for_IE
+from src.IE_grammar.crt_grammar import IE_ConcreteGrammar
 from src.grammar import (
     ConcreteGrammar,
-    Production,
+)
+from src.production import (
     TerminalItem,
     EntityTerminalItem,
     RelationTerminalItem,
+    Production,
     CrtTerminalProduction,
 )
 from src.config.config import DATA_PATHS, JSON_GF_ASSET_DIR
@@ -35,7 +37,7 @@ if __name__ == "__main__":
     entities: List[str] = read_jsonl(entities_path)
     relations: List[str] = read_jsonl(relations_path)
 
-    crt_grammar = build_concrete_grammar_for_IE(
+    crt_grammar = IE_ConcreteGrammar(
         base_concrete_grammar_path=IE_CRT_BASE_JSON_PATH,
         entities=entities,
         relations=relations,

@@ -1,12 +1,11 @@
-import os
 from typing import List
 
 from src.IE_grammar import production
-from src.config.config import JSON_GF_ASSET_DIR
-from src.grammar import Production, AbstractProduction, AbstractGrammar
+from src.grammar import AbstractGrammar
+from src.production import Production, AbstractProduction
 
 
-def build_abstract_grammar_for_IE(
+def IE_AbstractGrammar(
     base_abs_grammar_path: str, entities: List[str], relations: List[str], name: str
 ):
     """
@@ -20,7 +19,7 @@ def build_abstract_grammar_for_IE(
 
     _prod_rules: List[str] = production.get_production_rules_for_ie(
         entities=entities, relations=relations
-    )["production_rules"]
+    )
     prod_rules: List[Production] = [
         AbstractProduction.from_str(prod_rule) for prod_rule in _prod_rules
     ]

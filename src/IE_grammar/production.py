@@ -27,15 +27,14 @@ def _get_relation_production_rules(relations: List[str]) -> List[str]:
 
 def get_production_rules_for_ie(
     entities: List[str], relations: List[str], json_path: str = None
-) -> Dict:
+) -> List:
     entity_production_rules = _get_entity_production_rules(entities=entities)
     relation_production_rules = _get_relation_production_rules(relations=relations)
     prod_rules = entity_production_rules + relation_production_rules
-    obj = {"production_rules": prod_rules}
     if json_path:
         with open(json_path, "w") as json_file:
-            json.dump(obj, json_file)
-    return obj
+            json.dump(prod_rules, json_file)
+    return prod_rules
 
 
 # Concrete
