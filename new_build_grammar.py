@@ -5,93 +5,127 @@
 # @Project: GF-Grammar-Factory
 # @AUTHOR : Saibo Geng
 # @Desc :
-import importlib
 import json
 import os
 
 from tqdm import tqdm
 
-from src.config.config import GF_AUTO_GEN_GF_DIR, DATA_PATHS
+from src.config.config import (
+    GF_AUTO_GEN_GF_DIR,
+    DATA_PATHS,
+    GRAMMAR_JSON_CONFIG_ASSET_DIR,
+)
 from src.legacy_GrammarBuild.base_grammar import AbsCrtGrammarPair
 
 if __name__ == "__main__":
-    # get env variable LLAMA_DIR
-    LLAMA_DIR = os.environ.get("LLAMA_DIR")
-
     import argparse
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--task", choices=["IE", "CP", "ED"])
-    parser.add_argument("--dep", action="store_true", help="whether to use dep grammar")
-    parser.add_argument("--grammar", type=str, default=None)
-    parser.add_argument("--KB", type=str, default=None)
-    parser.add_argument("--dataset", type=str, default=None)
-    parser.add_argument("--tokenizer-path", type=str, default="saibo/llama-7B")
+    # Define valid tasks, grammars, and datasets using a nested dictionary.
+    TASKS = {
+        "IE": {
+            "grammar": ["FullyExpanded", "SubjectCollapsed"],
+            "dataset": ["wiki_ner", "rebel", "rebel_medium"],
+        },
+        "CP": {"grammar": ["re"], "dataset": ["ptb"]},
+        "ED": {
+            "grammar": ["Minimal", "Canonical"],
+            "dataset": ["aida", "ace2004", "aquaint", "clueweb", "msnbc", "wiki"],
+        },
+    }
+
+    parser = argparse.ArgumentParser(description="A script for various NLP tasks.")
+
+    # General Arguments
     parser.add_argument(
-        "--compile", action="store_true", help="whether to compile the grammar"
+        "--task",
+        choices=TASKS.keys(),
+        required=True,
+        help="Specify the task to be performed.",
     )
     parser.add_argument(
-        "--literal", action="store_true", help="whether to use literal grammar"
+        "--grammar", type=str, required=True, help="Specify the grammar type."
+    )
+    parser.add_argument(
+        "--dataset", type=str, required=True, help="Specify the dataset to be used."
+    )
+    parser.add_argument(
+        "--tokenizer-path",
+        type=str,
+        choices=["saibo/llama-7B"],
+        help="Path to the tokenizer.",
+    )
+    parser.add_argument(
+        "--str_or_int",
+        type=str,
+        default="str",
+        choices=["str", "int"],
+        help="Whether to use string or integer as the terminal symbol.",
+    )
+
+    # Flags
+    parser.add_argument(
+        "--compile", action="store_true", help="Whether to compile the grammar."
     )
     parser.add_argument(
         "--debug",
         action="store_true",
-        help="whether to use debug mode, which will generate a small grammar from list of entities and relations",
+        help="Use debug mode, which will generate a small grammar from list of entities and relations.",
     )
     parser.add_argument(
-        "--clean", action="store_true", help="whether to clean the grammar"
+        "--clean", action="store_true", help="Whether to clean the grammar."
     )
-    args = parser.parse_args()
-    dependency = "Dep" if args.dep else "Indep"
 
-    if args.task == "IE":
-        assert args.KB in [
-            "wiki_ner",
-            "rebel",
-            "rebel_medium",
-        ], f"KB {args.KB} not implemented, choose from [wiki_ner, rebel, rebel_medium]"
-        assert args.grammar in [
-            "FullyExpanded",
-            "SubjectCollapsed",
-        ], f"grammar {args.grammar} not implemented, choose from [FullyExpanded, SubjectCollapsed]"
-    elif args.task == "CP":
-        assert args.KB is None, f"KB should be None for CP task"
-        assert args.grammar in [
-            "PtbRe",
-            "PtbCfg",
-        ], f"grammar {args.grammar} not implemented, choose from [PtbRe, PtbCfg]"
+    args = parser.parse_args()
+
+    # Check the validity of provided grammar and dataset based on the task.
+    if args.grammar not in TASKS[args.task]["grammar"]:
+        valid_grammars = ", ".join(TASKS[args.task]["grammar"])
+        raise ValueError(
+            f"Invalid grammar for task '{args.task}'. Valid options are: {valid_grammars}"
+        )
+
+    if args.dataset not in TASKS[args.task]["dataset"]:
+        valid_datasets = ", ".join(TASKS[args.task]["dataset"])
+        raise ValueError(
+            f"Invalid dataset for task '{args.task}'. Valid options are: {valid_datasets}"
+        )
+
+    task, grammar_type, dataset = args.task, args.grammar, args.dataset
+
+    abs_grammar_name = f"{task}_{grammar_type}_{dataset}"
+    crt_grammar_name = "_".join([abs_grammar_name, args.str_or_int, "llama"])
+
+    dataset = f"_{args.dataset}" if args.dataset is not None else ""
+    grammar_name = f"{args.task}_{args.grammar}_llama"
+    grammar_name += "_debug" if args.debug else ""
+
+    if args.task == "CP":
+        abs_grammar_cls = CP_AbstractGrammar
+        crt_grammar_cls = CP_ConcreteGrammar
+
+    elif args.task == "IE":
+        abs_grammar_cls = IE_AbstractGrammar
+        crt_grammar_cls = IE_ConcreteGrammar
     elif args.task == "ED":
-        if args.dep:
-            assert args.KB is None, f"KB should be None for ED task"
-        else:
-            assert args.KB in [
-                "kilt_wiki",
-                "YAGO_KB",
-            ], f"KB {args.KB} not implemented, choose from [wiki_kilt, YAGO_KB]"
-        assert args.grammar in [
-            "Minimal",
-            "Canonical",
-        ], f"grammar {args.grammar} not implemented, choose from [Minimal]"
+        abs_grammar_cls = ED_AbstractGrammar
+        crt_grammar_cls = ED_ConcreteGrammar
     else:
         raise NotImplementedError
 
-    KB_name = args.KB if args.KB is not None else "NoKB"
-    dataset = f"_{args.dataset}" if args.dataset is not None else ""
-    grammar_name = f"{args.task}{dataset}_{KB_name}_{args.grammar}_{args.tokenizer_path.split('/')[-1].replace('-','_')}"
-    grammar_name += "_debug" if args.debug else ""
-
-    submodule_name = args.grammar
-
-    task_abs_grammar_module = importlib.import_module(f"src.GrammarBuild.{args.task}")
-    task_crt_grammar_module = importlib.import_module(f"src.GrammarBuild.{args.task}")
-
-    absGrammarBuilder = getattr(
-        task_abs_grammar_module,
-        f"{args.task}_{dependency}{submodule_name}AbsGrammarBuilder",
+    CRT_GRAMMAR_BASE_CONFIG_PATH = os.path.join(
+        GRAMMAR_JSON_CONFIG_ASSET_DIR, task, grammar_type, "concrete.json"
     )
-    crtGrammarBuilder = getattr(
-        task_crt_grammar_module,
-        f"{args.task}_{dependency}{submodule_name}CrtGrammarBuilder",
+
+    ABS_GRAMMAR_BASE_CONFIG_PATH = os.path.join(
+        GRAMMAR_JSON_CONFIG_ASSET_DIR, task, grammar_type, "abstract.json"
+    )
+
+    abs_grammar_name = f"{task}_{grammar_type}_{dataset}"
+
+    abs_grammar = abs_grammar_cls(
+        base_abs_grammar_path=ABS_GRAMMAR_BASE_CONFIG_PATH,
+        num_input_words=len(tokens),
+        name="CP_re_ptb_dp0",
     )
 
     abs_builder = absGrammarBuilder(

@@ -15,7 +15,7 @@ from src.production import (
     Production,
     CrtTerminalProduction,
 )
-from src.config.config import DATA_PATHS, JSON_GF_ASSET_DIR
+from src.config.config import DATA_PATHS, GRAMMAR_JSON_CONFIG_ASSET_DIR
 from src.new_utils import LiteralStr
 from src.utils import read_jsonl
 
@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     WORKING_FILE_DIR = os.path.dirname(os.path.abspath(__file__))
     IE_CRT_BASE_JSON_PATH = os.path.join(
-        JSON_GF_ASSET_DIR, "IE", "fully_expanded", "concrete.json"
+        GRAMMAR_JSON_CONFIG_ASSET_DIR, "IE", "fully_expanded", "concrete.json"
     )
 
     KB = "wiki_ner"
@@ -52,5 +52,5 @@ if __name__ == "__main__":
         abs_name=abs_grammar_name, str_or_int=str_or_int, tokenizer="llama"
     )
 
-    crt_grammar.save(dir=os.path.join(WORKING_FILE_DIR))
+    crt_grammar.save_to_gf(dir=os.path.join(WORKING_FILE_DIR))
     crt_grammar.summary()

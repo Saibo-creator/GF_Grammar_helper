@@ -3,7 +3,7 @@ from typing import List
 from tqdm import tqdm
 
 from src.CP_grammar.crt_production import *
-from src.GrammarBuild.CP.const import FULL_PHRASE_LEVEL_TAGS, WORD_LEVEL_TAGS
+from src.legacy_GrammarBuild.CP.const import FULL_PHRASE_LEVEL_TAGS, WORD_LEVEL_TAGS
 from src.grammar import (
     ConcreteGrammar,
 )

@@ -3,7 +3,7 @@ from src.ED_grammar import production
 from src.grammar import AbstractGrammar
 from src.production import Production, AbstractProduction
 from src.CP_grammar.abs_production import *
-from src.GrammarBuild.CP.const import WORD_LEVEL_TAGS, FULL_PHRASE_LEVEL_TAGS
+from src.legacy_GrammarBuild.CP.const import WORD_LEVEL_TAGS, FULL_PHRASE_LEVEL_TAGS
 
 
 def CP_AbstractGrammar(base_abs_grammar_path: str, num_input_words: int, name: str):

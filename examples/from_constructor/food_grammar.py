@@ -30,7 +30,7 @@ if __name__ == "__main__":
     )
 
     print(abstract_grammar)
-    abstract_grammar.save("FoodExample")
+    abstract_grammar.save_to_gf("FoodExample")
 
     concrete_grammar = ConcreteGrammar(
         start="Comment",
@@ -86,5 +86,5 @@ if __name__ == "__main__":
     dir_path = os.path.dirname(os.path.realpath(__file__))
     output_dir = os.path.join(dir_path, "output")
 
-    abstract_grammar.save(output_dir)
-    concrete_grammar.save(output_dir)
+    abstract_grammar.save_to_gf(output_dir)
+    concrete_grammar.save_to_gf(output_dir)

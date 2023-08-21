@@ -5,7 +5,7 @@ from typing import List, Dict
 from transformers import AutoTokenizer
 
 from src.ED_grammar.crt_grammar import ED_ConcreteGrammar
-from src.config.config import DATA_PATHS, JSON_GF_ASSET_DIR
+from src.config.config import DATA_PATHS, GRAMMAR_JSON_CONFIG_ASSET_DIR
 
 if __name__ == "__main__":
 
@@ -14,7 +14,9 @@ if __name__ == "__main__":
 
     WORKING_FILE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-    BASE_JSON_PATH = os.path.join(JSON_GF_ASSET_DIR, "ED", "canonical", "concrete.json")
+    BASE_JSON_PATH = os.path.join(
+        GRAMMAR_JSON_CONFIG_ASSET_DIR, "ED", "canonical", "concrete.json"
+    )
 
     dataset = "aida"
 
@@ -29,7 +31,7 @@ if __name__ == "__main__":
         entities: List[str] = dp.get("candidates", None)
 
         crt_grammar = ED_ConcreteGrammar(
-            base_concrete_grammar_path=BASE_JSON_PATH,
+            base_crt_grammar_path=BASE_JSON_PATH,
             entities=entities,
             mention=dp["mention"],
             tokenizer=tokenizer,
@@ -43,6 +45,6 @@ if __name__ == "__main__":
             abs_name=abs_grammar_name, str_or_int=str_or_int, tokenizer="llama"
         )
 
-        crt_grammar.save(dir=os.path.join(WORKING_FILE_DIR))
+        crt_grammar.save_to_gf(dir=os.path.join(WORKING_FILE_DIR))
 
         crt_grammar.summary()

@@ -107,7 +107,7 @@ class Grammar:
             f.write(str(self))
 
     # save with dir and name
-    def save(self, dir: str = "."):
+    def save_to_gf(self, dir: str = "."):
         """
         Save the grammar to a file.
         """
@@ -226,6 +226,10 @@ class ConcreteGrammar(Grammar):
         ), "abstract_grammar_name must be provided"
         self._abstract_grammar_name = abstract_grammar_name
         self._initializing = False
+
+    @property
+    def abstract_grammar_name(self):
+        return self._abstract_grammar_name
 
     def set_name(self, name):
         # only allow setting name during initialization
@@ -351,42 +355,42 @@ if __name__ == "__main__":
                     "CloseBracket",
                     "EOG",
                 ],
-                rhs_elements=None,
+                rhs=None,
             ),
             ConcreteProduction(
                 name="Materialise_BOG",
                 lhs=[],
-                rhs_elements="BOG",
+                rhs="BOG",
             ),
             ConcreteProduction(
                 name="Materialise_EOG",
                 lhs=[],
-                rhs_elements="EOG",
+                rhs="EOG",
             ),
             ConcreteProduction(
                 name="Materialise_Mention",
                 lhs=[],
-                rhs_elements="Mention",
+                rhs="Mention",
             ),
             ConcreteProduction(
                 name="Materialise_OpenBracket",
                 lhs=[],
-                rhs_elements="[",
+                rhs="[",
             ),
             ConcreteProduction(
                 name="Materialise_CloseBracket",
                 lhs=[],
-                rhs_elements="]",
+                rhs="]",
             ),
             ConcreteProduction(
                 name="Materialise_Canonical_phrase",
                 lhs=[],
-                rhs_elements="token1 token2 token3",
+                rhs="token1 token2 token3",
             ),
             ConcreteProduction(
                 name="Materialise_Entity",
                 lhs=[],
-                rhs_elements="Entity",
+                rhs="Entity",
             ),
         ],
         categories={

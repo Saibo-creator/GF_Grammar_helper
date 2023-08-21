@@ -2,7 +2,7 @@ import os
 from typing import List
 
 from src.ED_grammar import production
-from src.config.config import JSON_GF_ASSET_DIR
+from src.config.config import GRAMMAR_JSON_CONFIG_ASSET_DIR
 from src.grammar import AbstractGrammar
 from src.production import Production, AbstractProduction
 

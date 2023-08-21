@@ -3,7 +3,7 @@ import os
 from typing import List, Dict
 
 from src.CP_grammar.abs_grammar import CP_AbstractGrammar
-from src.config.config import DATA_PATHS, JSON_GF_ASSET_DIR
+from src.config.config import DATA_PATHS, GRAMMAR_JSON_CONFIG_ASSET_DIR
 
 if __name__ == "__main__":
 
@@ -12,7 +12,7 @@ if __name__ == "__main__":
     task, grammar_type, dataset = "CP", "re", "ptb"
 
     ABS_BASE_JSON_PATH = os.path.join(
-        JSON_GF_ASSET_DIR, task, grammar_type, "abstract.json"
+        GRAMMAR_JSON_CONFIG_ASSET_DIR, task, grammar_type, "abstract.json"
     )
 
     dataset_jsonl = DATA_PATHS[task]["Tasks"][dataset]
@@ -30,6 +30,6 @@ if __name__ == "__main__":
             num_input_words=len(tokens),
             name="CP_re_ptb_dp0",
         )
-        abs_grammar.save(dir=os.path.join(WORKING_FILE_DIR))
+        abs_grammar.save_to_gf(dir=os.path.join(WORKING_FILE_DIR))
 
         abs_grammar.summary()

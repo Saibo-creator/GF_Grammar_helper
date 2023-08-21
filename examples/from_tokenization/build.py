@@ -1,4 +1,4 @@
-from src.GrammarBuild.grammar_builder import get_prod_name_for_ie
+from src.legacy_GrammarBuild.grammar_builder import get_prod_name_for_ie
 from src.production import CrtTerminalProduction
 from src.new_utils import tokenize
 from transformers import AutoTokenizer

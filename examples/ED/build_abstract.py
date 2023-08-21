@@ -7,7 +7,7 @@ from src.ED_grammar.abs_grammar import ED_AbstractGrammar
 from src.grammar import AbstractGrammar
 from src.production import Production, AbstractProduction
 from src.IE_grammar import production
-from src.config.config import DATA_PATHS, JSON_GF_ASSET_DIR
+from src.config.config import DATA_PATHS, GRAMMAR_JSON_CONFIG_ASSET_DIR
 from src.utils import read_jsonl
 
 if __name__ == "__main__":
@@ -15,7 +15,7 @@ if __name__ == "__main__":
     WORKING_FILE_DIR = os.path.dirname(os.path.abspath(__file__))
 
     ABS_BASE_JSON_PATH = os.path.join(
-        JSON_GF_ASSET_DIR, "ED", "canonical", "abstract.json"
+        GRAMMAR_JSON_CONFIG_ASSET_DIR, "ED", "canonical", "abstract.json"
     )
 
     dataset = "aida"
@@ -35,6 +35,6 @@ if __name__ == "__main__":
             entities=entities,
             name="ED_canonical_aida_dp0",
         )
-        abs_grammar.save(dir=os.path.join(WORKING_FILE_DIR))
+        abs_grammar.save_to_gf(dir=os.path.join(WORKING_FILE_DIR))
 
         abs_grammar.summary()

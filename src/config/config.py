@@ -22,7 +22,7 @@ GF_ASSET_DIR = os.path.join(ASSET_DIR, "GF-grammars", "gf")
 # Set the asset directory
 PGF_ASSET_DIR = os.path.join(ASSET_DIR, "GF-grammars", "pgf")
 # Set the asset directory
-JSON_GF_ASSET_DIR = os.path.join(ASSET_DIR, "grammar_json")
+GRAMMAR_JSON_CONFIG_ASSET_DIR = os.path.join(ASSET_DIR, "grammar_json")
 
 # AUTO GENERATED GF GRAMMARS
 OUTPUT_DIR = os.path.join(ROOT_DIR, "output")

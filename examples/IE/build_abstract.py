@@ -5,7 +5,7 @@ from src.IE_grammar.abs_grammar import IE_AbstractGrammar
 from src.grammar import AbstractGrammar
 from src.production import Production, AbstractProduction
 from src.IE_grammar import production
-from src.config.config import DATA_PATHS, JSON_GF_ASSET_DIR
+from src.config.config import DATA_PATHS, GRAMMAR_JSON_CONFIG_ASSET_DIR
 from src.utils import read_jsonl
 
 
@@ -14,7 +14,7 @@ if __name__ == "__main__":
     WORKING_FILE_DIR = os.path.dirname(os.path.abspath(__file__))
 
     ABS_BASE_JSON_PATH = os.path.join(
-        JSON_GF_ASSET_DIR, "IE", "fully_expanded", "abstract.json"
+        GRAMMAR_JSON_CONFIG_ASSET_DIR, "IE", "fully_expanded", "abstract.json"
     )
 
     KB = "wiki_ner"
@@ -34,6 +34,6 @@ if __name__ == "__main__":
     )
 
     # save grammar
-    abs_grammar.save(dir=os.path.join(WORKING_FILE_DIR))
+    abs_grammar.save_to_gf(dir=os.path.join(WORKING_FILE_DIR))
 
     abs_grammar.summary()
