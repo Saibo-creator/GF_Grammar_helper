@@ -1,1 +1,0 @@
-( S ( SBAR-TMP ( WHADVP-1 ( WRB XX ) ) ( S ( NP-SBJ ( NP ( DT XX ) ( NN XX ) ) ( PP ( IN XX ) ( NP ( NNS XX ) ) ) ) ( VP ( VBD XX ) ( PRT ( RP XX ) ) ( PP-TMP ( IN XX ) ( NP ( CD XX ) ) ) ) ) ) ( NP-SBJ ( NNP XX ) ( NNP XX ) ( NNP XX ) ) ( VP ( VBD XX ) ( ADVP-CLR ( RB XX ) ) ( PP-PRP ( IN XX ) ( NP ( DT XX ) ( NN XX ) ) ) ) )
