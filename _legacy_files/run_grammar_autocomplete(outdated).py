@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# @Filename : run_grammar_autocomplete.py
+# @Filename : run_grammar_autocomplete(outdated).py
 # @Date : 2023-03-29-12-28
 # @Project: GF-Grammar-Factory
 # @AUTHOR : Saibo Geng
