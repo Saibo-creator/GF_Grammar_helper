@@ -69,8 +69,8 @@ if __name__ == "__main__":
                 "YAGO_KB",
             ], f"KB {args.KB} not implemented, choose from [wiki_kilt, YAGO_KB]"
         assert args.grammar in [
-            "Minimal",
-            "Canonical",
+            "minimal",
+            "canonical",
         ], f"grammar {args.grammar} not implemented, choose from [Minimal]"
     else:
         raise NotImplementedError

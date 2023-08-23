@@ -40,7 +40,7 @@ if __name__ == "__main__":
         },
         "CP": {"grammar_type": ["re"], "dataset": ["ptb"]},
         "ED": {
-            "grammar_type": ["Minimal", "Canonical"],
+            "grammar_type": ["minimal", "canonical"],
             "dataset": ["aida", "ace2004", "aquaint", "clueweb", "msnbc", "wiki"],
         },
     }

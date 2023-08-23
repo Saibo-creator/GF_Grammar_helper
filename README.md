@@ -35,7 +35,7 @@ pip install -r requirements.txt
 ## Reproduce the grammars needed for the paper
 
 ```
-bash build_all_grammars_by_factory.sh
+bash reproduce_all_grammars_for_gcd.sh
 ```
 
 The generated grammars are saved in `output/grammars/gf/` and `output/grammars/pgf/` folders.
@@ -47,6 +47,7 @@ Only the `pgf` files are directly used by the GF runtime for constrained text ge
 - [Intro: Food Grammar](docs/food_grammar.md)
 - [Grammar](docs/grammar.md)
 - [Grammar Factory](docs/grammar_factory.md)
+- [Grammar Examples](docs/example_grammar.md)
 - [Examples](docs/examples.md)
 - [Add new task](docs/add_new_task.md)
 - [Benchmark](docs/benchmark.md)
