@@ -7,7 +7,7 @@
 # @Desc :
 from time import sleep
 
-from src.constrained_generation.pgf import HttpPgf
+from src.constrained_generation._pgf import HttpPgf
 from src.config.config import PGF_ASSET_DIR
 
 if __name__ == "__main__":

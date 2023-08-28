@@ -13,7 +13,7 @@ import time
 import numpy as np
 from tqdm import tqdm
 
-from src.constrained_generation.pgf import HttpPgf
+from src.constrained_generation._pgf import HttpPgf
 from src.config.config import PGF_ASSET_DIR, BENCHMARK_DIR
 from src.benchmark.visualization import plot_time_complexity
 

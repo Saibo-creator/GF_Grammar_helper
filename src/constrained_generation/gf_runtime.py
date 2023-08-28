@@ -6,9 +6,11 @@ import subprocess
 import time
 from typing import List, Union
 
+import numpy as np
 import requests
 from urllib.parse import urljoin
-
+from src import logger
+from tqdm import tqdm
 
 DEFAULT_PGF_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "pgf")
 
@@ -87,7 +89,7 @@ class GFServerRuntime(GFRuntime):
         )
 
         # Wait for the server to be ready
-        print(f"visit {self.url} to check if the server is ready")
+        logger.info(f"visit {self.url} to check if the server is ready")
 
         # wait for the server to be ready
         time.sleep(0.1)
@@ -109,7 +111,7 @@ class GFServerRuntime(GFRuntime):
 
         # Send an HTTP GET request with values
         response = requests.get(url, params=params)
-        print(response.url)
+        logger.debug(response.url)
 
         # Parse the response, handle errors
         if response.status_code != 200:
@@ -131,6 +133,30 @@ class GFServerRuntime(GFRuntime):
 
     def clear(self):
         self.server_process.terminate()
+
+    def random_decode(self, n: int, tokens2exclude: set[str]) -> List[float]:
+        input_tokens = []
+        decoding_time = []
+
+        count = 0
+
+        while count < n:
+            start_time = time.time()
+            completions: List[str] = self.complete(input_tokens)
+            completions = [x for x in completions if x not in tokens2exclude]
+            # randomly choose one completion
+            if len(completions) > 0:
+                idx = np.random.randint(0, len(completions))
+                next_token: str = completions[idx]
+                end_time = time.time()
+                elapsed_time = round(end_time - start_time, 4)
+                decoding_time.append(elapsed_time)
+                input_tokens.append(next_token)
+                count += 1
+            else:
+                # clear the input_tokens and start over
+                input_tokens = []
+        return decoding_time
 
 
 class GFServerRuntimeForLM(GFServerRuntime):

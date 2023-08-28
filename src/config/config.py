@@ -26,9 +26,9 @@ GRAMMAR_JSON_CONFIG_ASSET_DIR = os.path.join(ASSET_DIR, "grammar_json")
 
 # AUTO GENERATED GF GRAMMARS
 OUTPUT_DIR = os.path.join(ROOT_DIR, "output")
-GF_AUTO_GEN_GF_DIR = os.path.join(OUTPUT_DIR, "grammars", "autogen")
+# GF_AUTO_GEN_GF_DIR = os.path.join(OUTPUT_DIR, "grammars", "autogen")
 NEW_GF_AUTO_GEN_GF_DIR = os.path.join(OUTPUT_DIR, "grammars", "autogen", "gf")
-PGF_AUTO_GEN_DIR = os.path.join(OUTPUT_DIR, "grammars", "autogen")
+# PGF_AUTO_GEN_DIR = os.path.join(OUTPUT_DIR, "grammars", "autogen")
 NEW_PGF_AUTO_GEN_DIR = os.path.join(OUTPUT_DIR, "grammars", "autogen", "pgf")
 # Benchmarks
 BENCHMARK_DIR = os.path.join(OUTPUT_DIR, "benchmarks")
