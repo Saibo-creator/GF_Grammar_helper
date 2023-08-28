@@ -19,3 +19,12 @@ repos:
     rev: 22.3.0
     hooks:
     -   id: black
+-   repo: local
+    hooks:
+        -   id: unittest
+            name: unittest
+            entry: python -m unittest discover -s tests -p 'test_*.py'
+            language: system
+            'types': [ python ]
+            pass_filenames: false
+            stages: [ commit ]

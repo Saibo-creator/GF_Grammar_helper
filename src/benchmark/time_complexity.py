@@ -18,7 +18,14 @@ from src.config.config import PGF_ASSET_DIR, BENCHMARK_DIR
 from src.benchmark.visualization import plot_time_complexity
 
 
-def measure_speed(pgf_name='FullyExpandedGenieWiki', port=41296, pgf_dir=PGF_ASSET_DIR, num_repeat=6, max_seq_len=1024, tokens2exclude=None):
+def measure_speed(
+    pgf_name="FoodRepeat",
+    port=41296,
+    pgf_dir=PGF_ASSET_DIR,
+    num_repeat=6,
+    max_seq_len=1024,
+    tokens2exclude=None,
+):
     pgf_fname = pgf_name + ".pgf"
     pgf = HttpPgf(pgf=pgf_fname, port=port, root_dir=pgf_dir)
     tokens2exclude = tokens2exclude or []
@@ -54,16 +61,22 @@ def measure_speed(pgf_name='FullyExpandedGenieWiki', port=41296, pgf_dir=PGF_ASS
     return csv_fpath
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument('--pgf', type=str, default='FullyExpandedGenieWiki')
-    arg_parser.add_argument('--port', type=int, default=41296)
-    arg_parser.add_argument('--pgf_dir', type=str, default=PGF_ASSET_DIR)
-    arg_parser.add_argument('--num_repeat', type=int, default=6)
-    arg_parser.add_argument('--max_seq_len', type=int, default=1024)
-    arg_parser.add_argument('--tokens2exclude', type=list, default=[])
+    arg_parser.add_argument("--pgf", type=str, default="FoodRepeat")
+    arg_parser.add_argument("--port", type=int, default=41296)
+    arg_parser.add_argument("--pgf_dir", type=str, default=PGF_ASSET_DIR)
+    arg_parser.add_argument("--num_repeat", type=int, default=6)
+    arg_parser.add_argument("--max_seq_len", type=int, default=1024)
+    arg_parser.add_argument("--tokens2exclude", type=list, default=[])
     args = arg_parser.parse_args()
 
-    csv_fpath = measure_speed(pgf_name=args.pgf, port=args.port, pgf_dir=args.pgf_dir, num_repeat=args.num_repeat,
-                              max_seq_len=args.max_seq_len, tokens2exclude=args.tokens2exclude)
+    csv_fpath = measure_speed(
+        pgf_name=args.pgf,
+        port=args.port,
+        pgf_dir=args.pgf_dir,
+        num_repeat=args.num_repeat,
+        max_seq_len=args.max_seq_len,
+        tokens2exclude=args.tokens2exclude,
+    )
     plot_time_complexity(csv_fpath)
