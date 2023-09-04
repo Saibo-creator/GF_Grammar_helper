@@ -8,7 +8,7 @@ This library
 
 ## High level design
 
-As shown in the paper xxx, one can use formal grammar to represent the language of a task.
+As shown in the [paper](https://arxiv.org/abs/2305.13971), one can use formal grammar to represent the language of a task.
 Given a runtime that supports partial parsing, one can use the formal grammar to incrementally parse a sentence and get the next allowed tokens.
 
 With this library, the task of using formal grammar to do constrained language generation is divided into two three steps:
