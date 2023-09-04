@@ -2,4 +2,4 @@
 
 Examples are in `examples/` folder.
 
-TO ADD
+Some are organized by tasks: `IE`, `ED`, `CP`.

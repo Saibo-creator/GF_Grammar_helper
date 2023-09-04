@@ -3,6 +3,7 @@ from typing import List
 
 from transformers import AutoTokenizer
 
+from src.IE_grammar.abs_grammar import IE_AbstractGrammar
 from src.IE_grammar.crt_grammar import IE_ConcreteGrammar
 from src.config.config import DATA_PATHS, GRAMMAR_JSON_CONFIG_ASSET_DIR
 from src.utils import read_jsonl
@@ -10,24 +11,42 @@ from src.utils import read_jsonl
 if __name__ == "__main__":
 
     LITERAL = False
+
+    task, grammar_type, dataset = "IE", "fe", "wiki_ner"
+
     tokenizer = AutoTokenizer.from_pretrained("saibo/llama-7B", use_fast=False)
 
     WORKING_FILE_DIR = os.path.dirname(os.path.abspath(__file__))
     IE_CRT_BASE_JSON_PATH = os.path.join(
-        GRAMMAR_JSON_CONFIG_ASSET_DIR, "IE", "fe", "concrete.json"
+        GRAMMAR_JSON_CONFIG_ASSET_DIR, task, grammar_type, "concrete.json"
     )
 
-    KB = "wiki_ner"
-    entities_path = DATA_PATHS["IE"]["KB"][KB]["entity"]
-    relations_path = DATA_PATHS["IE"]["KB"][KB]["relation"]
+    BASE_JSON_PATH = os.path.join(
+        GRAMMAR_JSON_CONFIG_ASSET_DIR, task, grammar_type, "concrete.json"
+    )
+
+    ABS_BASE_JSON_PATH = os.path.join(
+        GRAMMAR_JSON_CONFIG_ASSET_DIR, task, grammar_type, "abstract.json"
+    )
+
+    entities_path = DATA_PATHS["IE"]["KB"][dataset]["entity"]
+    relations_path = DATA_PATHS["IE"]["KB"][dataset]["relation"]
 
     # Load entities and relations from jsonl files
     entities: List[str] = read_jsonl(entities_path)
     relations: List[str] = read_jsonl(relations_path)
 
-    crt_grammar = IE_ConcreteGrammar(
-        base_abs_grammar_path=IE_CRT_BASE_JSON_PATH,
+    abs_grammar = IE_AbstractGrammar(
+        base_abs_grammar_path=ABS_BASE_JSON_PATH,
         entities=entities,
+        relations=relations,
+        name="IE_wiki_ner_fe",
+    )
+
+    crt_grammar = IE_ConcreteGrammar(
+        base_crt_grammar_path=BASE_JSON_PATH,
+        entities=entities,
+        categories=abs_grammar.categories,
         relations=relations,
         tokenizer=tokenizer,
         literal=LITERAL,

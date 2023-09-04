@@ -15,8 +15,8 @@ class Grammar:
 
     def __init__(
         self,
-        name,
-        start,
+        name: str,
+        start: str,
         productions: List[Production],
         categories: Optional[Set[str]] = None,
         flags=None,

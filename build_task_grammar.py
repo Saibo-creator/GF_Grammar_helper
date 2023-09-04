@@ -6,28 +6,15 @@
 # @AUTHOR : Saibo Geng
 # @Desc :
 import json
-import os
 from typing import Dict, List
 
-from tqdm import tqdm
-
-from src.CP_grammar.abs_grammar import CP_AbstractGrammar
-from src.CP_grammar.crt_grammar import CP_ConcreteGrammar
 from src.CP_grammar.factory import CPGrammarFactory
-from src.ED_grammar.abs_grammar import ED_AbstractGrammar
-from src.ED_grammar.crt_grammar import ED_ConcreteGrammar
 from src.ED_grammar.factory import EDGrammarFactory
-from src.IE_grammar.abs_grammar import IE_AbstractGrammar
-from src.IE_grammar.crt_grammar import IE_ConcreteGrammar
 from src.IE_grammar.factory import IEGrammarFactory
 from src.compilation import compile_for_task
-
 from src.config.config import (
-    GF_AUTO_GEN_GF_DIR,
     DATA_PATHS,
-    GRAMMAR_JSON_CONFIG_ASSET_DIR,
 )
-from src.legacy_GrammarBuild.base_grammar import AbsCrtGrammarPair
 
 if __name__ == "__main__":
     import argparse

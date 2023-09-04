@@ -1,41 +1,48 @@
 # GF GrammarHelper
 
-This is a helper library to generate GF grammar files for NLP tasks.
+GF GrammarHelper is a library designed to facilitate the generation of Grammatical Framework (GF) grammar files tailored for various NLP tasks.
 
-This library
-- Provides an abstraction of `Grammar` and `ProductionRule` to represent a GF grammar.
-- Provides a `IE_grammar`, `ED_grammar` and `CP_grammar` three modules to generate GF grammar files for Information Extraction, Entity Disambiguation and Consituency Parsing tasks respectively.
+Before diving into the library, we highly recommend familiarizing yourself with the basics of GF by reading the [Grammatical Framework Tutorial](https://www.grammaticalframework.org/doc/tutorial/gf-tutorial.html) first to get a basic understanding of GF.
 
-## High level design
+To reproduce the grammars used in the paper, please refer to the [Reproduce the grammars needed for the paper](#reproduce-the-grammars-needed-for-the-paper) section.
 
-As shown in the [paper](https://arxiv.org/abs/2305.13971), one can use formal grammar to represent the language of a task.
-Given a runtime that supports partial parsing, one can use the formal grammar to incrementally parse a sentence and get the next allowed tokens.
+## Overview
 
-With this library, the task of using formal grammar to do constrained language generation is divided into two three steps:
-- Step 1: Define the formal grammar for the task by creating a task-specific `Grammar` object(see `grammar.py`).
-- Step 2: Save the `Grammar` object to a GF grammar file by calling `Grammar.save()`.
-- Step 3: Use the GF runtime to compile the GF grammar file into `pgf` file
-- Step 4: Use the python gf wrapper to load the `pgf` file and do constrained text generation.(see `xxx` repository for an example)
+Incorporating the insights presented in this [paper](https://arxiv.org/abs/2305.13971), formal grammar can be employed to represent a task-specific language.
+Leveraging a [runtime](https://www.grammaticalframework.org/doc/runtime-api.html#haskell) that supports partial parsing, this formal grammar can incrementally parse sentences, guiding the production of the subsequent permissible tokens.
 
+Using the GF GrammarHelper library, the process of employing formal grammar for constrained language generation is delineated into four steps:
+
+- **Grammar Definition**: Initiate the task-specific formal grammar by constructing a `Grammar` object (refer to `src/grammar.py`).
+- **Grammar File Creation**: Store the Grammar object into a GF grammar file(`.gf`) using the `Grammar.save()` method.
+- **Compilation**: Utilize the GF runtime to transform the GF grammar file into a `.pgf` file.
+- **Constrained Text Generation**: Rely on the Python GF wrapper to load the `.pgf` file and execute constrained text generation. For a practical demonstration, see the xxx repository.
+
+## Features:
+
+- Offers a abstraction of `Grammar` and `ProductionRule` to encapsulate a GF grammar.
+- Introduces three specialized modules: `IE_grammar`, `ED_grammar`, and `CP_grammar`. These are dedicated to generating GF grammar files for Information Extraction, Entity Disambiguation, and Constituency Parsing tasks, respectively.
+- Provides a `GrammarFactory` class to facilitate the creation of `Grammar` objects in batch.
 
 
 ## Requirements
 
-```
-export PYTHONPATH=/path/to/my_project:$PYTHONPATH # this is required to run scripts in `example/` folder
-export PYTHONPATH=/Users/saibo/Research/Projects/GCD/GF_editor:$PYTHONPATH # this is required to run scripts in `example/` folder
-```
 
-## Installation
-
-```
+```shell
 pip install -r requirements.txt
 ```
 
+Add the root folder of this repository to `PYTHONPATH` environment variable.
+```shell
+# in the root folder of this repository
+export PYTHONPATH="$(pwd):$PYTHONPATH"  # this is required to run scripts in `example/` folder
+```
+
+
 ## Reproduce the grammars needed for the paper
 
-```
-bash reproduce_all_grammars_for_gcd.sh
+```shell
+bash generate_gcd_grammars.sh
 ```
 
 The generated grammars are saved in `output/grammars/gf/` and `output/grammars/pgf/` folders.
@@ -47,7 +54,7 @@ Only the `pgf` files are directly used by the GF runtime for constrained text ge
 - [Intro: Food Grammar](docs/food_grammar.md)
 - [Grammar](docs/grammar.md)
 - [Grammar Factory](docs/grammar_factory.md)
-- [Grammar Examples](docs/example_grammar.md)
 - [Examples](docs/examples.md)
 - [Add new task](docs/add_new_task.md)
-- [Benchmark](docs/benchmark.md)
+- [Constrained Decoding](docs/constrained_decoding.md)
+- [Benchmark(outdated)](docs/benchmark.md)
